@@ -1,9 +1,10 @@
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
+import { dataDir } from "./data-dir";
 
 type TrialRow = { startedAt: string };
 
-const filePath = path.join(process.cwd(), ".data", "trial.json");
+const filePath = path.join(dataDir(), "trial.json");
 
 async function readAll(): Promise<Record<string, TrialRow>> {
   try {

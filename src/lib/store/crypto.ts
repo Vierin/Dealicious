@@ -1,9 +1,10 @@
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "crypto";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
+import { dataDir } from "./data-dir";
 
-const dataDir = path.join(process.cwd(), ".data");
-const secretPath = path.join(dataDir, "secret");
+const secretPath = path.join(dataDir(), "secret");
+let memorySecret: string | null = null;
 
 export function hashPassword(password: string): { salt: string; hash: string } {
   const salt = randomBytes(16).toString("hex");
@@ -19,13 +20,23 @@ export function verifyPassword(password: string, salt: string, hash: string): bo
 }
 
 async function secret(): Promise<string> {
-  await mkdir(dataDir, { recursive: true });
+  const fromEnv = process.env.SESSION_SECRET?.trim();
+  if (fromEnv) return fromEnv;
+  if (memorySecret) return memorySecret;
   try {
-    return (await readFile(secretPath, "utf8")).trim();
-  } catch {
+    await mkdir(path.dirname(secretPath), { recursive: true });
+    try {
+      const stored = (await readFile(secretPath, "utf8")).trim();
+      if (stored) return stored;
+    } catch {
+      // missing file, write a new one below
+    }
     const value = randomBytes(32).toString("hex");
     await writeFile(secretPath, value, "utf8");
     return value;
+  } catch {
+    memorySecret = randomBytes(32).toString("hex");
+    return memorySecret;
   }
 }
 

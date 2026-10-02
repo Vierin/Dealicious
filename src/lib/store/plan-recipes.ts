@@ -1,7 +1,8 @@
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
+import { dataDir } from "./data-dir";
 
-const filePath = path.join(process.cwd(), ".data", "plan-recipes.json");
+const filePath = path.join(dataDir(), "plan-recipes.json");
 
 async function readAll(): Promise<Record<string, string[]>> {
   try {
@@ -13,8 +14,12 @@ async function readAll(): Promise<Record<string, string[]>> {
 }
 
 async function writeAll(all: Record<string, string[]>): Promise<void> {
-  await mkdir(path.dirname(filePath), { recursive: true });
-  await writeFile(filePath, `${JSON.stringify(all, null, 2)}\n`, "utf8");
+  try {
+    await mkdir(path.dirname(filePath), { recursive: true });
+    await writeFile(filePath, `${JSON.stringify(all, null, 2)}\n`, "utf8");
+  } catch {
+    // Read-only deploy. The plan still renders from the database rows.
+  }
 }
 
 export async function readPlanRecipes(planId: string): Promise<string[] | null> {

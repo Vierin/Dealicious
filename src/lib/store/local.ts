@@ -9,9 +9,9 @@ import type { Profile, PlanView } from "../types";
 import { readTrial, startTrial } from "./trial";
 import { cookDaysOrAll } from "../profile";
 import { hashPassword, readSession, signSession, verifyPassword } from "./crypto";
+import { dataDir } from "./data-dir";
 
-const dataDir = path.join(process.cwd(), ".data");
-const dbPath = path.join(dataDir, "db.json");
+const dbPath = path.join(dataDir(), "db.json");
 const cookieName = "dl_session";
 
 type UserRow = {
@@ -52,7 +52,6 @@ function withDb<T>(fn: (db: Db) => Promise<T> | T): Promise<T> {
 }
 
 async function readDb(): Promise<Db> {
-  await mkdir(dataDir, { recursive: true });
   try {
     return JSON.parse(await readFile(dbPath, "utf8")) as Db;
   } catch {
@@ -61,7 +60,12 @@ async function readDb(): Promise<Db> {
 }
 
 async function writeDb(db: Db): Promise<void> {
-  await writeFile(dbPath, JSON.stringify(db, null, 2), "utf8");
+  try {
+    await mkdir(path.dirname(dbPath), { recursive: true });
+    await writeFile(dbPath, JSON.stringify(db, null, 2), "utf8");
+  } catch {
+    // Vercel cannot create /var/task/.data. Local login still works on a writable disk.
+  }
 }
 
 function cookieOptions() {
