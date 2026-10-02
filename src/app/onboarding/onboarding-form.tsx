@@ -50,6 +50,7 @@ function stepReady(draft: Draft, step: string) {
   if (step === "diet") return draft.diet !== null;
   if (step === "meat") return draft.meatPref !== null;
   if (step === "style") return draft.dietStyle !== null;
+  if (step === "kitchen") return draft.appliances.length > 0;
   if (step === "budget") {
     return draft.weeklyBudget !== null && draft.weeklyBudget >= 20 && draft.weeklyBudget <= 10000;
   }
@@ -293,14 +294,6 @@ export function OnboardingForm() {
         {step === "kitchen" ? (
           <Step title="Kitchen appliances" hint="Рецепт попадёт в неделю, только если вся нужная техника есть.">
             <div className="flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={() => setDraft({ ...draft, appliances: [] })}
-                className={`rounded-2xl border px-4 py-4 text-left ${draft.appliances.length === 0 ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
-              >
-                <div>None</div>
-                <div className="mt-1 text-sm text-muted">Только холодные обеды</div>
-              </button>
               {APPLIANCE_OPTIONS.map((option) => {
                 const active = draft.appliances.includes(option.id);
                 return (

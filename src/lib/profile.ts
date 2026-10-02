@@ -47,6 +47,7 @@ export function isProfileComplete(profile: Profile | null): profile is Profile {
     STYLES.includes(profile.dietStyle) &&
     DIETS.includes(profile.diet) &&
     Array.isArray(profile.appliances) &&
+    profile.appliances.length >= 1 &&
     (profile.diet !== "none" || MEAT.includes(profile.meatPref)) &&
     profile.weeklyBudgetPln >= 20 &&
     profile.weeklyBudgetPln <= 10000 &&
@@ -105,8 +106,8 @@ export function parseProfile(userId: string, body: unknown): Profile {
   }
 
   const appliances = Array.isArray(input.appliances) ? input.appliances : [];
-  if (!appliances.every((item) => typeof item === "string" && APPLIANCES.includes(item as Appliance))) {
-    throw new Error("Неизвестная техника");
+  if (appliances.length < 1 || !appliances.every((item) => typeof item === "string" && APPLIANCES.includes(item as Appliance))) {
+    throw new Error(appliances.length < 1 ? "Выбери технику" : "Неизвестная техника");
   }
 
   return {
