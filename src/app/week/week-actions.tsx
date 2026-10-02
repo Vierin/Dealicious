@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function WeekActions() {
+export function WeekActions({ trialOpen }: { trialOpen: boolean }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
@@ -31,9 +31,15 @@ export function WeekActions() {
 
   return (
     <div className="flex flex-wrap items-center gap-4 text-sm">
-      <button type="button" onClick={rebuild} disabled={pending} className="text-olive disabled:opacity-60">
-        {pending ? "Считаю…" : "Пересчитать"}
-      </button>
+      {trialOpen ? (
+        <button type="button" onClick={rebuild} disabled={pending} className="text-olive disabled:opacity-60">
+          {pending ? "Считаю…" : "Пересчитать"}
+        </button>
+      ) : (
+        <a href="/subscribe" className="text-olive">
+          Подписка
+        </a>
+      )}
       <a href="/meals" className="text-muted">
         Блюда
       </a>

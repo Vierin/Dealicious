@@ -2,7 +2,13 @@ import { NextResponse } from "next/server";
 
 export function errorResponse(error: unknown) {
   const message = error instanceof Error ? error.message : "Ошибка";
-  const status = message.includes("Неверная почта") ? 401 : message.includes("уже есть") ? 409 : 400;
+  const status = message.includes("Триал кончился")
+    ? 402
+    : message.includes("Неверная почта")
+      ? 401
+      : message.includes("уже есть")
+        ? 409
+        : 400;
   return NextResponse.json({ error: message }, { status });
 }
 

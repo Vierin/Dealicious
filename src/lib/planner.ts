@@ -1,4 +1,6 @@
+import { COOKING, kcal } from "./cooking";
 import { addISODays, nextShopDate } from "./dates";
+import { PANTRY_PRODUCT_IDS } from "./pantry";
 import { money, roundQty } from "./money";
 import type {
   BasketLine,
@@ -30,6 +32,13 @@ function priced(promo: Promotion | undefined, product: Product): {
     return { unitPrice: shelf, regularUnit: shelf, onPromo: false };
   }
   return { unitPrice: promo.promoPricePln, regularUnit: knownRegular(promo, product), onPromo: true };
+}
+
+export function packQuote(productId: string, catalog: Catalog, shopDate: string): { pay: number; regular: number } {
+  const product = productById(catalog, productId);
+  const promo = activePromo(productId, catalog.promotions, shopDate);
+  const { unitPrice, regularUnit } = priced(promo, product);
+  return { pay: unitPrice, regular: regularUnit };
 }
 
 export function activePromo(
@@ -108,6 +117,12 @@ function plateProducts(recipeId: string, catalog: Catalog): string[] {
     .map((item) => item.productId);
 }
 
+function tooLight(recipe: Recipe, target: number): boolean {
+  const cooking = COOKING[recipe.id];
+  if (!cooking) return false;
+  return kcal(cooking) < target * 0.75;
+}
+
 function repeatsProduct(recipe: Recipe, picked: Recipe[], catalog: Catalog): boolean {
   const used = new Map<string, number>();
   for (const item of picked) {
@@ -123,9 +138,13 @@ export function pickWeek(profile: Profile, catalog: Catalog, from = new Date()) 
   const pool = catalog.recipes.filter((recipe) => allows(profile, recipe));
   const picked: Recipe[] = [];
 
+  const target = profile.dailyKcal * 0.35;
+
   while (picked.length < 7 && pool.length > 0) {
     const varied = pool.filter((recipe) => !repeatsProduct(recipe, picked, catalog));
-    const candidates = varied.length > 0 ? varied : pool;
+    const sized = pool.filter((recipe) => !tooLight(recipe, target));
+    const variedSized = varied.filter((recipe) => !tooLight(recipe, target));
+    const candidates = variedSized.length > 0 ? variedSized : sized.length > 0 ? sized : varied.length > 0 ? varied : pool;
     let bestIndex = 0;
     let bestScore = Number.NEGATIVE_INFINITY;
 
@@ -142,9 +161,12 @@ export function pickWeek(profile: Profile, catalog: Catalog, from = new Date()) 
         shopDate,
       );
       const over = Math.max(0, total - profile.weeklyBudgetPln);
+      const plate = COOKING[recipe.id] ? kcal(COOKING[recipe.id]) : target;
+      const gap = Math.abs(plate - target) / target;
       const score =
         promoShare(recipe, catalog, shopDate) +
         styleBonus(profile, recipe) -
+        gap * 0.45 -
         repeats * 0.22 -
         cuisineRepeats * 0.08 -
         over / profile.weeklyBudgetPln;
@@ -202,6 +224,7 @@ export function buildBasket(
     const rounded = roundQty(qty, product.unit);
     const promo = activePromo(productId, catalog.promotions, shopDate);
     const { unitPrice, regularUnit, onPromo } = priced(promo, product);
+    if (PANTRY_PRODUCT_IDS.has(productId)) continue;
     lines.push({
       productId,
       namePl: product.namePl,
@@ -209,6 +232,7 @@ export function buildBasket(
       qty: rounded,
       unit: product.unit,
       unitPrice,
+      regularUnitPrice: regularUnit,
       lineTotal: money(rounded * unitPrice),
       regularLineTotal: money(rounded * regularUnit),
       onPromo,
@@ -226,6 +250,7 @@ function mealCost(recipeId: string, householdSize: number, catalog: Catalog, sho
   let total = 0;
   for (const ingredient of catalog.ingredients.filter((item) => item.recipeId === recipeId)) {
     const product = productById(catalog, ingredient.productId);
+    if (PANTRY_PRODUCT_IDS.has(ingredient.productId)) continue;
     const qty = roundQty(ingredient.qtyPerPerson * householdSize, product.unit);
     const promo = activePromo(ingredient.productId, catalog.promotions, shopDate);
     total += qty * priced(promo, product).unitPrice;

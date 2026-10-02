@@ -2,9 +2,11 @@ import { randomUUID } from "crypto";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
 import { cookies } from "next/headers";
+import { savingLines, trialOpen, type TrialWeek } from "../billing";
 import { buildCatalog } from "../catalog";
 import { pickWeek, presentPlan } from "../planner";
 import type { Profile, PlanView } from "../types";
+import { readTrial, startTrial } from "./trial";
 import { hashPassword, readSession, signSession, verifyPassword } from "./crypto";
 
 const dataDir = path.join(process.cwd(), ".data");
@@ -130,7 +132,11 @@ export async function signOut() {
 }
 
 export async function getProfile(userId: string): Promise<Profile | null> {
-  return withDb((db) => db.profiles.find((item) => item.userId === userId) ?? null);
+  return withDb((db) => {
+    const profile = db.profiles.find((item) => item.userId === userId);
+    if (!profile) return null;
+    return { ...profile, dailyKcal: profile.dailyKcal ?? 2000 };
+  });
 }
 
 export async function saveProfile(profile: Profile): Promise<void> {
@@ -142,12 +148,17 @@ export async function saveProfile(profile: Profile): Promise<void> {
 }
 
 export async function savePlan(userId: string, profile: Profile): Promise<PlanView> {
+  const startedAt = (await readTrial(userId)) ?? (await startTrial(userId, new Date().toISOString()));
+  if (!trialOpen(startedAt)) {
+    throw new Error("Триал кончился. Следующую неделю соберём после подписки.");
+  }
+
   const catalog = buildCatalog();
   const picked = pickWeek(profile, catalog);
   const id = randomUUID();
 
   await withDb((db) => {
-    db.plans = db.plans.filter((plan) => plan.userId !== userId);
+    db.plans = db.plans.filter((plan) => !(plan.userId === userId && plan.shopDate === picked.shopDate));
     db.plans.push({
       id,
       userId,
@@ -177,5 +188,25 @@ export async function getLatestPlan(userId: string, householdSize: number): Prom
     householdSize,
     recipeIds: row.recipeIds,
     catalog: buildCatalog(),
+  });
+}
+
+export async function listPlans(userId: string, householdSize: number): Promise<TrialWeek[]> {
+  const rows = await withDb((db) => db.plans.filter((plan) => plan.userId === userId));
+  const catalog = buildCatalog();
+  return rows.map((row) => {
+    const view = presentPlan({
+      id: row.id,
+      shopDate: row.shopDate,
+      householdSize,
+      recipeIds: row.recipeIds,
+      catalog,
+    });
+    return {
+      shopDate: view.shopDate,
+      createdAt: row.createdAt,
+      saved: view.saved,
+      lines: savingLines(view.lines),
+    };
   });
 }

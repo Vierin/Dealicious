@@ -4,6 +4,7 @@ import { VibePills, cuisineLabel } from "@/components/pills";
 import { INGREDIENTS, PANTRY, PRODUCTS, RECIPES } from "@/lib/catalog";
 import { COOKING, kcal } from "@/lib/cooking";
 import { formatQty, roundQty } from "@/lib/money";
+import { pantryUseLabel } from "@/lib/pantry";
 import { recipePhoto } from "@/lib/recipes";
 import { isProfileComplete } from "@/lib/profile";
 import { getProfile, getSessionUser } from "@/lib/store";
@@ -30,7 +31,9 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
     if (!product) throw new Error(`Нет продукта ${item.productId}`);
     return {
       name: product.namePl,
-      qty: formatQty(roundQty(item.qtyPerPerson * portions, product.unit), product.unit),
+      qty:
+        pantryUseLabel(item.productId, item.qtyPerPerson, portions) ??
+        formatQty(roundQty(item.qtyPerPerson * portions, product.unit), product.unit),
     };
   });
 

@@ -20,6 +20,7 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
   const [appliances, setAppliances] = useState<Appliance[]>(profile.appliances);
   const [householdSize, setHouseholdSize] = useState(profile.householdSize);
   const [weeklyBudget, setWeeklyBudget] = useState(String(profile.weeklyBudgetPln));
+  const [dailyKcal, setDailyKcal] = useState(profile.dailyKcal ?? 2000);
   const [shopWeekday, setShopWeekday] = useState(profile.shopWeekday);
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
@@ -62,6 +63,7 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
           appliances,
           dietStyle,
           householdSize,
+          dailyKcal,
           weeklyBudgetPln: budget,
           shopWeekday,
         }),
@@ -184,6 +186,18 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
           </button>
           <div className="w-12 text-center font-serif text-4xl">{householdSize}</div>
           <button type="button" className="h-12 w-12 rounded-full border border-line text-2xl" onClick={() => setHouseholdSize((value) => Math.min(12, value + 1))}>
+            +
+          </button>
+        </div>
+      </Section>
+
+      <Section title="Калории в день" hint="Обед около трети этой нормы.">
+        <div className="flex items-center gap-6">
+          <button type="button" className="h-12 w-12 rounded-full border border-line text-2xl" onClick={() => setDailyKcal((value) => Math.max(1200, value - 100))}>
+            −
+          </button>
+          <div className="w-24 text-center font-serif text-4xl">{dailyKcal}</div>
+          <button type="button" className="h-12 w-12 rounded-full border border-line text-2xl" onClick={() => setDailyKcal((value) => Math.min(4000, value + 100))}>
             +
           </button>
         </div>

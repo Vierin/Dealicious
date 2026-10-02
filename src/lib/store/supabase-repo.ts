@@ -1,8 +1,10 @@
+import { savingLines, trialOpen, type TrialWeek } from "../billing";
 import { applyLivePromos, INGREDIENTS, PRODUCTS, RECIPES } from "../catalog";
 import { pickWeek, presentPlan } from "../planner";
 import type { Catalog, PlanView, Profile } from "../types";
+import { readTrial, startTrial } from "./trial";
 import { createClient } from "../supabase/server";
-import { clearProfileExtras, readProfileExtras, writeProfileExtras, type ProfileExtras } from "./profile-extras";
+import { readProfileExtras, writeProfileExtras, type ProfileExtras } from "./profile-extras";
 import { readPlanRecipes, writePlanRecipes } from "./plan-recipes";
 
 type PromotionRow = {
@@ -49,6 +51,7 @@ function mapProfile(row: ProfileRow, extras: ProfileExtras | null): Profile {
     shopWeekday: row.shop_weekday,
     weeklyBudgetPln:
       extras?.weeklyBudgetPln ?? (row.weekly_budget_pln == null ? 250 : num(row.weekly_budget_pln)),
+    dailyKcal: extras?.dailyKcal ?? 2000,
   };
 }
 
@@ -114,6 +117,7 @@ export async function saveProfile(profile: Profile) {
     diet: profile.diet,
     appliances: profile.appliances,
     weeklyBudgetPln: profile.weeklyBudgetPln,
+    dailyKcal: profile.dailyKcal,
   };
   const row = {
     user_id: profile.userId,
@@ -132,7 +136,7 @@ export async function saveProfile(profile: Profile) {
   };
   const { error } = await supabase.from("profiles").upsert(row);
   if (!error) {
-    await clearProfileExtras(profile.userId);
+    await writeProfileExtras(profile.userId, { dailyKcal: profile.dailyKcal });
     return;
   }
   if (!missingColumn(error.message)) throw new Error(error.message);
@@ -174,11 +178,17 @@ export async function getCatalog(): Promise<Catalog> {
 }
 
 export async function savePlan(userId: string, profile: Profile): Promise<PlanView> {
+  const startedAt = (await readTrial(userId)) ?? (await startTrial(userId, new Date().toISOString()));
+  if (!trialOpen(startedAt)) {
+    throw new Error("Триал кончился. Следующую неделю соберём после подписки.");
+  }
+
   const catalog = await getCatalog();
   const picked = pickWeek(profile, catalog);
   const supabase = await createClient();
 
-  await supabase.from("meal_plans").delete().eq("user_id", userId);
+  const wiped = await supabase.from("meal_plans").delete().eq("user_id", userId).eq("shop_date", picked.shopDate);
+  if (wiped.error) throw new Error(wiped.error.message);
   const { data, error } = await supabase
     .from("meal_plans")
     .insert({ user_id: userId, shop_date: picked.shopDate })
@@ -237,6 +247,44 @@ export async function getLatestPlan(userId: string, householdSize: number): Prom
     recipeIds: stored ?? items.map((item) => item.recipe_id),
     catalog: await getCatalog(),
   });
+}
+
+type PlanListRow = {
+  id: string;
+  shop_date: string;
+  created_at: string;
+  meal_plan_items: { day_index: number; recipe_id: string }[] | null;
+};
+
+export async function listPlans(userId: string, householdSize: number): Promise<TrialWeek[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("meal_plans")
+    .select("id, shop_date, created_at, meal_plan_items(day_index, recipe_id)")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: true });
+  if (error) throw new Error(error.message);
+
+  const catalog = await getCatalog();
+  const weeks: TrialWeek[] = [];
+  for (const row of (data ?? []) as PlanListRow[]) {
+    const items = [...(row.meal_plan_items ?? [])].sort((a, b) => a.day_index - b.day_index);
+    const stored = await readPlanRecipes(row.id);
+    const view = presentPlan({
+      id: row.id,
+      shopDate: String(row.shop_date).slice(0, 10),
+      householdSize,
+      recipeIds: stored ?? items.map((item) => item.recipe_id),
+      catalog,
+    });
+    weeks.push({
+      shopDate: view.shopDate,
+      createdAt: row.created_at,
+      saved: view.saved,
+      lines: savingLines(view.lines),
+    });
+  }
+  return weeks;
 }
 
 function foreignRecipe(message: string): boolean {

@@ -24,7 +24,9 @@ export function isProfileComplete(profile: Profile | null): profile is Profile {
     Array.isArray(profile.appliances) &&
     (profile.diet !== "none" || MEAT.includes(profile.meatPref)) &&
     profile.weeklyBudgetPln >= 20 &&
-    profile.weeklyBudgetPln <= 10000
+    profile.weeklyBudgetPln <= 10000 &&
+    profile.dailyKcal >= 1200 &&
+    profile.dailyKcal <= 4000
   );
 }
 
@@ -65,6 +67,11 @@ export function parseProfile(userId: string, body: unknown): Profile {
     throw new Error("Укажи бюджет от 20 до 10 000 zł");
   }
 
+  const rawKcal = input.dailyKcal == null || input.dailyKcal === "" ? 2000 : Number(input.dailyKcal);
+  if (!Number.isInteger(rawKcal) || rawKcal < 1200 || rawKcal > 4000 || rawKcal % 100 !== 0) {
+    throw new Error("Калории в день: от 1200 до 4000, шаг 100");
+  }
+
   const allergies = Array.isArray(input.allergies) ? input.allergies : [];
   if (!allergies.every((item) => typeof item === "string" && ALLERGENS.includes(item as Allergen))) {
     throw new Error("Неизвестная аллергия");
@@ -88,5 +95,6 @@ export function parseProfile(userId: string, body: unknown): Profile {
     householdSize,
     shopWeekday,
     weeklyBudgetPln: Math.round(weeklyBudgetPln * 100) / 100,
+    dailyKcal: rawKcal,
   };
 }

@@ -17,6 +17,7 @@ function profile(patch: Partial<Profile>): Profile {
     householdSize: 2,
     shopWeekday: 1,
     weeklyBudgetPln: 400,
+    dailyKcal: 2000,
     appliances: ["stove", "oven", "microwave", "blender", "airfryer"],
     ...patch,
   };

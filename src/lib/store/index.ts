@@ -1,6 +1,17 @@
+import { trialDaysLeft, trialEndsAt, trialLedger, trialOpen, type TrialWeek } from "../billing";
 import type { PlanView, Profile } from "../types";
 import * as local from "./local";
 import * as remote from "./supabase-repo";
+import { readTrial, startTrial } from "./trial";
+
+export type TrialView = {
+  startedAt: string;
+  endsAt: string;
+  open: boolean;
+  daysLeft: number;
+  weeks: TrialWeek[];
+  saved: number;
+};
 
 export function supabaseConfigured(): boolean {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
@@ -40,4 +51,22 @@ export async function getLatestPlan(userId: string, householdSize: number): Prom
   return supabaseConfigured()
     ? remote.getLatestPlan(userId, householdSize)
     : local.getLatestPlan(userId, householdSize);
+}
+
+export async function getTrial(userId: string, householdSize: number): Promise<TrialView> {
+  const weeks = supabaseConfigured()
+    ? await remote.listPlans(userId, householdSize)
+    : await local.listPlans(userId, householdSize);
+  const oldest = [...weeks].sort((a, b) => a.createdAt.localeCompare(b.createdAt))[0]?.createdAt;
+  const startedAt = (await readTrial(userId)) ?? (await startTrial(userId, oldest ?? new Date().toISOString()));
+  const ledger = trialLedger(weeks, startedAt);
+  const saved = Math.round(ledger.reduce((sum, week) => sum + week.saved, 0) * 100) / 100;
+  return {
+    startedAt,
+    endsAt: trialEndsAt(startedAt).toISOString(),
+    open: trialOpen(startedAt),
+    daysLeft: trialDaysLeft(startedAt),
+    weeks: ledger,
+    saved,
+  };
 }

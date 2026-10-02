@@ -15,6 +15,7 @@ type Draft = {
   appliances: Appliance[];
   dietStyle: DietStyle | null;
   householdSize: number;
+  dailyKcal: number;
   weeklyBudget: number | null;
   shopWeekday: number | null;
 };
@@ -28,13 +29,14 @@ const emptyDraft: Draft = {
   appliances: [],
   dietStyle: null,
   householdSize: 2,
+  dailyKcal: 2000,
   weeklyBudget: null,
   shopWeekday: null,
 };
 
 function stepsFor(draft: Draft) {
   const steps = ["name", "city", "store", "diet"] as const;
-  const rest = ["allergies", "style", "kitchen", "people", "budget", "day"] as const;
+  const rest = ["allergies", "style", "kcal", "kitchen", "people", "budget", "day"] as const;
   if (draft.diet !== null && draft.diet !== "none") return [...steps, ...rest];
   return [...steps, "meat" as const, ...rest];
 }
@@ -82,6 +84,7 @@ export function OnboardingForm() {
         appliances: data.profile.appliances ?? [],
         dietStyle: data.profile.dietStyle,
         householdSize: data.profile.householdSize,
+        dailyKcal: data.profile.dailyKcal ?? 2000,
         weeklyBudget: data.profile.weeklyBudgetPln,
         shopWeekday: data.profile.shopWeekday,
       });
@@ -127,6 +130,7 @@ export function OnboardingForm() {
           appliances: draft.appliances,
           dietStyle: draft.dietStyle,
           householdSize: draft.householdSize,
+          dailyKcal: draft.dailyKcal,
           weeklyBudgetPln: draft.weeklyBudget,
           shopWeekday: draft.shopWeekday,
         }),
@@ -331,6 +335,28 @@ export function OnboardingForm() {
                 type="button"
                 className="h-14 w-14 rounded-full border border-line text-2xl"
                 onClick={() => setDraft({ ...draft, householdSize: Math.min(12, draft.householdSize + 1) })}
+              >
+                +
+              </button>
+            </div>
+          </Step>
+        ) : null}
+
+        {step === "kcal" ? (
+          <Step title="Сколько калорий в день?" hint="Обед подберём примерно на треть этой нормы.">
+            <div className="flex items-center justify-center gap-6 py-8">
+              <button
+                type="button"
+                className="h-14 w-14 rounded-full border border-line text-2xl"
+                onClick={() => setDraft({ ...draft, dailyKcal: Math.max(1200, draft.dailyKcal - 100) })}
+              >
+                −
+              </button>
+              <div className="w-32 text-center font-serif text-5xl">{draft.dailyKcal}</div>
+              <button
+                type="button"
+                className="h-14 w-14 rounded-full border border-line text-2xl"
+                onClick={() => setDraft({ ...draft, dailyKcal: Math.min(4000, draft.dailyKcal + 100) })}
               >
                 +
               </button>

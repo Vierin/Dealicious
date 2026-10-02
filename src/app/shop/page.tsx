@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { buildCatalog, INGREDIENTS, PANTRY } from "@/lib/catalog";
+import { pantryNeeds } from "@/lib/pantry";
+import { packQuote } from "@/lib/planner";
 import { isProfileComplete } from "@/lib/profile";
 import { getLatestPlan, getProfile, getSessionUser } from "@/lib/store";
 import type { BasketLine } from "@/lib/types";
+import { PantryStock } from "./pantry-stock";
 import { ShoppingList } from "./shopping-list";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +34,15 @@ export default async function ShopPage() {
       <h1 className="mt-3 font-serif text-4xl">Список покупок</h1>
       <p className="mt-2 text-muted">Biedronka · на {profile.householdSize} чел.</p>
       <ShoppingList planId={plan.id} groups={groups} />
+      <PantryStock planId={plan.id} needs={needsFor(plan.meals.map((meal) => meal.recipeId), profile.householdSize, plan.shopDate)} />
     </main>
   );
+}
+
+function needsFor(recipeIds: string[], householdSize: number, shopDate: string) {
+  const catalog = buildCatalog();
+  return pantryNeeds(recipeIds, householdSize, INGREDIENTS, PANTRY, {
+    oliwa: packQuote("oliwa", catalog, shopDate),
+    maslo: packQuote("maslo", catalog, shopDate),
+  });
 }

@@ -76,6 +76,7 @@ export type Profile = {
   householdSize: number;
   shopWeekday: number;
   weeklyBudgetPln: number;
+  dailyKcal: number;
 };
 
 export type BasketLine = {
@@ -85,6 +86,7 @@ export type BasketLine = {
   qty: number;
   unit: Unit;
   unitPrice: number;
+  regularUnitPrice: number;
   lineTotal: number;
   regularLineTotal: number;
   onPromo: boolean;

@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { VibePills, cuisineLabel } from "@/components/pills";
-import { RECIPES } from "@/lib/catalog";
-import { COOKING } from "@/lib/cooking";
+import { leafletsOn, RECIPES } from "@/lib/catalog";
+import { COOKING, kcal } from "@/lib/cooking";
+import type { BasketLine, Unit } from "@/lib/types";
 import { recipePhoto } from "@/lib/recipes";
 import { formatRuDate } from "@/lib/dates";
-import { formatPln } from "@/lib/money";
+import { formatPln, money } from "@/lib/money";
 import { isProfileComplete } from "@/lib/profile";
-import { getLatestPlan, getProfile, getSessionUser } from "@/lib/store";
+import { getLatestPlan, getProfile, getSessionUser, getTrial } from "@/lib/store";
 import { WeekActions } from "./week-actions";
 import { ShopCard } from "./shop-card";
 
@@ -19,26 +20,56 @@ export default async function WeekPage() {
   const profile = await getProfile(user.id);
   if (!isProfileComplete(profile)) redirect("/onboarding");
   const plan = await getLatestPlan(user.id, profile.householdSize);
+  const trial = await getTrial(user.id, profile.householdSize);
+  const stale = plan?.meals.some((meal) => !RECIPES.some((recipe) => recipe.id === meal.recipeId)) ?? false;
+  const noLeaflet = plan != null && plan.saved === 0 && leafletsOn(plan.shopDate).length === 0;
 
   return (
     <main className="mx-auto w-full max-w-5xl px-5 py-8">
       <header className="flex items-start justify-between gap-4">
         <p className="font-serif text-3xl">Dealicious</p>
-        <WeekActions />
+        <WeekActions trialOpen={trial.open} />
       </header>
+
+      <p className="mt-4 text-sm text-muted">
+        {trial.open ? (
+          <>
+            Триал ещё {dayWord(trial.daysLeft)}.{" "}
+            <a href="/subscribe" className="text-olive">
+              Экономия за эти недели
+            </a>
+          </>
+        ) : (
+          <>
+            Триал кончился. Эта неделя остаётся.{" "}
+            <a href="/subscribe" className="text-olive">
+              Следующую без подписки не соберём
+            </a>
+          </>
+        )}
+      </p>
 
       {plan ? (
         <>
           <div className="mt-8 grid gap-4 md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)]">
-            <section className="grid grid-cols-3 gap-3 rounded-3xl bg-ink p-5 text-cream">
-              <Stat label="К оплате" value={formatPln(plan.total)} />
-              <Stat label="Без акций" value={formatPln(plan.regularTotal)} />
-              <Stat label="Сэкономили" value={formatPln(plan.saved)} accent />
-            </section>
+            <div>
+              <section className="grid grid-cols-3 gap-3 rounded-3xl bg-ink p-5 text-cream">
+                <Stat label="К оплате" value={formatPln(plan.total)} />
+                <Stat label="Без акций" value={formatPln(plan.regularTotal)} />
+                <Stat label="Сэкономили" value={formatPln(plan.saved)} accent />
+              </section>
+              <SavingsLines lines={plan.lines} />
+            </div>
             <ShopCard planId={plan.id} productIds={plan.lines.map((line) => line.productId)} />
           </div>
 
-          {plan.meals.some((meal) => !RECIPES.some((recipe) => recipe.id === meal.recipeId)) ? (
+          {noLeaflet ? (
+            <p className="mt-4 text-sm text-muted">
+              На {formatRuDate(plan.shopDate).dayMonth} газетки нет, поэтому сэкономили 0.
+            </p>
+          ) : null}
+
+          {stale && trial.open ? (
             <p className="mt-4 text-sm text-olive">Каталог обновился. Нажми «Пересчитать», чтобы собрать неделю заново.</p>
           ) : null}
 
@@ -76,6 +107,9 @@ export default async function WeekPage() {
                           <PeopleIcon />
                           {plan.householdSize}
                         </span>
+                        {COOKING[meal.recipeId] ? (
+                          <span>{kcal(COOKING[meal.recipeId])} ккал</span>
+                        ) : null}
                         <span className="inline-flex items-center gap-1.5">
                           <PriceIcon />
                           {formatPln(meal.cost)}
@@ -124,6 +158,48 @@ function PeopleIcon() {
       <path d="M11 8.6c1.4.2 2.4 1.1 2.7 2.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   );
+}
+
+function SavingsLines({ lines }: { lines: BasketLine[] }) {
+  const deals = lines
+    .filter((line) => line.onPromo && line.regularLineTotal > line.lineTotal)
+    .map((line) => ({ line, saved: money(line.regularLineTotal - line.lineTotal) }))
+    .sort((a, b) => b.saved - a.saved);
+  if (deals.length === 0) return null;
+  return (
+    <ul className="mt-4 flex flex-col gap-2 text-sm">
+      {deals.map(({ line, saved }) => (
+        <li key={line.productId} className="flex items-baseline justify-between gap-3">
+          <span className="min-w-0">
+            <span className="block truncate">{line.namePl}</span>
+            <span className="text-muted">
+              {formatUnitPrice(line.regularUnitPrice)} → {formatUnitPrice(line.unitPrice)} {priceUnit(line.unit)}
+            </span>
+          </span>
+          <span className="shrink-0 text-olive">−{formatPln(saved)}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function formatUnitPrice(value: number): string {
+  return new Intl.NumberFormat("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+}
+
+function priceUnit(unit: Unit): string {
+  if (unit === "kg") return "zł/kg";
+  if (unit === "l") return "zł/l";
+  if (unit === "opak") return "zł/opak";
+  return "zł/szt";
+}
+
+function dayWord(days: number): string {
+  const mod10 = days % 10;
+  const mod100 = days % 100;
+  if (mod10 === 1 && mod100 !== 11) return `${days} день`;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return `${days} дня`;
+  return `${days} дней`;
 }
 
 function PriceIcon() {
