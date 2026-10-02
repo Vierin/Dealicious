@@ -1,14 +1,15 @@
 import Link from "next/link";
+import { Clock, CreditCard, Users } from "lucide-react";
 import { redirect } from "next/navigation";
 import { VibePills, cuisineLabel } from "@/components/pills";
 import { leafletsOn, RECIPES } from "@/lib/catalog";
 import { COOKING, kcal } from "@/lib/cooking";
-import type { BasketLine, Unit } from "@/lib/types";
 import { recipePhoto } from "@/lib/recipes";
 import { formatRuDate } from "@/lib/dates";
 import { formatPln, money } from "@/lib/money";
 import { isProfileComplete } from "@/lib/profile";
 import { getLatestPlan, getProfile, getSessionUser, getTrial } from "@/lib/store";
+import { RebuildPlan } from "./rebuild-plan";
 import { WeekActions } from "./week-actions";
 import { ShopCard } from "./shop-card";
 
@@ -32,22 +33,17 @@ export default async function WeekPage() {
       </header>
 
       <p className="mt-4 text-sm text-muted">
-        {trial.open ? (
-          <>
-            Триал ещё {dayWord(trial.daysLeft)}.{" "}
-            <a href="/subscribe" className="text-olive">
-              Экономия за эти недели
-            </a>
-          </>
-        ) : (
-          <>
-            Триал кончился. Эта неделя остаётся.{" "}
-            <a href="/subscribe" className="text-olive">
-              Следующую без подписки не соберём
-            </a>
-          </>
-        )}
+        {trial.open
+          ? `Триал ещё ${dayWord(trial.daysLeft)}.`
+          : "Триал кончился. Эта неделя остаётся. Следующую без подписки не соберём."}
       </p>
+      <Link
+        href="/subscribe"
+        className="mt-4 flex items-baseline justify-between rounded-2xl border border-ink px-4 py-3"
+      >
+        <span className="text-sm">Уже сэкономлено</span>
+        <span className="font-serif text-2xl">{formatPln(trial.saved)}</span>
+      </Link>
 
       {plan ? (
         <>
@@ -58,7 +54,7 @@ export default async function WeekPage() {
                 <Stat label="Без акций" value={formatPln(plan.regularTotal)} />
                 <Stat label="Сэкономили" value={formatPln(plan.saved)} accent />
               </section>
-              <SavingsLines lines={plan.lines} />
+              <BudgetSpend spent={plan.total} budget={profile.weeklyBudgetPln} />
             </div>
             <ShopCard planId={plan.id} productIds={plan.lines.map((line) => line.productId)} />
           </div>
@@ -70,7 +66,7 @@ export default async function WeekPage() {
           ) : null}
 
           {stale && trial.open ? (
-            <p className="mt-4 text-sm text-olive">Каталог обновился. Нажми «Пересчитать», чтобы собрать неделю заново.</p>
+            <p className="mt-4 text-sm text-olive">Каталог обновился. Нажми Rebuild plan, чтобы собрать неделю заново.</p>
           ) : null}
 
           <section className="mt-8 max-w-2xl">
@@ -99,19 +95,19 @@ export default async function WeekPage() {
                       <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
                         {minutes != null ? (
                           <span className="inline-flex items-center gap-1.5">
-                            <ClockIcon />
+                            <Clock size={16} strokeWidth={1.75} />
                             {minutes} мин
                           </span>
                         ) : null}
                         <span className="inline-flex items-center gap-1.5">
-                          <PeopleIcon />
+                          <Users size={16} strokeWidth={1.75} />
                           {plan.householdSize}
                         </span>
                         {COOKING[meal.recipeId] ? (
                           <span>{kcal(COOKING[meal.recipeId])} ккал</span>
                         ) : null}
                         <span className="inline-flex items-center gap-1.5">
-                          <PriceIcon />
+                          <CreditCard size={16} strokeWidth={1.75} />
                           {formatPln(meal.cost)}
                         </span>
                       </div>
@@ -131,6 +127,13 @@ export default async function WeekPage() {
                 );
               })}
             </ol>
+            <RebuildPlan
+              meals={plan.meals.map((meal) => ({
+                dayIndex: meal.dayIndex,
+                title: meal.title,
+                weekday: formatRuDate(meal.date).weekday,
+              }))}
+            />
           </section>
         </>
       ) : (
@@ -138,60 +141,6 @@ export default async function WeekPage() {
       )}
     </main>
   );
-}
-
-function ClockIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M8 4.5V8.2L10.4 9.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function PeopleIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="6" cy="5" r="2" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M2.5 12.5c.4-2 1.8-3 3.5-3s3.1 1 3.5 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      <circle cx="11" cy="5.5" r="1.6" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M11 8.6c1.4.2 2.4 1.1 2.7 2.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function SavingsLines({ lines }: { lines: BasketLine[] }) {
-  const deals = lines
-    .filter((line) => line.onPromo && line.regularLineTotal > line.lineTotal)
-    .map((line) => ({ line, saved: money(line.regularLineTotal - line.lineTotal) }))
-    .sort((a, b) => b.saved - a.saved);
-  if (deals.length === 0) return null;
-  return (
-    <ul className="mt-4 flex flex-col gap-2 text-sm">
-      {deals.map(({ line, saved }) => (
-        <li key={line.productId} className="flex items-baseline justify-between gap-3">
-          <span className="min-w-0">
-            <span className="block truncate">{line.namePl}</span>
-            <span className="text-muted">
-              {formatUnitPrice(line.regularUnitPrice)} → {formatUnitPrice(line.unitPrice)} {priceUnit(line.unit)}
-            </span>
-          </span>
-          <span className="shrink-0 text-olive">−{formatPln(saved)}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function formatUnitPrice(value: number): string {
-  return new Intl.NumberFormat("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
-}
-
-function priceUnit(unit: Unit): string {
-  if (unit === "kg") return "zł/kg";
-  if (unit === "l") return "zł/l";
-  if (unit === "opak") return "zł/opak";
-  return "zł/szt";
 }
 
 function dayWord(days: number): string {
@@ -202,12 +151,26 @@ function dayWord(days: number): string {
   return `${days} дней`;
 }
 
-function PriceIcon() {
+function BudgetSpend({ spent, budget }: { spent: number; budget: number }) {
+  const ratio = budget <= 0 ? 0 : Math.min(spent / budget, 1);
+  const left = money(budget - spent);
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <rect x="2.25" y="3.75" width="11.5" height="8.5" rx="2" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M2.25 6.5h11.5" stroke="currentColor" strokeWidth="1.4" />
-    </svg>
+    <section className="mt-4 rounded-3xl border border-line bg-paper px-5 py-4">
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="text-sm text-muted">Потрачено из бюджета</p>
+        <p className="font-serif text-2xl">{formatPln(spent)}</p>
+      </div>
+      <p className="mt-1 text-sm text-muted">из {formatPln(budget)} на неделю</p>
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-line">
+        <div
+          className={`h-full rounded-full ${left < 0 ? "bg-[#8a3d32]" : "bg-olive"}`}
+          style={{ width: `${ratio * 100}%` }}
+        />
+      </div>
+      <p className="mt-2 text-sm text-muted">
+        {left < 0 ? `Выше бюджета на ${formatPln(-left)}` : `Осталось ${formatPln(left)}`}
+      </p>
+    </section>
   );
 }
 

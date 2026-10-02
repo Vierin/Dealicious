@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Literata, Manrope } from "next/font/google";
+import { TabBar } from "@/components/tab-bar";
 import "./globals.css";
 
 const sans = Manrope({
@@ -20,7 +21,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ru" className={`${sans.variable} ${serif.variable} h-full antialiased`}>
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        {children}
+        <TabBar />
+      </body>
     </html>
   );
 }

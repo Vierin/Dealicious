@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Refrigerator } from "lucide-react";
+import { BackLink } from "@/components/back-link";
 import { buildCatalog, INGREDIENTS, PANTRY } from "@/lib/catalog";
 import { pantryNeeds } from "@/lib/pantry";
 import { packQuote } from "@/lib/planner";
@@ -28,10 +30,14 @@ export default async function ShopPage() {
 
   return (
     <main className="mx-auto w-full max-w-2xl px-5 py-8">
-      <Link href="/week" className="text-sm text-muted">
-        Неделя
-      </Link>
-      <h1 className="mt-3 font-serif text-4xl">Список покупок</h1>
+      <div className="flex items-center justify-between gap-4">
+        <BackLink href="/week" label="Неделя" />
+        <Link href="/pantry" className="inline-flex items-center gap-1.5 text-sm">
+          <Refrigerator size={16} strokeWidth={1.75} />
+          Кладовая
+        </Link>
+      </div>
+      <h1 className="mt-3 font-serif text-4xl">Список продуктов</h1>
       <p className="mt-2 text-muted">Biedronka · на {profile.householdSize} чел.</p>
       <ShoppingList planId={plan.id} groups={groups} />
       <PantryStock planId={plan.id} needs={needsFor(plan.meals.map((meal) => meal.recipeId), profile.householdSize, plan.shopDate)} />

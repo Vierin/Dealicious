@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { BackLink } from "@/components/back-link";
 import { RECIPES } from "@/lib/catalog";
 import { COOKING } from "@/lib/cooking";
 import { CUISINE_OPTIONS } from "@/lib/options";
@@ -35,9 +35,7 @@ export default async function CuisinePage({ params }: { params: Promise<{ cuisin
 
   return (
     <main className="mx-auto w-full max-w-2xl px-5 py-8">
-      <Link href="/meals" className="text-sm text-muted">
-        Блюда
-      </Link>
+      <BackLink href="/meals" label="Блюда" />
       <CuisineMeals title={title} meals={meals} />
     </main>
   );

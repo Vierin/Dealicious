@@ -4,9 +4,10 @@ import path from "path";
 import { cookies } from "next/headers";
 import { savingLines, trialOpen, type TrialWeek } from "../billing";
 import { buildCatalog } from "../catalog";
-import { pickWeek, placeRecipe, presentPlan, swapRecipeIds } from "../planner";
+import { pickWeek, placeRecipe, presentPlan, repickWeek, swapRecipeIds } from "../planner";
 import type { Profile, PlanView } from "../types";
 import { readTrial, startTrial } from "./trial";
+import { cookDaysOrAll } from "../profile";
 import { hashPassword, readSession, signSession, verifyPassword } from "./crypto";
 
 const dataDir = path.join(process.cwd(), ".data");
@@ -135,7 +136,7 @@ export async function getProfile(userId: string): Promise<Profile | null> {
   return withDb((db) => {
     const profile = db.profiles.find((item) => item.userId === userId);
     if (!profile) return null;
-    return { ...profile, dailyKcal: profile.dailyKcal ?? 2000 };
+    return { ...profile, dailyKcal: profile.dailyKcal ?? 2000, cookDays: cookDaysOrAll(profile.cookDays) };
   });
 }
 
@@ -147,14 +148,27 @@ export async function saveProfile(profile: Profile): Promise<void> {
   });
 }
 
-export async function savePlan(userId: string, profile: Profile): Promise<PlanView> {
+export async function savePlan(userId: string, profile: Profile, keep?: number[]): Promise<PlanView> {
   const startedAt = (await readTrial(userId)) ?? (await startTrial(userId, new Date().toISOString()));
   if (!trialOpen(startedAt)) {
     throw new Error("Триал кончился. Следующую неделю соберём после подписки.");
   }
 
   const catalog = buildCatalog();
-  const picked = pickWeek(profile, catalog);
+  const current = keep == null ? null : await getLatestPlan(userId, profile.householdSize);
+  const picked =
+    keep == null || current == null
+      ? pickWeek(profile, catalog)
+      : {
+          shopDate: current.shopDate,
+          recipeIds: repickWeek(
+            profile,
+            catalog,
+            current.meals.map((meal) => meal.recipeId),
+            current.shopDate,
+            keep,
+          ),
+        };
   const id = randomUUID();
 
   await withDb((db) => {

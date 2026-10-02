@@ -6,6 +6,27 @@ const MEAT: MeatPref[] = ["any", "chicken", "beef", "pork", "fish"];
 const DIETS: DietNeed[] = ["none", "vegetarian", "vegan", "pescatarian"];
 const STYLES: DietStyle[] = ["healthy", "sport", "balanced", "comfort"];
 
+export const ALL_COOK_DAYS = [0, 1, 2, 3, 4, 5, 6];
+
+export function cookDaysOrAll(value: number[] | undefined): number[] {
+  if (!value?.length) return [...ALL_COOK_DAYS];
+  const days = [...new Set(value.filter((day) => Number.isInteger(day) && day >= 0 && day <= 6))];
+  return days.length > 0 ? days : [...ALL_COOK_DAYS];
+}
+
+export function parseCookDays(value: unknown): number[] {
+  if (value == null) return [...ALL_COOK_DAYS];
+  if (!Array.isArray(value) || value.length < 1) throw new Error("Выбери хотя бы один день готовки");
+  const days = [...new Set(value)];
+  if (
+    days.length !== value.length ||
+    days.some((day) => !Number.isInteger(day) || day < 0 || day > 6)
+  ) {
+    throw new Error("Выбери дни готовки");
+  }
+  return days as number[];
+}
+
 export function isWarsaw(value: string): boolean {
   return /warszaw|варшав|warsaw/i.test(value);
 }
@@ -19,6 +40,10 @@ export function isProfileComplete(profile: Profile | null): profile is Profile {
     profile.householdSize >= 1 &&
     profile.shopWeekday >= 0 &&
     profile.shopWeekday <= 6 &&
+    profile.cookDays.length >= 1 &&
+    profile.cookDays.length <= 7 &&
+    profile.cookDays.every((day) => Number.isInteger(day) && day >= 0 && day <= 6) &&
+    new Set(profile.cookDays).size === profile.cookDays.length &&
     STYLES.includes(profile.dietStyle) &&
     DIETS.includes(profile.diet) &&
     Array.isArray(profile.appliances) &&
@@ -62,6 +87,8 @@ export function parseProfile(userId: string, body: unknown): Profile {
     throw new Error("Выбери день закупки");
   }
 
+  const cookDays = parseCookDays(input.cookDays);
+
   const weeklyBudgetPln = Number(input.weeklyBudgetPln);
   if (!Number.isFinite(weeklyBudgetPln) || weeklyBudgetPln < 20 || weeklyBudgetPln > 10000) {
     throw new Error("Укажи бюджет от 20 до 10 000 zł");
@@ -94,6 +121,7 @@ export function parseProfile(userId: string, body: unknown): Profile {
     dietStyle: dietStyle as DietStyle,
     householdSize,
     shopWeekday,
+    cookDays,
     weeklyBudgetPln: Math.round(weeklyBudgetPln * 100) / 100,
     dailyKcal: rawKcal,
   };

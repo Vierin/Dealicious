@@ -75,6 +75,8 @@ export type Profile = {
   appliances: Appliance[];
   householdSize: number;
   shopWeekday: number;
+  /** Weekdays to cook, 0 = Sunday … 6 = Saturday. */
+  cookDays: number[];
   weeklyBudgetPln: number;
   dailyKcal: number;
 };

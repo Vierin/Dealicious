@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { BackLink } from "@/components/back-link";
 import { VibePills, cuisineLabel } from "@/components/pills";
 import { INGREDIENTS, PANTRY, PRODUCTS, RECIPES } from "@/lib/catalog";
 import { COOKING, kcal } from "@/lib/cooking";
@@ -46,9 +46,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
   return (
     <main className="mx-auto w-full max-w-2xl px-5 py-8">
       <RememberView recipeId={recipe.id} />
-      <Link href="/week" className="text-sm text-muted">
-        Неделя
-      </Link>
+      <BackLink href="/week" label="Неделя" />
       <div className="relative mt-4">
         {photo ? (
           // eslint-disable-next-line @next/next/no-img-element

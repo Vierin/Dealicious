@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
+import { BackLink } from "@/components/back-link";
 import { isWarsaw } from "@/lib/profile";
 import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
 import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "@/lib/types";
@@ -22,6 +24,9 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
   const [weeklyBudget, setWeeklyBudget] = useState(String(profile.weeklyBudgetPln));
   const [dailyKcal, setDailyKcal] = useState(profile.dailyKcal ?? 2000);
   const [shopWeekday, setShopWeekday] = useState(profile.shopWeekday);
+  const [cookDays, setCookDays] = useState<number[]>(
+    profile.cookDays?.length ? profile.cookDays : SHOP_DAYS.map((day) => day.value),
+  );
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -48,6 +53,10 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
       setError("Укажи бюджет от 20 до 10 000 zł");
       return;
     }
+    if (cookDays.length < 1) {
+      setError("Выбери хотя бы один день готовки");
+      return;
+    }
 
     setPending(true);
     try {
@@ -66,6 +75,7 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
           dailyKcal,
           weeklyBudgetPln: budget,
           shopWeekday,
+          cookDays,
         }),
       });
       const profileData = (await profileResponse.json()) as { error?: string };
@@ -83,11 +93,25 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
     }
   }
 
+  async function logout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
+  }
+
   return (
-    <main className="mx-auto w-full max-w-2xl px-5 py-8 pb-28">
-      <a href="/week" className="text-sm text-muted">
-        Неделя
-      </a>
+    <main className="mx-auto w-full max-w-2xl px-5 py-8">
+      <div className="flex items-center justify-between gap-4">
+        <BackLink href="/week" label="Неделя" />
+        <button
+          type="button"
+          onClick={logout}
+          className="inline-flex items-center gap-1.5 rounded-2xl border border-ink px-3 py-2 text-sm"
+        >
+          <LogOut size={16} strokeWidth={1.75} />
+          Выйти
+        </button>
+      </div>
       <h1 className="mt-3 font-serif text-4xl">Профиль</h1>
       <p className="mt-2 text-muted">{email}</p>
 
@@ -225,6 +249,28 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
           onChange={(event) => setWeeklyBudget(event.target.value)}
           className="mt-3 h-14 w-full rounded-2xl border border-line bg-paper px-4 text-lg outline-none focus:border-olive"
         />
+      </Section>
+
+      <Section title="Дни готовки" hint="Меню соберётся только на отмеченные дни.">
+        <div className="flex flex-col gap-2">
+          {SHOP_DAYS.map((day) => {
+            const selected = cookDays.includes(day.value);
+            return (
+              <button
+                key={day.value}
+                type="button"
+                onClick={() =>
+                  setCookDays((current) =>
+                    current.includes(day.value) ? current.filter((value) => value !== day.value) : [...current, day.value],
+                  )
+                }
+                className={selected ? on : off}
+              >
+                {day.label}
+              </button>
+            );
+          })}
+        </div>
       </Section>
 
       <Section title="День закупки">

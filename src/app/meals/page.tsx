@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { BackLink } from "@/components/back-link";
 import { RECIPES } from "@/lib/catalog";
 import { COOKING } from "@/lib/cooking";
 import { recipePhoto } from "@/lib/recipes";
@@ -31,9 +31,7 @@ export default async function MealsPage({
 
   return (
     <main className="mx-auto w-full max-w-2xl px-5 py-8">
-      <Link href="/week" className="text-sm text-muted">
-        Неделя
-      </Link>
+      <BackLink href="/week" label="Неделя" />
       <MealBrowser meals={meals} favoritesOnly={favoritesOnly} />
     </main>
   );

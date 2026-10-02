@@ -1,5 +1,6 @@
 import { COOKING, kcal } from "./cooking";
-import { addISODays, nextShopDate } from "./dates";
+import { addISODays, cookOffsets, nextShopDate } from "./dates";
+import { ALL_COOK_DAYS } from "./profile";
 import { PANTRY_PRODUCT_IDS } from "./pantry";
 import { money, roundQty } from "./money";
 import type {
@@ -133,59 +134,122 @@ function repeatsProduct(recipe: Recipe, picked: Recipe[], catalog: Catalog): boo
   return plateProducts(recipe.id, catalog).some((productId) => (used.get(productId) ?? 0) >= 2);
 }
 
+function takeBest(
+  pool: Recipe[],
+  picked: Recipe[],
+  profile: Profile,
+  catalog: Catalog,
+  shopDate: string,
+): Recipe | null {
+  if (pool.length === 0) return null;
+  const target = profile.dailyKcal * 0.35;
+  const varied = pool.filter((recipe) => !repeatsProduct(recipe, picked, catalog));
+  const sized = pool.filter((recipe) => !tooLight(recipe, target));
+  const variedSized = varied.filter((recipe) => !tooLight(recipe, target));
+  const candidates =
+    variedSized.length > 0 ? variedSized : sized.length > 0 ? sized : varied.length > 0 ? varied : pool;
+  let best = candidates[0];
+  let bestScore = Number.NEGATIVE_INFINITY;
+  for (const recipe of candidates) {
+    const repeats = picked.filter((item) => primaryProtein(item) === primaryProtein(recipe)).length;
+    const cuisineRepeats = picked.filter((item) => item.cuisine === recipe.cuisine).length;
+    const total = basketSpend(
+      [...picked.map((item) => item.id), recipe.id],
+      profile.householdSize,
+      catalog,
+      shopDate,
+    );
+    const over = Math.max(0, total - profile.weeklyBudgetPln);
+    const plate = COOKING[recipe.id] ? kcal(COOKING[recipe.id]) : target;
+    const gap = Math.abs(plate - target) / target;
+    const score =
+      promoShare(recipe, catalog, shopDate) +
+      styleBonus(profile, recipe) -
+      gap * 0.45 -
+      repeats * 0.22 -
+      cuisineRepeats * 0.08 -
+      over / profile.weeklyBudgetPln;
+    if (score > bestScore || (score === bestScore && recipe.id < best.id)) {
+      best = recipe;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
+function fillSlots(
+  pool: Recipe[],
+  locked: Recipe[],
+  profile: Profile,
+  catalog: Catalog,
+  shopDate: string,
+  count: number,
+): Recipe[] {
+  const picked = [...locked];
+  const fresh: Recipe[] = [];
+  while (fresh.length < count && pool.length > 0) {
+    const best = takeBest(pool, picked, profile, catalog, shopDate);
+    if (!best) break;
+    pool.splice(pool.indexOf(best), 1);
+    picked.push(best);
+    fresh.push(best);
+  }
+  if (fresh.length < count) throw new Error("Не хватает блюд под эти ограничения");
+  return fresh;
+}
+
+function activeCookDays(profile: Profile): number[] {
+  return profile.cookDays?.length ? profile.cookDays : ALL_COOK_DAYS;
+}
+
 export function pickWeek(profile: Profile, catalog: Catalog, from = new Date()) {
   const shopDate = nextShopDate(profile.shopWeekday, from);
+  const offsets = cookOffsets(shopDate, activeCookDays(profile));
+  if (offsets.length === 0) throw new Error("Выбери хотя бы один день готовки");
   const pool = catalog.recipes.filter((recipe) => allows(profile, recipe));
-  const picked: Recipe[] = [];
+  const picked = fillSlots(pool, [], profile, catalog, shopDate, offsets.length);
+  const recipeIds = Array.from({ length: 7 }, () => "");
+  offsets.forEach((offset, index) => {
+    recipeIds[offset] = picked[index].id;
+  });
+  return { shopDate, recipeIds };
+}
 
-  const target = profile.dailyKcal * 0.35;
-
-  while (picked.length < 7 && pool.length > 0) {
-    const varied = pool.filter((recipe) => !repeatsProduct(recipe, picked, catalog));
-    const sized = pool.filter((recipe) => !tooLight(recipe, target));
-    const variedSized = varied.filter((recipe) => !tooLight(recipe, target));
-    const candidates = variedSized.length > 0 ? variedSized : sized.length > 0 ? sized : varied.length > 0 ? varied : pool;
-    let bestIndex = 0;
-    let bestScore = Number.NEGATIVE_INFINITY;
-
-    candidates.forEach((recipe) => {
-      const index = pool.indexOf(recipe);
-      const repeats = picked.filter(
-        (item) => primaryProtein(item) === primaryProtein(recipe),
-      ).length;
-      const cuisineRepeats = picked.filter((item) => item.cuisine === recipe.cuisine).length;
-      const total = basketSpend(
-        [...picked.map((item) => item.id), recipe.id],
-        profile.householdSize,
-        catalog,
-        shopDate,
-      );
-      const over = Math.max(0, total - profile.weeklyBudgetPln);
-      const plate = COOKING[recipe.id] ? kcal(COOKING[recipe.id]) : target;
-      const gap = Math.abs(plate - target) / target;
-      const score =
-        promoShare(recipe, catalog, shopDate) +
-        styleBonus(profile, recipe) -
-        gap * 0.45 -
-        repeats * 0.22 -
-        cuisineRepeats * 0.08 -
-        over / profile.weeklyBudgetPln;
-      const better =
-        score > bestScore || (score === bestScore && recipe.id < pool[bestIndex].id);
-      if (better) {
-        bestScore = score;
-        bestIndex = index;
-      }
-    });
-
-    picked.push(pool.splice(bestIndex, 1)[0]);
+export function repickWeek(
+  profile: Profile,
+  catalog: Catalog,
+  currentIds: string[],
+  shopDate: string,
+  keep: number[],
+): string[] {
+  const offsets = cookOffsets(shopDate, activeCookDays(profile));
+  if (offsets.length === 0) throw new Error("Выбери хотя бы один день готовки");
+  const active = new Set(offsets);
+  const base = Array.from({ length: 7 }, (_, index) => currentIds[index] ?? "");
+  const keepSet = new Set<number>();
+  const locked: Recipe[] = [];
+  for (const index of keep) {
+    if (!active.has(index) || keepSet.has(index) || !base[index]) continue;
+    const recipe = catalog.recipes.find((item) => item.id === base[index]);
+    if (!recipe || !allows(profile, recipe)) continue;
+    keepSet.add(index);
+    locked.push(recipe);
   }
+  const openIndexes = offsets.filter((index) => !keepSet.has(index));
+  const next = Array.from({ length: 7 }, () => "");
+  for (const index of keepSet) next[index] = base[index];
+  if (openIndexes.length === 0) return next;
 
-  if (picked.length < 7) {
-    throw new Error("Не хватает блюд под эти ограничения");
-  }
-
-  return { shopDate, recipeIds: picked.map((recipe) => recipe.id) };
+  const lockedIds = new Set(locked.map((recipe) => recipe.id));
+  const avoid = new Set(openIndexes.map((index) => base[index]).filter((id) => id.length > 0));
+  const allowed = catalog.recipes.filter((recipe) => allows(profile, recipe) && !lockedIds.has(recipe.id));
+  const fresh = allowed.filter((recipe) => !avoid.has(recipe.id));
+  const pool = fresh.length >= openIndexes.length ? [...fresh] : [...allowed];
+  const added = fillSlots(pool, locked, profile, catalog, shopDate, openIndexes.length);
+  openIndexes.forEach((index, cursor) => {
+    next[index] = added[cursor].id;
+  });
+  return next;
 }
 
 export function replacementFor(
@@ -220,7 +284,7 @@ export function placeRecipe(recipeIds: string[], recipeId: string, dayIndex: num
   if (!Number.isInteger(dayIndex) || dayIndex < 0 || dayIndex >= recipeIds.length) {
     throw new Error("Нет такого дня");
   }
-  if (recipeIds.includes(recipeId)) throw new Error("Уже в неделе");
+  if (recipeIds.some((id) => id === recipeId)) throw new Error("Уже в неделе");
   const next = [...recipeIds];
   next[dayIndex] = recipeId;
   return next;
@@ -242,6 +306,7 @@ export function swapRecipeIds(
   let slot = 0;
   let worst = Number.POSITIVE_INFINITY;
   next.forEach((id, itemIndex) => {
+    if (!id) return;
     const recipe = catalog.recipes.find((item) => item.id === id);
     const score = recipe ? promoShare(recipe, catalog, shopDate) : -1;
     if (score < worst) {
@@ -338,19 +403,22 @@ export function presentPlan(input: {
     id: input.id,
     shopDate: input.shopDate,
     householdSize: input.householdSize,
-    meals: input.recipeIds.map((recipeId, dayIndex) => {
+    meals: input.recipeIds.flatMap((recipeId, dayIndex) => {
+      if (!recipeId) return [];
       const recipe = input.catalog.recipes.find((item) => item.id === recipeId);
       const date = addISODays(input.shopDate, dayIndex);
       if (!recipe) {
-        return { dayIndex, date, recipeId, title: "Блюдо больше не в каталоге", cost: 0 };
+        return [{ dayIndex, date, recipeId, title: "Блюдо больше не в каталоге", cost: 0 }];
       }
-      return {
-        dayIndex,
-        date,
-        recipeId,
-        title: recipe.title,
-        cost: mealCost(recipeId, input.householdSize, input.catalog, input.shopDate),
-      };
+      return [
+        {
+          dayIndex,
+          date,
+          recipeId,
+          title: recipe.title,
+          cost: mealCost(recipeId, input.householdSize, input.catalog, input.shopDate),
+        },
+      ];
     }),
     lines,
     total,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Heart } from "lucide-react";
 
 const storageKey = "dealicious-favorites";
 
@@ -45,15 +46,5 @@ export function FavoriteButton({ recipeId }: { recipeId: string }) {
 }
 
 export function HeartIcon({ filled }: { filled?: boolean }) {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden>
-      <path
-        d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4.6-7 9-7 9z"
-        fill={filled ? "currentColor" : "none"}
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+  return <Heart size={22} strokeWidth={1.75} fill={filled ? "currentColor" : "none"} aria-hidden />;
 }

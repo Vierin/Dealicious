@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
 import type { Profile } from "../types";
 
-export type ProfileExtras = Partial<Pick<Profile, "diet" | "appliances" | "weeklyBudgetPln" | "dailyKcal">>;
+export type ProfileExtras = Partial<Pick<Profile, "diet" | "appliances" | "weeklyBudgetPln" | "dailyKcal" | "cookDays">>;
 
 const filePath = path.join(process.cwd(), ".data", "profile-extras.json");
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { BackButton } from "@/components/back-link";
 import { useRouter } from "next/navigation";
 import { isWarsaw } from "@/lib/profile";
 import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
@@ -18,6 +19,7 @@ type Draft = {
   dailyKcal: number;
   weeklyBudget: number | null;
   shopWeekday: number | null;
+  cookDays: number[];
 };
 
 const emptyDraft: Draft = {
@@ -32,11 +34,12 @@ const emptyDraft: Draft = {
   dailyKcal: 2000,
   weeklyBudget: null,
   shopWeekday: null,
+  cookDays: SHOP_DAYS.map((day) => day.value),
 };
 
 function stepsFor(draft: Draft) {
   const steps = ["name", "city", "store", "diet"] as const;
-  const rest = ["allergies", "style", "kcal", "kitchen", "people", "budget", "day"] as const;
+  const rest = ["allergies", "style", "kcal", "kitchen", "people", "budget", "day", "cook"] as const;
   if (draft.diet !== null && draft.diet !== "none") return [...steps, ...rest];
   return [...steps, "meat" as const, ...rest];
 }
@@ -51,6 +54,7 @@ function stepReady(draft: Draft, step: string) {
     return draft.weeklyBudget !== null && draft.weeklyBudget >= 20 && draft.weeklyBudget <= 10000;
   }
   if (step === "day") return draft.shopWeekday !== null;
+  if (step === "cook") return draft.cookDays.length > 0;
   return true;
 }
 
@@ -87,6 +91,7 @@ export function OnboardingForm() {
         dailyKcal: data.profile.dailyKcal ?? 2000,
         weeklyBudget: data.profile.weeklyBudgetPln,
         shopWeekday: data.profile.shopWeekday,
+        cookDays: data.profile.cookDays?.length ? data.profile.cookDays : SHOP_DAYS.map((day) => day.value),
       });
       setReady(true);
     })();
@@ -133,6 +138,7 @@ export function OnboardingForm() {
           dailyKcal: draft.dailyKcal,
           weeklyBudgetPln: draft.weeklyBudget,
           shopWeekday: draft.shopWeekday,
+          cookDays: draft.cookDays,
         }),
       });
       const profileData = (await profileResponse.json()) as { error?: string };
@@ -405,15 +411,40 @@ export function OnboardingForm() {
             />
           </Step>
         ) : null}
+
+        {step === "cook" ? (
+          <Step title="В какие дни готовишь?" hint="Меню соберётся только на эти дни, не обязательно на всю неделю.">
+            <div className="flex flex-col gap-2">
+              {SHOP_DAYS.map((day) => {
+                const on = draft.cookDays.includes(day.value);
+                return (
+                  <button
+                    key={day.value}
+                    type="button"
+                    onClick={() =>
+                      setDraft({
+                        ...draft,
+                        cookDays: on
+                          ? draft.cookDays.filter((value) => value !== day.value)
+                          : [...draft.cookDays, day.value],
+                      })
+                    }
+                    className={`rounded-2xl border px-4 py-4 text-left ${on ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
+                  >
+                    {day.label}
+                  </button>
+                );
+              })}
+            </div>
+          </Step>
+        ) : null}
       </div>
 
       {error ? <p className="mt-4 text-sm text-[#8a3d32]">{error}</p> : null}
 
       <div className="mt-6 flex items-center gap-4">
         {index > 0 ? (
-          <button type="button" onClick={() => setIndex((value) => value - 1)} className="text-sm text-muted">
-            Назад
-          </button>
+          <BackButton label="Назад" onClick={() => setIndex((value) => value - 1)} />
         ) : (
           <span />
         )}

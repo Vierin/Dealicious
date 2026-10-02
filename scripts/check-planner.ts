@@ -18,6 +18,7 @@ function profile(patch: Partial<Profile>): Profile {
     shopWeekday: 1,
     weeklyBudgetPln: 400,
     dailyKcal: 2000,
+    cookDays: [0, 1, 2, 3, 4, 5, 6],
     appliances: ["stove", "oven", "microwave", "blender", "airfryer"],
     ...patch,
   };

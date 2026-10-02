@@ -3,40 +3,22 @@
 import { useEffect, useState } from "react";
 import { formatPln } from "@/lib/money";
 import { packsToBuy, type PantryNeed } from "@/lib/pantry";
+import { readPantry, writePantry, type PantryState } from "@/lib/pantry-store";
 
-type Applied = { packs: number; used: number };
-type PantryState = {
-  stock: Record<string, number>;
-  applied: Record<string, Record<string, Applied>>;
-};
-
-const storageKey = "dealicious-pantry";
 const empty: PantryState = { stock: {}, applied: {} };
-
-function readState(): PantryState {
-  const raw = localStorage.getItem(storageKey);
-  if (!raw) return empty;
-  try {
-    const parsed = JSON.parse(raw) as Partial<PantryState>;
-    if (!parsed || typeof parsed !== "object" || !parsed.stock || !parsed.applied) return empty;
-    return { stock: parsed.stock, applied: parsed.applied };
-  } catch {
-    return empty;
-  }
-}
 
 export function PantryStock({ planId, needs }: { planId: string; needs: PantryNeed[] }) {
   const [state, setState] = useState<PantryState>(empty);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setState(readState());
+    setState(readPantry());
     setReady(true);
   }, []);
 
   function write(next: PantryState) {
     setState(next);
-    localStorage.setItem(storageKey, JSON.stringify(next));
+    writePantry(next);
   }
 
   function toggle(item: PantryNeed) {
@@ -99,7 +81,6 @@ export function PantryStock({ planId, needs }: { planId: string; needs: PantryNe
                   <span className={`block ${bought ? "text-muted line-through" : ""}`}>{item.name}</span>
                   <span className="block text-sm text-muted">
                     Дома {Math.round(stock)} {unit}
-                    {item.need > 0 ? ` · на неделю ${item.need} ${unit}` : ""}
                   </span>
                   {packs > 0 ? (
                     <span className={`block text-sm ${bought ? "text-muted" : ""}`}>

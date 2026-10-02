@@ -43,8 +43,8 @@ export async function saveProfile(profile: Profile): Promise<void> {
   return supabaseConfigured() ? remote.saveProfile(profile) : local.saveProfile(profile);
 }
 
-export async function savePlan(userId: string, profile: Profile): Promise<PlanView> {
-  return supabaseConfigured() ? remote.savePlan(userId, profile) : local.savePlan(userId, profile);
+export async function savePlan(userId: string, profile: Profile, keep?: number[]): Promise<PlanView> {
+  return supabaseConfigured() ? remote.savePlan(userId, profile, keep) : local.savePlan(userId, profile, keep);
 }
 
 export async function replaceMeal(

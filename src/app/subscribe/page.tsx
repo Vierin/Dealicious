@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { BackLink } from "@/components/back-link";
 import { SUBSCRIPTION_PLN } from "@/lib/billing";
 import { formatRuDate } from "@/lib/dates";
 import { formatPln } from "@/lib/money";
@@ -14,15 +15,15 @@ export default async function SubscribePage() {
   if (!isProfileComplete(profile)) redirect("/onboarding");
   const trial = await getTrial(user.id, profile.householdSize);
   const until = formatRuDate(localDate(trial.endsAt));
-  const covers = trial.saved >= SUBSCRIPTION_PLN;
+  const times = Math.round((trial.saved / SUBSCRIPTION_PLN) * 10) / 10;
 
   return (
     <main className="mx-auto w-full max-w-2xl px-5 py-8">
-      <a href="/week" className="text-sm text-muted">
-        Неделя
-      </a>
-      <h1 className="mt-3 font-serif text-4xl">Подписка</h1>
-      <p className="mt-3 text-sm text-muted">
+      <BackLink href="/week" label="Неделя" />
+      <h1 className="mt-3 font-serif text-4xl">Уже сэкономлено</h1>
+      <p className="mt-3 font-serif text-5xl">{formatPln(trial.saved)}</p>
+      <p className="mt-3 text-lg">{payoff(trial.saved, times)}</p>
+      <p className="mt-2 text-sm text-muted">
         {trial.open
           ? `Триал ещё ${dayWord(trial.daysLeft)}, до ${until.dayMonth}.`
           : `Триал кончился ${until.dayMonth}. Уже собранная неделя остаётся.`}
@@ -76,11 +77,12 @@ export default async function SubscribePage() {
             <span className="text-xs tracking-wide text-cream/70 uppercase">Подписка</span>
             <span className="font-serif text-3xl">{formatPln(SUBSCRIPTION_PLN)} / мес</span>
           </div>
-          <p className="mt-5 text-sm text-cream/80">
-            {covers
-              ? `Акции за триал дали ${formatPln(trial.saved)}. Подписка ${formatPln(SUBSCRIPTION_PLN)} в месяц.`
-              : `Эти недели подписку не отбили: ${formatPln(trial.saved)} против ${formatPln(SUBSCRIPTION_PLN)}.`}
-          </p>
+          {times >= 1 ? (
+            <div className="mt-4 flex items-baseline justify-between gap-4">
+              <span className="text-xs tracking-wide text-cream/70 uppercase">Окупилась</span>
+              <span className="font-serif text-3xl">×{timesLabel(times)}</span>
+            </div>
+          ) : null}
         </section>
       ) : null}
 
@@ -96,6 +98,26 @@ function localDate(iso: string): string {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${date.getFullYear()}-${month}-${day}`;
+}
+
+function timesLabel(times: number): string {
+  return Number.isInteger(times) ? String(times) : times.toFixed(1).replace(".", ",");
+}
+
+function timesWord(times: number): string {
+  if (!Number.isInteger(times)) return "раза";
+  const mod10 = times % 10;
+  const mod100 = times % 100;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "раза";
+  return "раз";
+}
+
+function payoff(saved: number, times: number): string {
+  if (saved <= 0) return "Пока скидки не дали разницы с полкой.";
+  if (times < 1) {
+    return `Подписка ${formatPln(SUBSCRIPTION_PLN)} в месяц. Эти недели её ещё не отбили.`;
+  }
+  return `Подписка ${formatPln(SUBSCRIPTION_PLN)} в месяц уже окупилась в ${timesLabel(times)} ${timesWord(times)}.`;
 }
 
 function dayWord(days: number): string {

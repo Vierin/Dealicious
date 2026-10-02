@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { RefreshCw } from "lucide-react";
 
 type WeekSlot = { dayIndex: number; title: string; weekday: string };
 
@@ -47,8 +48,9 @@ export function SwapMeal({
           type="button"
           onClick={() => send()}
           disabled={pending}
-          className="h-12 w-full rounded-2xl bg-ink text-cream disabled:opacity-60"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-ink text-cream disabled:opacity-60"
         >
+          <RefreshCw size={18} strokeWidth={1.75} />
           {pending ? "Меняю…" : "Swap this meal"}
         </button>
       ) : (

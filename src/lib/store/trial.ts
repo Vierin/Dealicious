@@ -24,7 +24,11 @@ export async function startTrial(userId: string, startedAt: string): Promise<str
   const all = await readAll();
   if (all[userId]?.startedAt) return all[userId].startedAt;
   all[userId] = { startedAt };
-  await mkdir(path.dirname(filePath), { recursive: true });
-  await writeFile(filePath, `${JSON.stringify(all, null, 2)}\n`, "utf8");
+  try {
+    await mkdir(path.dirname(filePath), { recursive: true });
+    await writeFile(filePath, `${JSON.stringify(all, null, 2)}\n`, "utf8");
+  } catch {
+    return startedAt;
+  }
   return startedAt;
 }

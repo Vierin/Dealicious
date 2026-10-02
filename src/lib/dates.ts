@@ -41,6 +41,15 @@ export function addISODays(iso: string, days: number): string {
   return formatISODate(addDays(parseISODate(iso), days));
 }
 
+export function cookOffsets(shopDate: string, cookDays: number[]): number[] {
+  const days = new Set(cookDays);
+  const offsets: number[] = [];
+  for (let index = 0; index < 7; index += 1) {
+    if (days.has(parseISODate(addISODays(shopDate, index)).getDay())) offsets.push(index);
+  }
+  return offsets;
+}
+
 const WEEKDAY_LONG = [
   "воскресенье",
   "понедельник",

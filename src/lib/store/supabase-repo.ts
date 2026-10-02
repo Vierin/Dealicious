@@ -1,9 +1,10 @@
 import { savingLines, trialOpen, type TrialWeek } from "../billing";
 import { applyLivePromos, INGREDIENTS, PRODUCTS, RECIPES } from "../catalog";
-import { pickWeek, placeRecipe, presentPlan, swapRecipeIds } from "../planner";
+import { pickWeek, placeRecipe, presentPlan, repickWeek, swapRecipeIds } from "../planner";
 import type { Catalog, PlanView, Profile } from "../types";
 import { readTrial, startTrial } from "./trial";
 import { createClient } from "../supabase/server";
+import { cookDaysOrAll } from "../profile";
 import { readProfileExtras, writeProfileExtras, type ProfileExtras } from "./profile-extras";
 import { readPlanRecipes, writePlanRecipes } from "./plan-recipes";
 
@@ -52,7 +53,26 @@ function mapProfile(row: ProfileRow, extras: ProfileExtras | null): Profile {
     weeklyBudgetPln:
       extras?.weeklyBudgetPln ?? (row.weekly_budget_pln == null ? 250 : num(row.weekly_budget_pln)),
     dailyKcal: extras?.dailyKcal ?? 2000,
+    cookDays: cookDaysOrAll(extras?.cookDays),
   };
+}
+
+function alignRecipeIds(
+  items: { day_index: number; recipe_id: string }[],
+  stored: string[] | null,
+): string[] {
+  if (stored && stored.length === 7) return stored.map((id) => id || "");
+  const recipeIds = Array.from({ length: 7 }, () => "");
+  if (stored && stored.length === items.length) {
+    items.forEach((item, index) => {
+      if (item.day_index >= 0 && item.day_index < 7) recipeIds[item.day_index] = stored[index] || "";
+    });
+    return recipeIds;
+  }
+  for (const item of items) {
+    if (item.day_index >= 0 && item.day_index < 7) recipeIds[item.day_index] = item.recipe_id;
+  }
+  return recipeIds;
 }
 
 function missingColumn(message: string): boolean {
@@ -118,6 +138,7 @@ export async function saveProfile(profile: Profile) {
     appliances: profile.appliances,
     weeklyBudgetPln: profile.weeklyBudgetPln,
     dailyKcal: profile.dailyKcal,
+    cookDays: profile.cookDays,
   };
   const row = {
     user_id: profile.userId,
@@ -136,7 +157,7 @@ export async function saveProfile(profile: Profile) {
   };
   const { error } = await supabase.from("profiles").upsert(row);
   if (!error) {
-    await writeProfileExtras(profile.userId, { dailyKcal: profile.dailyKcal });
+    await writeProfileExtras(profile.userId, { dailyKcal: profile.dailyKcal, cookDays: profile.cookDays });
     return;
   }
   if (!missingColumn(error.message)) throw new Error(error.message);
@@ -177,14 +198,27 @@ export async function getCatalog(): Promise<Catalog> {
   });
 }
 
-export async function savePlan(userId: string, profile: Profile): Promise<PlanView> {
+export async function savePlan(userId: string, profile: Profile, keep?: number[]): Promise<PlanView> {
   const startedAt = (await readTrial(userId)) ?? (await startTrial(userId, new Date().toISOString()));
   if (!trialOpen(startedAt)) {
     throw new Error("Триал кончился. Следующую неделю соберём после подписки.");
   }
 
   const catalog = await getCatalog();
-  const picked = pickWeek(profile, catalog);
+  const current = keep == null ? null : await getLatestPlan(userId, profile.householdSize);
+  const picked =
+    keep == null || current == null
+      ? pickWeek(profile, catalog)
+      : {
+          shopDate: current.shopDate,
+          recipeIds: repickWeek(
+            profile,
+            catalog,
+            current.meals.map((meal) => meal.recipeId),
+            current.shopDate,
+            keep,
+          ),
+        };
   const supabase = await createClient();
 
   const wiped = await supabase.from("meal_plans").delete().eq("user_id", userId).eq("shop_date", picked.shopDate);
@@ -196,12 +230,11 @@ export async function savePlan(userId: string, profile: Profile): Promise<PlanVi
     .single();
   if (error || !data) throw new Error(error?.message ?? "Не удалось сохранить план");
 
-  const rows = picked.recipeIds.map((recipeId, dayIndex) => ({
-    meal_plan_id: data.id,
-    day_index: dayIndex,
-    recipe_id: recipeId,
-  }));
-  const inserted = await supabase.from("meal_plan_items").insert(rows);
+  const rows = picked.recipeIds.flatMap((recipeId, dayIndex) =>
+    recipeId ? [{ meal_plan_id: data.id, day_index: dayIndex, recipe_id: recipeId }] : [],
+  );
+  const inserted =
+    rows.length === 0 ? { error: null } : await supabase.from("meal_plan_items").insert(rows);
   if (inserted.error && foreignRecipe(inserted.error.message)) {
     const stub = await supabase.from("recipes").select("id").limit(1).maybeSingle();
     const stubId = stub.data?.id;
@@ -268,7 +301,7 @@ export async function getLatestPlan(userId: string, householdSize: number): Prom
     id: data.id,
     shopDate: String(data.shop_date).slice(0, 10),
     householdSize,
-    recipeIds: stored ?? items.map((item) => item.recipe_id),
+    recipeIds: alignRecipeIds(items, stored),
     catalog: await getCatalog(),
   });
 }
@@ -298,7 +331,7 @@ export async function listPlans(userId: string, householdSize: number): Promise<
       id: row.id,
       shopDate: String(row.shop_date).slice(0, 10),
       householdSize,
-      recipeIds: stored ?? items.map((item) => item.recipe_id),
+      recipeIds: alignRecipeIds(items, stored),
       catalog,
     });
     weeks.push({

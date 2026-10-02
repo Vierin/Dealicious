@@ -34,7 +34,7 @@ export function ShopCard({
       className="flex h-full items-center justify-between gap-4 rounded-3xl border border-line bg-paper px-5 py-5"
     >
       <span>
-        <span className="block font-serif text-2xl">Список</span>
+        <span className="block font-serif text-2xl">Список продуктов</span>
         <span className="mt-1 block text-sm text-muted">Открыть</span>
       </span>
       <span className="font-serif text-3xl">
