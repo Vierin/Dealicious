@@ -2,11 +2,8 @@ import { savingLines, trialOpen, type TrialWeek } from "../billing";
 import { applyLivePromos, INGREDIENTS, PRODUCTS, RECIPES } from "../catalog";
 import { pickWeek, placeRecipe, presentPlan, repickWeek, swapRecipeIds } from "../planner";
 import type { Catalog, PlanView, Profile } from "../types";
-import { readTrial, startTrial } from "./trial";
 import { createClient } from "../supabase/server";
 import { cookDaysOrAll } from "../profile";
-import { readProfileExtras, writeProfileExtras, type ProfileExtras } from "./profile-extras";
-import { readPlanRecipes, writePlanRecipes } from "./plan-recipes";
 
 type PromotionRow = {
   id: string;
@@ -31,44 +28,58 @@ type ProfileRow = {
   household_size: number;
   shop_weekday: number;
   weekly_budget_pln: number | string;
+  daily_kcal?: number | string | null;
+  cook_days?: number[] | null;
 };
 
 function num(value: number | string): number {
   return typeof value === "number" ? value : Number(value);
 }
 
-function mapProfile(row: ProfileRow, extras: ProfileExtras | null): Profile {
+type ProfileMeta = {
+  diet?: Profile["diet"];
+  appliances?: Profile["appliances"];
+  weeklyBudgetPln?: number;
+  dailyKcal?: number;
+  cookDays?: number[];
+};
+
+function profileMeta(value: unknown): ProfileMeta {
+  if (!value || typeof value !== "object") return {};
+  return value as ProfileMeta;
+}
+
+function mapProfile(row: ProfileRow, meta: ProfileMeta): Profile {
+  const appliances = row.appliances ?? (Array.isArray(meta.appliances) ? meta.appliances : []);
   return {
     userId: row.user_id,
     name: row.name,
     city: row.city,
     store: "biedronka",
     allergies: row.allergies ?? [],
-    appliances: extras?.appliances ?? row.appliances ?? [],
+    appliances,
     meatPref: row.meat_pref,
-    diet: extras?.diet ?? row.diet ?? (row.is_vegan ? "vegan" : "none"),
+    diet: row.diet ?? meta.diet ?? (row.is_vegan ? "vegan" : "none"),
     dietStyle: row.diet_style,
     householdSize: row.household_size,
     shopWeekday: row.shop_weekday,
     weeklyBudgetPln:
-      extras?.weeklyBudgetPln ?? (row.weekly_budget_pln == null ? 250 : num(row.weekly_budget_pln)),
-    dailyKcal: extras?.dailyKcal ?? 2000,
-    cookDays: cookDaysOrAll(extras?.cookDays),
+      row.weekly_budget_pln == null
+        ? typeof meta.weeklyBudgetPln === "number"
+          ? meta.weeklyBudgetPln
+          : 250
+        : num(row.weekly_budget_pln),
+    dailyKcal: row.daily_kcal == null ? (typeof meta.dailyKcal === "number" ? meta.dailyKcal : 2000) : num(row.daily_kcal),
+    cookDays: cookDaysOrAll(row.cook_days ?? meta.cookDays),
   };
 }
 
-function alignRecipeIds(
+function recipeIdsFrom(
   items: { day_index: number; recipe_id: string }[],
-  stored: string[] | null,
+  stored: string[] | null | undefined,
 ): string[] {
   if (stored && stored.length === 7) return stored.map((id) => id || "");
   const recipeIds = Array.from({ length: 7 }, () => "");
-  if (stored && stored.length === items.length) {
-    items.forEach((item, index) => {
-      if (item.day_index >= 0 && item.day_index < 7) recipeIds[item.day_index] = stored[index] || "";
-    });
-    return recipeIds;
-  }
   for (const item of items) {
     if (item.day_index >= 0 && item.day_index < 7) recipeIds[item.day_index] = item.recipe_id;
   }
@@ -119,27 +130,35 @@ export async function signOut() {
   await supabase.auth.signOut();
 }
 
+async function rememberProfile(profile: Profile): Promise<void> {
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  const { error } = await supabase.auth.updateUser({
+    data: {
+      ...profileMeta(data.user?.user_metadata),
+      diet: profile.diet,
+      appliances: profile.appliances,
+      weeklyBudgetPln: profile.weeklyBudgetPln,
+      dailyKcal: profile.dailyKcal,
+      cookDays: profile.cookDays,
+    },
+  });
+  if (error) throw new Error(error.message);
+}
+
 export async function getProfile(userId: string): Promise<Profile | null> {
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("user_id", userId)
-    .maybeSingle();
+  const [{ data, error }, user] = await Promise.all([
+    supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
+    supabase.auth.getUser(),
+  ]);
   if (error) throw new Error(error.message);
   if (!data || !data.name) return null;
-  return mapProfile(data as ProfileRow, await readProfileExtras(userId));
+  return mapProfile(data as ProfileRow, profileMeta(user.data.user?.user_metadata));
 }
 
 export async function saveProfile(profile: Profile) {
   const supabase = await createClient();
-  const extras: ProfileExtras = {
-    diet: profile.diet,
-    appliances: profile.appliances,
-    weeklyBudgetPln: profile.weeklyBudgetPln,
-    dailyKcal: profile.dailyKcal,
-    cookDays: profile.cookDays,
-  };
   const row = {
     user_id: profile.userId,
     name: profile.name,
@@ -154,13 +173,23 @@ export async function saveProfile(profile: Profile) {
     household_size: profile.householdSize,
     shop_weekday: profile.shopWeekday,
     weekly_budget_pln: profile.weeklyBudgetPln,
+    daily_kcal: profile.dailyKcal,
+    cook_days: profile.cookDays,
   };
-  const { error } = await supabase.from("profiles").upsert(row);
-  if (!error) {
-    await writeProfileExtras(profile.userId, { dailyKcal: profile.dailyKcal, cookDays: profile.cookDays });
+  const saved = await supabase.from("profiles").upsert(row);
+  if (!saved.error) {
+    await rememberProfile(profile);
     return;
   }
-  if (!missingColumn(error.message)) throw new Error(error.message);
+  if (!missingColumn(saved.error.message)) throw new Error(saved.error.message);
+
+  const { daily_kcal: _kcal, cook_days: _days, ...withoutNew } = row;
+  const mid = await supabase.from("profiles").upsert(withoutNew);
+  if (!mid.error) {
+    await rememberProfile(profile);
+    return;
+  }
+  if (!missingColumn(mid.error.message)) throw new Error(mid.error.message);
 
   const retry = await supabase.from("profiles").upsert({
     user_id: row.user_id,
@@ -175,7 +204,7 @@ export async function saveProfile(profile: Profile) {
     shop_weekday: row.shop_weekday,
   });
   if (retry.error) throw new Error(retry.error.message);
-  await writeProfileExtras(profile.userId, extras);
+  await rememberProfile(profile);
 }
 
 export async function getCatalog(): Promise<Catalog> {
@@ -198,8 +227,58 @@ export async function getCatalog(): Promise<Catalog> {
   });
 }
 
+async function trialStartedAt(userId: string): Promise<string> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("meal_plans")
+    .select("created_at")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return data?.created_at ?? new Date().toISOString();
+}
+
+function slotsFromMeals(meals: { dayIndex: number; recipeId: string }[]): string[] {
+  const recipeIds = Array.from({ length: 7 }, () => "");
+  for (const meal of meals) {
+    if (meal.dayIndex >= 0 && meal.dayIndex < 7) recipeIds[meal.dayIndex] = meal.recipeId;
+  }
+  return recipeIds;
+}
+
+async function insertPlan(userId: string, shopDate: string, recipeIds: string[]): Promise<{ id: string; storedIds: boolean }> {
+  const supabase = await createClient();
+  const withIds = await supabase
+    .from("meal_plans")
+    .insert({ user_id: userId, shop_date: shopDate, recipe_ids: recipeIds })
+    .select("id")
+    .single();
+  if (!withIds.error && withIds.data) return { id: withIds.data.id, storedIds: true };
+  if (withIds.error && !missingColumn(withIds.error.message)) throw new Error(withIds.error.message);
+
+  const plain = await supabase.from("meal_plans").insert({ user_id: userId, shop_date: shopDate }).select("id").single();
+  if (plain.error || !plain.data) throw new Error(plain.error?.message ?? "Не удалось сохранить план");
+  return { id: plain.data.id, storedIds: false };
+}
+
+async function writeItems(planId: string, recipeIds: string[], storedIds: boolean): Promise<void> {
+  const supabase = await createClient();
+  const wiped = await supabase.from("meal_plan_items").delete().eq("meal_plan_id", planId);
+  if (wiped.error) throw new Error(wiped.error.message);
+  const rows = recipeIds.flatMap((recipeId, dayIndex) =>
+    recipeId ? [{ meal_plan_id: planId, day_index: dayIndex, recipe_id: recipeId }] : [],
+  );
+  if (rows.length === 0) return;
+  const inserted = await supabase.from("meal_plan_items").insert(rows);
+  if (!inserted.error) return;
+  if (storedIds && foreignRecipe(inserted.error.message)) return;
+  throw new Error(inserted.error.message);
+}
+
 export async function savePlan(userId: string, profile: Profile, keep?: number[]): Promise<PlanView> {
-  const startedAt = (await readTrial(userId)) ?? (await startTrial(userId, new Date().toISOString()));
+  const startedAt = await trialStartedAt(userId);
   if (!trialOpen(startedAt)) {
     throw new Error("Триал кончился. Следующую неделю соберём после подписки.");
   }
@@ -211,45 +290,17 @@ export async function savePlan(userId: string, profile: Profile, keep?: number[]
       ? pickWeek(profile, catalog)
       : {
           shopDate: current.shopDate,
-          recipeIds: repickWeek(
-            profile,
-            catalog,
-            current.meals.map((meal) => meal.recipeId),
-            current.shopDate,
-            keep,
-          ),
+          recipeIds: repickWeek(profile, catalog, slotsFromMeals(current.meals), current.shopDate, keep),
         };
   const supabase = await createClient();
 
   const wiped = await supabase.from("meal_plans").delete().eq("user_id", userId).eq("shop_date", picked.shopDate);
   if (wiped.error) throw new Error(wiped.error.message);
-  const { data, error } = await supabase
-    .from("meal_plans")
-    .insert({ user_id: userId, shop_date: picked.shopDate })
-    .select("id")
-    .single();
-  if (error || !data) throw new Error(error?.message ?? "Не удалось сохранить план");
-
-  const rows = picked.recipeIds.flatMap((recipeId, dayIndex) =>
-    recipeId ? [{ meal_plan_id: data.id, day_index: dayIndex, recipe_id: recipeId }] : [],
-  );
-  const inserted =
-    rows.length === 0 ? { error: null } : await supabase.from("meal_plan_items").insert(rows);
-  if (inserted.error && foreignRecipe(inserted.error.message)) {
-    const stub = await supabase.from("recipes").select("id").limit(1).maybeSingle();
-    const stubId = stub.data?.id;
-    if (stub.error || !stubId) throw new Error(inserted.error.message);
-    const fallback = await supabase.from("meal_plan_items").insert(
-      rows.map((row) => ({ ...row, recipe_id: stubId })),
-    );
-    if (fallback.error) throw new Error(fallback.error.message);
-    await writePlanRecipes(data.id, picked.recipeIds);
-  } else if (inserted.error) {
-    throw new Error(inserted.error.message);
-  }
+  const plan = await insertPlan(userId, picked.shopDate, picked.recipeIds);
+  await writeItems(plan.id, picked.recipeIds, plan.storedIds);
 
   return presentPlan({
-    id: data.id,
+    id: plan.id,
     shopDate: picked.shopDate,
     householdSize: profile.householdSize,
     recipeIds: picked.recipeIds,
@@ -266,12 +317,15 @@ export async function replaceMeal(
   const current = await getLatestPlan(userId, profile.householdSize);
   if (!current) throw new Error("Нет недели");
   const catalog = await getCatalog();
-  const currentIds = current.meals.map((meal) => meal.recipeId);
+  const currentIds = slotsFromMeals(current.meals);
   const recipeIds =
     dayIndex == null
       ? swapRecipeIds(profile, catalog, currentIds, recipeId, current.shopDate)
       : placeRecipe(currentIds, recipeId, dayIndex);
-  await writePlanRecipes(current.id, recipeIds);
+  const supabase = await createClient();
+  const updated = await supabase.from("meal_plans").update({ recipe_ids: recipeIds }).eq("id", current.id);
+  if (updated.error && !missingColumn(updated.error.message)) throw new Error(updated.error.message);
+  await writeItems(current.id, recipeIds, !updated.error);
   return presentPlan({
     id: current.id,
     shopDate: current.shopDate,
@@ -281,67 +335,61 @@ export async function replaceMeal(
   });
 }
 
-export async function getLatestPlan(userId: string, householdSize: number): Promise<PlanView | null> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("meal_plans")
-    .select("id, shop_date, meal_plan_items(day_index, recipe_id)")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  if (error) throw new Error(error.message);
-  if (!data) return null;
-
-  const items = (data.meal_plan_items ?? []) as { day_index: number; recipe_id: string }[];
-  items.sort((a, b) => a.day_index - b.day_index);
-  const stored = await readPlanRecipes(data.id);
-
-  return presentPlan({
-    id: data.id,
-    shopDate: String(data.shop_date).slice(0, 10),
-    householdSize,
-    recipeIds: alignRecipeIds(items, stored),
-    catalog: await getCatalog(),
-  });
-}
-
-type PlanListRow = {
+type PlanRow = {
   id: string;
   shop_date: string;
-  created_at: string;
+  created_at?: string;
+  recipe_ids?: string[] | null;
   meal_plan_items: { day_index: number; recipe_id: string }[] | null;
 };
 
-export async function listPlans(userId: string, householdSize: number): Promise<TrialWeek[]> {
+const planSelect = "id, shop_date, created_at, recipe_ids, meal_plan_items(day_index, recipe_id)";
+const planSelectLegacy = "id, shop_date, created_at, meal_plan_items(day_index, recipe_id)";
+
+async function loadPlans(userId: string): Promise<PlanRow[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const full = await supabase.from("meal_plans").select(planSelect).eq("user_id", userId).order("created_at", { ascending: true });
+  if (!full.error) return (full.data ?? []) as PlanRow[];
+  if (!missingColumn(full.error.message)) throw new Error(full.error.message);
+  const legacy = await supabase
     .from("meal_plans")
-    .select("id, shop_date, created_at, meal_plan_items(day_index, recipe_id)")
+    .select(planSelectLegacy)
     .eq("user_id", userId)
     .order("created_at", { ascending: true });
-  if (error) throw new Error(error.message);
+  if (legacy.error) throw new Error(legacy.error.message);
+  return (legacy.data ?? []) as PlanRow[];
+}
 
+function viewFromRow(row: PlanRow, householdSize: number, catalog: Catalog): PlanView {
+  const items = [...(row.meal_plan_items ?? [])].sort((a, b) => a.day_index - b.day_index);
+  return presentPlan({
+    id: row.id,
+    shopDate: String(row.shop_date).slice(0, 10),
+    householdSize,
+    recipeIds: recipeIdsFrom(items, row.recipe_ids),
+    catalog,
+  });
+}
+
+export async function getLatestPlan(userId: string, householdSize: number): Promise<PlanView | null> {
+  const rows = await loadPlans(userId);
+  const row = rows[rows.length - 1];
+  if (!row) return null;
+  return viewFromRow(row, householdSize, await getCatalog());
+}
+
+export async function listPlans(userId: string, householdSize: number): Promise<TrialWeek[]> {
+  const rows = await loadPlans(userId);
   const catalog = await getCatalog();
-  const weeks: TrialWeek[] = [];
-  for (const row of (data ?? []) as PlanListRow[]) {
-    const items = [...(row.meal_plan_items ?? [])].sort((a, b) => a.day_index - b.day_index);
-    const stored = await readPlanRecipes(row.id);
-    const view = presentPlan({
-      id: row.id,
-      shopDate: String(row.shop_date).slice(0, 10),
-      householdSize,
-      recipeIds: alignRecipeIds(items, stored),
-      catalog,
-    });
-    weeks.push({
+  return rows.map((row) => {
+    const view = viewFromRow(row, householdSize, catalog);
+    return {
       shopDate: view.shopDate,
-      createdAt: row.created_at,
+      createdAt: row.created_at ?? view.shopDate,
       saved: view.saved,
       lines: savingLines(view.lines),
-    });
-  }
-  return weeks;
+    };
+  });
 }
 
 function foreignRecipe(message: string): boolean {
