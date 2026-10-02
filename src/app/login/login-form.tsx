@@ -2,6 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+
+function authMessage(message: string): string {
+  if (/invalid login credentials/i.test(message)) return "Неверная почта или пароль";
+  if (/user already registered/i.test(message)) return "Такой аккаунт уже есть";
+  if (/email not confirmed/i.test(message)) return "Подтверди почту";
+  return message;
+}
 
 export function LoginForm() {
   const router = useRouter();
@@ -16,13 +24,18 @@ export function LoginForm() {
     setError("");
     setPending(true);
     try {
-      const response = await fetch(mode === "signup" ? "/api/auth/signup" : "/api/auth/login", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const supabase = createClient();
+      const emailValue = email.trim().toLowerCase();
+      const auth =
+        mode === "signup"
+          ? await supabase.auth.signUp({ email: emailValue, password })
+          : await supabase.auth.signInWithPassword({ email: emailValue, password });
+      if (auth.error) throw new Error(authMessage(auth.error.message));
+      if (!auth.data.session) throw new Error("Подтверди почту. Для локальной разработки выключи Confirm email в Supabase.");
+
+      const response = await fetch("/api/session");
       const data = (await response.json()) as { error?: string; profileComplete?: boolean };
-      if (!response.ok) throw new Error(data.error ?? "Не вышло");
+      if (!response.ok) throw new Error(data.error ?? "Сессия не сохранилась");
       router.push(data.profileComplete ? "/week" : "/onboarding");
       router.refresh();
     } catch (err) {

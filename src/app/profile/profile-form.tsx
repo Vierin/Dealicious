@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { BackLink } from "@/components/back-link";
+import { createClient } from "@/lib/supabase/client";
 import { isWarsaw } from "@/lib/profile";
 import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
 import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "@/lib/types";
@@ -57,6 +58,10 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
       setError("Выбери хотя бы один день готовки");
       return;
     }
+    if (appliances.length < 1) {
+      setError("Выбери технику");
+      return;
+    }
 
     setPending(true);
     try {
@@ -94,7 +99,11 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
   }
 
   async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
+    const { error } = await createClient().auth.signOut();
+    if (error) {
+      setError(error.message);
+      return;
+    }
     router.push("/login");
     router.refresh();
   }
@@ -190,10 +199,6 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
 
       <Section title="Техника" hint="Рецепт попадает в неделю, только если вся нужная техника есть.">
         <div className="flex flex-col gap-2">
-          <button type="button" onClick={() => setAppliances([])} className={appliances.length === 0 ? on : off}>
-            <div>None</div>
-            <div className="mt-1 text-sm text-muted">Только холодные обеды</div>
-          </button>
           {APPLIANCE_OPTIONS.map((option) => (
             <button key={option.id} type="button" onClick={() => toggleAppliance(option.id)} className={appliances.includes(option.id) ? on : off}>
               <div>{option.label}</div>
