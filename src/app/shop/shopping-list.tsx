@@ -50,10 +50,10 @@ export function ShoppingList({ planId, groups }: { planId: string; groups: Group
           <ul className="mt-2">
             {group.lines.map((line) => {
               const on = checked.includes(line.productId);
-              const pct =
-                line.onPromo && line.qty > 0
-                  ? Math.round((1 - line.unitPrice / (line.regularLineTotal / line.qty)) * 100)
-                  : 0;
+              const discounted = line.onPromo && line.regularLineTotal > line.lineTotal && line.qty > 0;
+              const pct = discounted
+                ? Math.round((1 - line.unitPrice / (line.regularLineTotal / line.qty)) * 100)
+                : 0;
               return (
                 <li key={line.productId} className="border-b border-line">
                   <button
@@ -73,7 +73,7 @@ export function ShoppingList({ planId, groups }: { planId: string; groups: Group
                     </span>
                     <span className={`text-right ${on ? "text-muted" : ""}`}>
                       <span className="block">{formatPln(line.lineTotal)}</span>
-                      {line.onPromo ? (
+                      {discounted ? (
                         <span className={`block text-sm ${on ? "" : "text-olive"}`}>
                           −{pct}% · было {formatPln(line.regularLineTotal)}
                         </span>

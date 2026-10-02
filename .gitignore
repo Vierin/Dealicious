@@ -37,6 +37,9 @@ yarn-error.log*
 # local accounts and sessions
 .data/
 
+# blix scrape leftovers
+data/blix-unmatched.txt
+
 # vercel
 .vercel
 

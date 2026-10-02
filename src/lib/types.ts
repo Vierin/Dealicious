@@ -20,7 +20,9 @@ export type Promotion = {
   promoPricePln: number;
   validFrom: string;
   validTo: string;
-  label: "gazetka-pon" | "gazetka-czw";
+  label: string;
+  /** null = leaflet had no regular price, savings stay zero. Omitted = use the product regular. */
+  regularPricePln?: number | null;
 };
 
 export type Recipe = {

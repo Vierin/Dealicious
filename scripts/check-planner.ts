@@ -1,4 +1,4 @@
-import { buildCatalog } from "../src/lib/catalog";
+import { buildCatalog, hasLivePromos } from "../src/lib/catalog";
 import { pickWeek, presentPlan } from "../src/lib/planner";
 import type { Profile } from "../src/lib/types";
 
@@ -45,13 +45,18 @@ function assert(cond: unknown, message: string) {
 assert(monday.meals.length === 7, "monday meals");
 assert(monday.shopDate === "2026-10-05", `monday shop ${monday.shopDate}`);
 assert(sunday.shopDate === "2026-10-04", `sunday shop ${sunday.shopDate}`);
-assert(
-  monday.meals.map((meal) => meal.recipeId).join() !== sunday.meals.map((meal) => meal.recipeId).join(),
-  `same meals\nmon ${monday.meals.map((m) => m.recipeId)}\nsun ${sunday.meals.map((m) => m.recipeId)}`,
-);
 assert(monday.total <= monday.regularTotal, "monday total");
 assert(monday.saved >= 0 && sunday.saved >= 0, "saved");
-assert(monday.saved !== sunday.saved, `same savings ${monday.saved}`);
+for (const line of [...monday.lines, ...sunday.lines]) {
+  if (line.onPromo) assert(line.regularLineTotal > line.lineTotal, `badge ${line.productId}`);
+}
+if (!hasLivePromos()) {
+  assert(
+    monday.meals.map((meal) => meal.recipeId).join() !== sunday.meals.map((meal) => meal.recipeId).join(),
+    `same meals\nmon ${monday.meals.map((m) => m.recipeId)}\nsun ${sunday.meals.map((m) => m.recipeId)}`,
+  );
+  assert(monday.saved !== sunday.saved, `same savings ${monday.saved}`);
+}
 assert(vegan.meals.length === 7, "vegan meals");
 assert(
   vegan.meals.every((meal) => !["tofu-bowl", "chicken-rice", "bolognese", "omelette"].includes(meal.recipeId)),
@@ -69,10 +74,8 @@ assert(
 );
 
 const chicken = monday.lines.find((line) => line.productId === "kurczak");
-if (chicken) {
-  assert(chicken.qty >= 0.1, "chicken qty");
-  assert(chicken.onPromo, "chicken should be on monday promo");
-}
+if (chicken) assert(chicken.qty >= 0.1, "chicken qty");
+if (chicken && !hasLivePromos()) assert(chicken.onPromo, "chicken should be on monday promo");
 
 const big = planFor({ householdSize: 4, shopWeekday: 1 });
 const small = planFor({ householdSize: 1, shopWeekday: 1 });

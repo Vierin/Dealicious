@@ -1,6 +1,8 @@
+import { applyLivePromos, RECIPES } from "../catalog";
 import { pickWeek, presentPlan } from "../planner";
 import type { Catalog, PlanView, Profile } from "../types";
 import { createClient } from "../supabase/server";
+import { clearProfileExtras, readProfileExtras, writeProfileExtras, type ProfileExtras } from "./profile-extras";
 
 type ProductRow = {
   id: string;
@@ -16,7 +18,7 @@ type PromotionRow = {
   promo_price_pln: number | string;
   valid_from: string;
   valid_to: string;
-  label: "gazetka-pon" | "gazetka-czw";
+  label: string;
 };
 
 type RecipeRow = {
@@ -55,21 +57,26 @@ function num(value: number | string): number {
   return typeof value === "number" ? value : Number(value);
 }
 
-function mapProfile(row: ProfileRow): Profile {
+function mapProfile(row: ProfileRow, extras: ProfileExtras | null): Profile {
   return {
     userId: row.user_id,
     name: row.name,
     city: row.city,
     store: "biedronka",
     allergies: row.allergies ?? [],
-    appliances: row.appliances ?? [],
+    appliances: extras?.appliances ?? row.appliances ?? [],
     meatPref: row.meat_pref,
-    diet: row.diet ?? (row.is_vegan ? "vegan" : "none"),
+    diet: extras?.diet ?? row.diet ?? (row.is_vegan ? "vegan" : "none"),
     dietStyle: row.diet_style,
     householdSize: row.household_size,
     shopWeekday: row.shop_weekday,
-    weeklyBudgetPln: num(row.weekly_budget_pln),
+    weeklyBudgetPln:
+      extras?.weeklyBudgetPln ?? (row.weekly_budget_pln == null ? 250 : num(row.weekly_budget_pln)),
   };
+}
+
+function missingColumn(message: string): boolean {
+  return /schema cache|does not exist|Could not find the/i.test(message);
 }
 
 async function requireUser() {
@@ -121,12 +128,17 @@ export async function getProfile(userId: string): Promise<Profile | null> {
     .maybeSingle();
   if (error) throw new Error(error.message);
   if (!data || !data.name) return null;
-  return mapProfile(data as ProfileRow);
+  return mapProfile(data as ProfileRow, await readProfileExtras(userId));
 }
 
 export async function saveProfile(profile: Profile) {
   const supabase = await createClient();
-  const { error } = await supabase.from("profiles").upsert({
+  const extras: ProfileExtras = {
+    diet: profile.diet,
+    appliances: profile.appliances,
+    weeklyBudgetPln: profile.weeklyBudgetPln,
+  };
+  const row = {
     user_id: profile.userId,
     name: profile.name,
     city: profile.city,
@@ -140,8 +152,28 @@ export async function saveProfile(profile: Profile) {
     household_size: profile.householdSize,
     shop_weekday: profile.shopWeekday,
     weekly_budget_pln: profile.weeklyBudgetPln,
+  };
+  const { error } = await supabase.from("profiles").upsert(row);
+  if (!error) {
+    await clearProfileExtras(profile.userId);
+    return;
+  }
+  if (!missingColumn(error.message)) throw new Error(error.message);
+
+  const retry = await supabase.from("profiles").upsert({
+    user_id: row.user_id,
+    name: row.name,
+    city: row.city,
+    store: row.store,
+    allergies: row.allergies,
+    meat_pref: row.meat_pref,
+    is_vegan: row.is_vegan,
+    diet_style: row.diet_style,
+    household_size: row.household_size,
+    shop_weekday: row.shop_weekday,
   });
-  if (error) throw new Error(error.message);
+  if (retry.error) throw new Error(retry.error.message);
+  await writeProfileExtras(profile.userId, extras);
 }
 
 export async function getCatalog(): Promise<Catalog> {
@@ -157,7 +189,7 @@ export async function getCatalog(): Promise<Catalog> {
   if (recipes.error) throw new Error(recipes.error.message);
   if (ingredients.error) throw new Error(ingredients.error.message);
 
-  return {
+  return applyLivePromos({
     products: (products.data as ProductRow[]).map((row) => ({
       id: row.id,
       namePl: row.name_pl,
@@ -180,14 +212,14 @@ export async function getCatalog(): Promise<Catalog> {
       allergens: row.allergens,
       proteins: row.proteins,
       isVegan: row.is_vegan,
-      appliances: row.appliances ?? [],
+      appliances: row.appliances ?? RECIPES.find((recipe) => recipe.id === row.id)?.appliances ?? [],
     })),
     ingredients: (ingredients.data as IngredientRow[]).map((row) => ({
       recipeId: row.recipe_id,
       productId: row.product_id,
       qtyPerPerson: num(row.qty_per_person),
     })),
-  };
+  });
 }
 
 export async function savePlan(userId: string, profile: Profile): Promise<PlanView> {

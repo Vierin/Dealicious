@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { hasLivePromos, leafletsOn } from "@/lib/catalog";
 import { formatRuDate } from "@/lib/dates";
 import { formatPln } from "@/lib/money";
 import { isProfileComplete } from "@/lib/profile";
@@ -17,6 +18,8 @@ export default async function WeekPage() {
   const plan = await getLatestPlan(user.id, profile.householdSize);
   const shop = plan ? formatRuDate(plan.shopDate) : null;
   const shopLabel = SHOP_DAYS.find((day) => day.value === profile.shopWeekday)?.label;
+  const sources = plan ? leafletsOn(plan.shopDate) : [];
+  const live = hasLivePromos();
 
   return (
     <main className="mx-auto w-full max-w-2xl px-5 py-8">
@@ -39,7 +42,13 @@ export default async function WeekPage() {
             <Stat label="Сэкономили" value={formatPln(plan.saved)} accent />
           </section>
           <p className="mt-3 text-sm text-muted">
-            Семь обедов с {shop.dayMonth}. Цены по газете, которая действует в день закупки.
+            {sources.length > 0
+              ? sources
+                  .map((leaflet) => `${leaflet.name}, ${dot(leaflet.validFrom)}–${dot(leaflet.validTo)}`)
+                  .join(" · ")
+              : live
+                ? "На день закупки нет активной газетки. В списке обычные цены."
+                : `Семь обедов с ${shop.dayMonth}. Цены по газете, которая действует в день закупки.`}
           </p>
           <p className="mt-1 text-sm text-muted">
             Бюджет {formatPln(profile.weeklyBudgetPln)}
@@ -54,15 +63,18 @@ export default async function WeekPage() {
               {plan.meals.map((meal) => {
                 const date = formatRuDate(meal.date);
                 return (
-                  <li key={meal.dayIndex} className="flex gap-4 border-b border-line py-4">
-                    <div className="w-32 shrink-0 text-sm text-muted">
-                      <div className="capitalize">{date.weekday}</div>
-                      <div>{date.dayMonth}</div>
-                    </div>
-                    <div>
-                      <div className="font-serif text-xl">{meal.title}</div>
-                      <div className="text-sm text-muted">на {plan.householdSize} чел.</div>
-                    </div>
+                  <li key={meal.dayIndex} className="border-b border-line">
+                    <Link href={`/recipe/${meal.recipeId}`} className="flex gap-4 py-4">
+                      <div className="w-32 shrink-0 text-sm text-muted">
+                        <div className="capitalize">{date.weekday}</div>
+                        <div>{date.dayMonth}</div>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="font-serif text-xl">{meal.title}</div>
+                        <div className="text-sm text-muted">на {plan.householdSize} чел.</div>
+                      </div>
+                      <span className="self-center text-olive">Открыть</span>
+                    </Link>
                   </li>
                 );
               })}
@@ -85,6 +97,11 @@ export default async function WeekPage() {
       )}
     </main>
   );
+}
+
+function dot(iso: string): string {
+  const [, month, day] = iso.split("-");
+  return `${day}.${month}`;
 }
 
 function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {

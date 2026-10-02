@@ -34,8 +34,8 @@ export function WeekActions() {
       <button type="button" onClick={rebuild} disabled={pending} className="text-olive disabled:opacity-60">
         {pending ? "Считаю…" : "Пересчитать"}
       </button>
-      <a href="/onboarding" className="text-muted">
-        Анкета
+      <a href="/profile" className="text-muted">
+        Профиль
       </a>
       <button type="button" onClick={logout} className="text-muted">
         Выйти

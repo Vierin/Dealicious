@@ -37,8 +37,7 @@ create table if not exists promotions (
   valid_from date not null,
   valid_to date not null,
   label text not null,
-  constraint promotions_dates_chk check (valid_to >= valid_from),
-  constraint promotions_label_chk check (label in ('gazetka-pon', 'gazetka-czw'))
+  constraint promotions_dates_chk check (valid_to >= valid_from)
 );
 
 create index if not exists promotions_product_dates_idx

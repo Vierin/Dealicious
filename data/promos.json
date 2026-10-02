@@ -1,0 +1,409 @@
+{
+  "importedAt": "2026-10-02T12:21:59.695Z",
+  "leaflets": [
+    {
+      "id": "526848",
+      "name": "Od czwartku, Z ladą tradycyjną",
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07"
+    },
+    {
+      "id": "526845",
+      "name": "Od czwartku",
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-14"
+    },
+    {
+      "id": "526674",
+      "name": "Od poniedziałku, Z ladą tradycyjną",
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-10"
+    },
+    {
+      "id": "526671",
+      "name": "Od poniedziałku",
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-10"
+    }
+  ],
+  "promotions": [
+    {
+      "id": "blix-526848-pomidory",
+      "productId": "pomidory",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526848-mleko",
+      "productId": "mleko",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526848-maslo",
+      "productId": "maslo",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526848-gouda",
+      "productId": "gouda",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526848-brokuly",
+      "productId": "brokuly",
+      "promoPricePln": 3.89,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526848-awokado",
+      "productId": "awokado",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526848-ziemniaki",
+      "productId": "ziemniaki",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526848-cebula",
+      "productId": "cebula",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526848-cytryna",
+      "productId": "cytryna",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526848-mielone",
+      "productId": "mielone",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526845-pomidory",
+      "productId": "pomidory",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-mleko",
+      "productId": "mleko",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-maslo",
+      "productId": "maslo",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-gouda",
+      "productId": "gouda",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-brokuly",
+      "productId": "brokuly",
+      "promoPricePln": 3.89,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-awokado",
+      "productId": "awokado",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-cebula",
+      "productId": "cebula",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-ziemniaki",
+      "productId": "ziemniaki",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-cytryna",
+      "productId": "cytryna",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-schab",
+      "productId": "schab",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-kurczak",
+      "productId": "kurczak",
+      "promoPricePln": 29.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-mielone",
+      "productId": "mielone",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-dorsz",
+      "productId": "dorsz",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-jogurt",
+      "productId": "jogurt",
+      "promoPricePln": 3.75,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526845-chleb",
+      "productId": "chleb",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-526674-jogurt",
+      "productId": "jogurt",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526674-mleko",
+      "productId": "mleko",
+      "promoPricePln": 3.09,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526674-kurczak",
+      "productId": "kurczak",
+      "promoPricePln": 16.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526674-mielone",
+      "productId": "mielone",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526674-dorsz",
+      "productId": "dorsz",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526674-chleb",
+      "productId": "chleb",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526674-gouda",
+      "productId": "gouda",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526674-oliwa",
+      "productId": "oliwa",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526674-kukurydza",
+      "productId": "kukurydza",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-526671-mleko",
+      "productId": "mleko",
+      "promoPricePln": 3.09,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku"
+    },
+    {
+      "id": "blix-526671-jogurt",
+      "productId": "jogurt",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku"
+    },
+    {
+      "id": "blix-526671-kurczak",
+      "productId": "kurczak",
+      "promoPricePln": 29.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku"
+    },
+    {
+      "id": "blix-526671-dorsz",
+      "productId": "dorsz",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku"
+    },
+    {
+      "id": "blix-526671-chleb",
+      "productId": "chleb",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku"
+    },
+    {
+      "id": "blix-526671-gouda",
+      "productId": "gouda",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku"
+    },
+    {
+      "id": "blix-526671-oliwa",
+      "productId": "oliwa",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku"
+    },
+    {
+      "id": "blix-526671-kukurydza",
+      "productId": "kukurydza",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-09-28",
+      "validTo": "2026-10-03",
+      "label": "Od poniedziałku"
+    }
+  ]
+}

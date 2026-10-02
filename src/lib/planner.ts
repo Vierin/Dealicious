@@ -12,6 +12,16 @@ import type {
 } from "./types";
 import { CATEGORY_ORDER } from "./types";
 
+function knownRegular(promo: Promotion, product: Product): number | null {
+  if (promo.regularPricePln === undefined) return product.regularPricePln;
+  return promo.regularPricePln;
+}
+
+export function isDiscount(promo: Promotion, product: Product): boolean {
+  const regular = knownRegular(promo, product);
+  return regular != null && regular > promo.promoPricePln;
+}
+
 export function activePromo(
   productId: string,
   promotions: Promotion[],
@@ -65,9 +75,16 @@ function promoShare(recipe: Recipe, catalog: Catalog, shopDate: string): number 
 
   for (const ingredient of ingredients) {
     const product = productById(catalog, ingredient.productId);
-    const cost = ingredient.qtyPerPerson * product.regularPricePln;
-    regular += cost;
-    if (activePromo(product.id, catalog.promotions, shopDate)) onPromo += cost;
+    const promo = activePromo(product.id, catalog.promotions, shopDate);
+    if (promo && isDiscount(promo, product)) {
+      const regularUnit = knownRegular(promo, product) ?? product.regularPricePln;
+      regular += ingredient.qtyPerPerson * regularUnit;
+      onPromo += ingredient.qtyPerPerson * regularUnit;
+    } else if (promo) {
+      regular += ingredient.qtyPerPerson * promo.promoPricePln;
+    } else {
+      regular += ingredient.qtyPerPerson * product.regularPricePln;
+    }
   }
 
   return regular === 0 ? 0 : onPromo / regular;
@@ -157,7 +174,10 @@ export function buildBasket(
     const product = productById(catalog, productId);
     const rounded = roundQty(qty, product.unit);
     const promo = activePromo(productId, catalog.promotions, shopDate);
+    const discount = promo != null && isDiscount(promo, product);
     const unitPrice = promo ? promo.promoPricePln : product.regularPricePln;
+    const regularUnit =
+      promo && discount ? (knownRegular(promo, product) ?? product.regularPricePln) : unitPrice;
     lines.push({
       productId,
       namePl: product.namePl,
@@ -166,8 +186,8 @@ export function buildBasket(
       unit: product.unit,
       unitPrice,
       lineTotal: money(rounded * unitPrice),
-      regularLineTotal: money(rounded * product.regularPricePln),
-      onPromo: Boolean(promo),
+      regularLineTotal: money(rounded * regularUnit),
+      onPromo: discount,
     });
   }
 
