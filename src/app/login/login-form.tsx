@@ -7,8 +7,15 @@ import { createClient } from "@/lib/supabase/client";
 function authMessage(message: string): string {
   if (/invalid login credentials/i.test(message)) return "Неверная почта или пароль";
   if (/user already registered/i.test(message)) return "Такой аккаунт уже есть";
-  if (/email not confirmed/i.test(message)) return "Подтверди почту";
+  if (/email not confirmed/i.test(message)) return "Почта ещё не подтверждена";
+  if (/rate limit|error sending confirmation email/i.test(message)) {
+    return "Supabase не отправил письмо: лимит встроенной почты. Нужен свой SMTP в Authentication → Emails.";
+  }
   return message;
+}
+
+function redirectTo(): string {
+  return `${window.location.origin}/login`;
 }
 
 export function LoginForm() {
@@ -17,27 +24,61 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [pending, setPending] = useState(false);
+
+  async function enter() {
+    const response = await fetch("/api/session");
+    const data = (await response.json()) as { error?: string; profileComplete?: boolean };
+    if (!response.ok) throw new Error(data.error ?? "Сессия не сохранилась");
+    router.push(data.profileComplete ? "/week" : "/onboarding");
+    router.refresh();
+  }
+
+  async function resend() {
+    setError("");
+    setPending(true);
+    try {
+      const emailValue = email.trim().toLowerCase();
+      const { error: resendError } = await createClient().auth.resend({
+        type: "signup",
+        email: emailValue,
+        options: { emailRedirectTo: redirectTo() },
+      });
+      if (resendError) throw new Error(authMessage(resendError.message));
+      setNotice(`Ещё раз отправили письмо на ${emailValue}.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Не вышло");
+    } finally {
+      setPending(false);
+    }
+  }
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     setError("");
+    setNotice("");
     setPending(true);
     try {
       const supabase = createClient();
       const emailValue = email.trim().toLowerCase();
       const auth =
         mode === "signup"
-          ? await supabase.auth.signUp({ email: emailValue, password })
+          ? await supabase.auth.signUp({
+              email: emailValue,
+              password,
+              options: { emailRedirectTo: redirectTo() },
+            })
           : await supabase.auth.signInWithPassword({ email: emailValue, password });
       if (auth.error) throw new Error(authMessage(auth.error.message));
-      if (!auth.data.session) throw new Error("Подтверди почту. Для локальной разработки выключи Confirm email в Supabase.");
-
-      const response = await fetch("/api/session");
-      const data = (await response.json()) as { error?: string; profileComplete?: boolean };
-      if (!response.ok) throw new Error(data.error ?? "Сессия не сохранилась");
-      router.push(data.profileComplete ? "/week" : "/onboarding");
-      router.refresh();
+      if (mode === "signup" && (auth.data.user?.identities?.length ?? 0) === 0) {
+        throw new Error("Такой аккаунт уже есть");
+      }
+      if (!auth.data.session) {
+        setNotice(`Письмо с подтверждением отправлено на ${emailValue}. Открой его и перейди по ссылке.`);
+        return;
+      }
+      await enter();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Не вышло");
     } finally {
@@ -75,7 +116,13 @@ export function LoginForm() {
             className="h-12 rounded-2xl border border-line bg-paper px-4 text-base text-ink outline-none focus:border-olive"
           />
         </label>
+        {notice ? <p className="text-sm text-olive">{notice}</p> : null}
         {error ? <p className="text-sm text-[#8a3d32]">{error}</p> : null}
+        {notice ? (
+          <button type="button" onClick={resend} disabled={pending} className="text-left text-sm text-ink underline disabled:opacity-60">
+            Отправить письмо ещё раз
+          </button>
+        ) : null}
         <button
           type="submit"
           disabled={pending}
