@@ -4,9 +4,11 @@ import { useState } from "react";
 
 export function RecipeTabs({
   ingredients,
+  pantry,
   steps,
 }: {
   ingredients: { name: string; qty: string }[];
+  pantry: string[];
   steps: string[];
 }) {
   const [tab, setTab] = useState<"ingredients" | "method">("ingredients");
@@ -31,6 +33,7 @@ export function RecipeTabs({
       </div>
 
       {tab === "ingredients" ? (
+        <>
         <ul className="mt-4">
           {ingredients.map((item) => (
             <li key={item.name} className="flex items-baseline justify-between gap-4 border-b border-line py-3">
@@ -39,6 +42,19 @@ export function RecipeTabs({
             </li>
           ))}
         </ul>
+        {pantry.length > 0 ? (
+          <div className="mt-6">
+            <p className="text-sm text-muted">Из кладовой, в чек не входит</p>
+            <ul className="mt-2">
+              {pantry.map((name) => (
+                <li key={name} className="border-b border-line py-3">
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        </>
       ) : (
         <ol className="mt-4">
           {steps.map((step, index) => (

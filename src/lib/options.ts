@@ -1,4 +1,4 @@
-import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref } from "./types";
+import type { Allergen, Appliance, Cuisine, DietNeed, DietStyle, MeatPref } from "./types";
 
 export const APPLIANCE_OPTIONS: { id: Appliance; label: string; hint: string }[] = [
   { id: "stove", label: "Stove", hint: "Плита" },
@@ -29,6 +29,15 @@ export const MEAT_OPTIONS: { id: MeatPref; label: string }[] = [
   { id: "pork", label: "Свинина" },
   { id: "fish", label: "Рыба" },
   { id: "any", label: "Без разницы" },
+];
+
+export const CUISINE_OPTIONS: { id: Cuisine; label: string }[] = [
+  { id: "domowa", label: "Домашняя" },
+  { id: "wloska", label: "Итальянская" },
+  { id: "azjatycka", label: "Азиатская" },
+  { id: "meksykanska", label: "Мексиканская" },
+  { id: "indyjska", label: "Индийская" },
+  { id: "srodziemnomorska", label: "Средиземноморская" },
 ];
 
 export const STYLE_OPTIONS: { id: DietStyle; label: string; hint: string }[] = [

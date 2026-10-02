@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { hasLivePromos, leafletsOn } from "@/lib/catalog";
+import { VibePills, cuisineLabel } from "@/components/pills";
+import { RECIPES } from "@/lib/catalog";
+import { COOKING } from "@/lib/cooking";
+import { recipePhoto } from "@/lib/recipes";
 import { formatRuDate } from "@/lib/dates";
 import { formatPln } from "@/lib/money";
 import { isProfileComplete } from "@/lib/profile";
 import { getLatestPlan, getProfile, getSessionUser } from "@/lib/store";
-import { SHOP_DAYS } from "@/lib/options";
 import { WeekActions } from "./week-actions";
+import { ShopCard } from "./shop-card";
 
 export const dynamic = "force-dynamic";
 
@@ -16,81 +19,85 @@ export default async function WeekPage() {
   const profile = await getProfile(user.id);
   if (!isProfileComplete(profile)) redirect("/onboarding");
   const plan = await getLatestPlan(user.id, profile.householdSize);
-  const shop = plan ? formatRuDate(plan.shopDate) : null;
-  const shopLabel = SHOP_DAYS.find((day) => day.value === profile.shopWeekday)?.label;
-  const sources = plan ? leafletsOn(plan.shopDate) : [];
-  const live = hasLivePromos();
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-5 py-8">
+    <main className="mx-auto w-full max-w-5xl px-5 py-8">
       <header className="flex items-start justify-between gap-4">
-        <div>
-          <p className="font-serif text-3xl">Dealicious</p>
-          <p className="mt-2 text-muted">
-            {profile.name} · {profile.city} · Biedronka · на {profile.householdSize} чел.
-          </p>
-          <p className="text-muted">Закупка: {shopLabel}</p>
-        </div>
+        <p className="font-serif text-3xl">Dealicious</p>
         <WeekActions />
       </header>
 
-      {plan && shop ? (
+      {plan ? (
         <>
-          <section className="mt-8 grid grid-cols-3 gap-3 rounded-3xl bg-ink p-5 text-cream">
-            <Stat label="К оплате" value={formatPln(plan.total)} />
-            <Stat label="Без акций" value={formatPln(plan.regularTotal)} />
-            <Stat label="Сэкономили" value={formatPln(plan.saved)} accent />
-          </section>
-          <p className="mt-3 text-sm text-muted">
-            {sources.length > 0
-              ? sources
-                  .map((leaflet) => `${leaflet.name}, ${dot(leaflet.validFrom)}–${dot(leaflet.validTo)}`)
-                  .join(" · ")
-              : live
-                ? "На день закупки нет активной газетки. В списке обычные цены."
-                : `Семь обедов с ${shop.dayMonth}. Цены по газете, которая действует в день закупки.`}
-          </p>
-          <p className="mt-1 text-sm text-muted">
-            Бюджет {formatPln(profile.weeklyBudgetPln)}
-            {plan.total <= profile.weeklyBudgetPln
-              ? ` · осталось ${formatPln(profile.weeklyBudgetPln - plan.total)}`
-              : ` · выше на ${formatPln(plan.total - profile.weeklyBudgetPln)}`}
-          </p>
+          <div className="mt-8 grid gap-4 md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)]">
+            <section className="grid grid-cols-3 gap-3 rounded-3xl bg-ink p-5 text-cream">
+              <Stat label="К оплате" value={formatPln(plan.total)} />
+              <Stat label="Без акций" value={formatPln(plan.regularTotal)} />
+              <Stat label="Сэкономили" value={formatPln(plan.saved)} accent />
+            </section>
+            <ShopCard planId={plan.id} productIds={plan.lines.map((line) => line.productId)} />
+          </div>
 
-          <section className="mt-8">
+          {plan.meals.some((meal) => !RECIPES.some((recipe) => recipe.id === meal.recipeId)) ? (
+            <p className="mt-4 text-sm text-olive">Каталог обновился. Нажми «Пересчитать», чтобы собрать неделю заново.</p>
+          ) : null}
+
+          <section className="mt-8 max-w-2xl">
             <h2 className="font-serif text-2xl">Обеды</h2>
-            <ol className="mt-2">
+            <ol className="mt-4 flex flex-col gap-3">
               {plan.meals.map((meal) => {
                 const date = formatRuDate(meal.date);
+                const minutes = COOKING[meal.recipeId]?.minutes;
+                const recipe = RECIPES.find((item) => item.id === meal.recipeId);
+                const photo = recipe ? (recipe.image ?? recipePhoto(recipe.id)) : null;
+                const card = (
+                    <div className="block overflow-hidden rounded-3xl border border-line bg-paper">
+                      {photo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={photo} alt="" className="aspect-[16/7] w-full object-cover" />
+                      ) : null}
+                      <div className="px-5 py-4">
+                      <p className="text-sm text-muted capitalize">{date.weekday}</p>
+                      <h3 className="mt-1 font-serif text-2xl">{meal.title}</h3>
+                      {recipe ? (
+                        <div className="mt-3 flex flex-col gap-2">
+                          <p className="text-xs tracking-wide text-muted uppercase">{cuisineLabel(recipe.cuisine)}</p>
+                          <VibePills styles={recipe.dietStyles} />
+                        </div>
+                      ) : null}
+                      <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
+                        {minutes != null ? (
+                          <span className="inline-flex items-center gap-1.5">
+                            <ClockIcon />
+                            {minutes} мин
+                          </span>
+                        ) : null}
+                        <span className="inline-flex items-center gap-1.5">
+                          <PeopleIcon />
+                          {plan.householdSize}
+                        </span>
+                        <span className="inline-flex items-center gap-1.5">
+                          <PriceIcon />
+                          {formatPln(meal.cost)}
+                        </span>
+                      </div>
+                      </div>
+                    </div>
+                );
                 return (
-                  <li key={meal.dayIndex} className="border-b border-line">
-                    <Link href={`/recipe/${meal.recipeId}`} className="flex gap-4 py-4">
-                      <div className="w-32 shrink-0 text-sm text-muted">
-                        <div className="capitalize">{date.weekday}</div>
-                        <div>{date.dayMonth}</div>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="font-serif text-xl">{meal.title}</div>
-                        <div className="text-sm text-muted">на {plan.householdSize} чел.</div>
-                      </div>
-                      <span className="self-center text-olive">Открыть</span>
-                    </Link>
+                  <li key={meal.dayIndex}>
+                    {recipe ? (
+                      <Link href={`/recipe/${meal.recipeId}`} className="block">
+                        {card}
+                      </Link>
+                    ) : (
+                      card
+                    )}
                   </li>
                 );
               })}
             </ol>
           </section>
-
-          <Link
-            href="/shop"
-            className="mt-10 flex items-center justify-between rounded-3xl border border-line bg-paper px-5 py-5"
-          >
-            <div>
-              <div className="font-serif text-2xl">Список покупок</div>
-              <div className="mt-1 text-sm text-muted">{plan.lines.length} позиций</div>
-            </div>
-            <span className="text-olive">Открыть</span>
-          </Link>
         </>
       ) : (
         <p className="mt-10 text-muted">Неделя ещё не собрана. Открой анкету и дойди до конца.</p>
@@ -99,9 +106,33 @@ export default async function WeekPage() {
   );
 }
 
-function dot(iso: string): string {
-  const [, month, day] = iso.split("-");
-  return `${day}.${month}`;
+function ClockIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M8 4.5V8.2L10.4 9.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PeopleIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <circle cx="6" cy="5" r="2" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M2.5 12.5c.4-2 1.8-3 3.5-3s3.1 1 3.5 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <circle cx="11" cy="5.5" r="1.6" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M11 8.6c1.4.2 2.4 1.1 2.7 2.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PriceIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <rect x="2.25" y="3.75" width="11.5" height="8.5" rx="2" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M2.25 6.5h11.5" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+  );
 }
 
 function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {

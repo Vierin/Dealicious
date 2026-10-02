@@ -12,14 +12,24 @@ import type {
 } from "./types";
 import { CATEGORY_ORDER } from "./types";
 
-function knownRegular(promo: Promotion, product: Product): number | null {
-  if (promo.regularPricePln === undefined) return product.regularPricePln;
-  return promo.regularPricePln;
+function knownRegular(promo: Promotion, product: Product): number {
+  return typeof promo.regularPricePln === "number" ? promo.regularPricePln : product.regularPricePln;
 }
 
 export function isDiscount(promo: Promotion, product: Product): boolean {
-  const regular = knownRegular(promo, product);
-  return regular != null && regular > promo.promoPricePln;
+  return product.regularPricePln > promo.promoPricePln && knownRegular(promo, product) > promo.promoPricePln;
+}
+
+function priced(promo: Promotion | undefined, product: Product): {
+  unitPrice: number;
+  regularUnit: number;
+  onPromo: boolean;
+} {
+  const shelf = product.regularPricePln;
+  if (!promo || !isDiscount(promo, product)) {
+    return { unitPrice: shelf, regularUnit: shelf, onPromo: false };
+  }
+  return { unitPrice: promo.promoPricePln, regularUnit: knownRegular(promo, product), onPromo: true };
 }
 
 export function activePromo(
@@ -76,15 +86,9 @@ function promoShare(recipe: Recipe, catalog: Catalog, shopDate: string): number 
   for (const ingredient of ingredients) {
     const product = productById(catalog, ingredient.productId);
     const promo = activePromo(product.id, catalog.promotions, shopDate);
-    if (promo && isDiscount(promo, product)) {
-      const regularUnit = knownRegular(promo, product) ?? product.regularPricePln;
-      regular += ingredient.qtyPerPerson * regularUnit;
-      onPromo += ingredient.qtyPerPerson * regularUnit;
-    } else if (promo) {
-      regular += ingredient.qtyPerPerson * promo.promoPricePln;
-    } else {
-      regular += ingredient.qtyPerPerson * product.regularPricePln;
-    }
+    const price = priced(promo, product);
+    regular += ingredient.qtyPerPerson * price.regularUnit;
+    if (price.onPromo) onPromo += ingredient.qtyPerPerson * price.regularUnit;
   }
 
   return regular === 0 ? 0 : onPromo / regular;
@@ -96,19 +100,41 @@ function productById(catalog: Catalog, productId: string): Product {
   return product;
 }
 
+const STAPLES = new Set(["cebula", "czosnek", "oliwa", "cytryna"]);
+
+function plateProducts(recipeId: string, catalog: Catalog): string[] {
+  return catalog.ingredients
+    .filter((item) => item.recipeId === recipeId && !STAPLES.has(item.productId))
+    .map((item) => item.productId);
+}
+
+function repeatsProduct(recipe: Recipe, picked: Recipe[], catalog: Catalog): boolean {
+  const used = new Map<string, number>();
+  for (const item of picked) {
+    for (const productId of plateProducts(item.id, catalog)) {
+      used.set(productId, (used.get(productId) ?? 0) + 1);
+    }
+  }
+  return plateProducts(recipe.id, catalog).some((productId) => (used.get(productId) ?? 0) >= 2);
+}
+
 export function pickWeek(profile: Profile, catalog: Catalog, from = new Date()) {
   const shopDate = nextShopDate(profile.shopWeekday, from);
   const pool = catalog.recipes.filter((recipe) => allows(profile, recipe));
   const picked: Recipe[] = [];
 
   while (picked.length < 7 && pool.length > 0) {
+    const varied = pool.filter((recipe) => !repeatsProduct(recipe, picked, catalog));
+    const candidates = varied.length > 0 ? varied : pool;
     let bestIndex = 0;
     let bestScore = Number.NEGATIVE_INFINITY;
 
-    pool.forEach((recipe, index) => {
+    candidates.forEach((recipe) => {
+      const index = pool.indexOf(recipe);
       const repeats = picked.filter(
         (item) => primaryProtein(item) === primaryProtein(recipe),
       ).length;
+      const cuisineRepeats = picked.filter((item) => item.cuisine === recipe.cuisine).length;
       const total = basketSpend(
         [...picked.map((item) => item.id), recipe.id],
         profile.householdSize,
@@ -120,6 +146,7 @@ export function pickWeek(profile: Profile, catalog: Catalog, from = new Date()) 
         promoShare(recipe, catalog, shopDate) +
         styleBonus(profile, recipe) -
         repeats * 0.22 -
+        cuisineRepeats * 0.08 -
         over / profile.weeklyBudgetPln;
       const better =
         score > bestScore || (score === bestScore && recipe.id < pool[bestIndex].id);
@@ -174,10 +201,7 @@ export function buildBasket(
     const product = productById(catalog, productId);
     const rounded = roundQty(qty, product.unit);
     const promo = activePromo(productId, catalog.promotions, shopDate);
-    const discount = promo != null && isDiscount(promo, product);
-    const unitPrice = promo ? promo.promoPricePln : product.regularPricePln;
-    const regularUnit =
-      promo && discount ? (knownRegular(promo, product) ?? product.regularPricePln) : unitPrice;
+    const { unitPrice, regularUnit, onPromo } = priced(promo, product);
     lines.push({
       productId,
       namePl: product.namePl,
@@ -187,7 +211,7 @@ export function buildBasket(
       unitPrice,
       lineTotal: money(rounded * unitPrice),
       regularLineTotal: money(rounded * regularUnit),
-      onPromo: discount,
+      onPromo,
     });
   }
 
@@ -196,6 +220,17 @@ export function buildBasket(
     if (categoryDelta !== 0) return categoryDelta;
     return a.namePl.localeCompare(b.namePl, "pl");
   });
+}
+
+function mealCost(recipeId: string, householdSize: number, catalog: Catalog, shopDate: string): number {
+  let total = 0;
+  for (const ingredient of catalog.ingredients.filter((item) => item.recipeId === recipeId)) {
+    const product = productById(catalog, ingredient.productId);
+    const qty = roundQty(ingredient.qtyPerPerson * householdSize, product.unit);
+    const promo = activePromo(ingredient.productId, catalog.promotions, shopDate);
+    total += qty * priced(promo, product).unitPrice;
+  }
+  return money(total);
 }
 
 export function presentPlan(input: {
@@ -215,12 +250,16 @@ export function presentPlan(input: {
     householdSize: input.householdSize,
     meals: input.recipeIds.map((recipeId, dayIndex) => {
       const recipe = input.catalog.recipes.find((item) => item.id === recipeId);
-      if (!recipe) throw new Error(`Нет рецепта ${recipeId}`);
+      const date = addISODays(input.shopDate, dayIndex);
+      if (!recipe) {
+        return { dayIndex, date, recipeId, title: "Блюдо больше не в каталоге", cost: 0 };
+      }
       return {
         dayIndex,
-        date: addISODays(input.shopDate, dayIndex),
+        date,
         recipeId,
         title: recipe.title,
+        cost: mealCost(recipeId, input.householdSize, input.catalog, input.shopDate),
       };
     }),
     lines,

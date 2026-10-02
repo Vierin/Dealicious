@@ -4,6 +4,13 @@ export type DietStyle = "healthy" | "sport" | "balanced" | "comfort";
 export type Allergen = "gluten" | "lactose" | "eggs" | "fish" | "soy";
 export type Protein = "chicken" | "beef" | "pork" | "fish" | "veg";
 export type Appliance = "stove" | "oven" | "microwave" | "blender" | "airfryer";
+export type Cuisine =
+  | "domowa"
+  | "wloska"
+  | "azjatycka"
+  | "meksykanska"
+  | "indyjska"
+  | "srodziemnomorska";
 export type Unit = "kg" | "szt" | "l" | "opak";
 
 export type Product = {
@@ -21,7 +28,7 @@ export type Promotion = {
   validFrom: string;
   validTo: string;
   label: string;
-  /** null = leaflet had no regular price, savings stay zero. Omitted = use the product regular. */
+  /** Leaflet "was" price. null/omitted = use the shelf price. */
   regularPricePln?: number | null;
 };
 
@@ -33,6 +40,14 @@ export type Recipe = {
   proteins: Protein[];
   isVegan: boolean;
   appliances: Appliance[];
+  cuisine: Cuisine;
+  /** Путь к фото, если файл уже лежит в public. Пусто — слот без картинки. */
+  image?: string;
+};
+
+export type PantryItem = {
+  recipeId: string;
+  name: string;
 };
 
 export type RecipeIngredient = {
@@ -80,6 +95,7 @@ export type PlanMeal = {
   date: string;
   recipeId: string;
   title: string;
+  cost: number;
 };
 
 export type PlanView = {

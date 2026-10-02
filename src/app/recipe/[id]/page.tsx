@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { INGREDIENTS, PRODUCTS, RECIPES } from "@/lib/catalog";
+import { VibePills, cuisineLabel } from "@/components/pills";
+import { INGREDIENTS, PANTRY, PRODUCTS, RECIPES } from "@/lib/catalog";
 import { COOKING, kcal } from "@/lib/cooking";
 import { formatQty, roundQty } from "@/lib/money";
+import { recipePhoto } from "@/lib/recipes";
 import { isProfileComplete } from "@/lib/profile";
 import { getProfile, getSessionUser } from "@/lib/store";
 import { RecipeTabs } from "./tabs";
@@ -21,6 +23,8 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
   if (!recipe || !cooking) notFound();
 
   const portions = profile.householdSize;
+  const photo = recipe.image ?? recipePhoto(recipe.id);
+  const pantry = PANTRY.filter((item) => item.recipeId === recipe.id).map((item) => item.name);
   const ingredients = INGREDIENTS.filter((item) => item.recipeId === recipe.id).map((item) => {
     const product = PRODUCTS.find((entry) => entry.id === item.productId);
     if (!product) throw new Error(`Нет продукта ${item.productId}`);
@@ -35,31 +39,41 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
       <Link href="/week" className="text-sm text-muted">
         Неделя
       </Link>
-      <h1 className="mt-3 font-serif text-4xl">{recipe.title}</h1>
-      <p className="mt-2 text-muted">
+      {photo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={photo} alt="" className="mt-4 aspect-[4/3] w-full rounded-3xl object-cover" />
+      ) : (
+        <div className="mt-4 aspect-[4/3] w-full rounded-3xl bg-paper" />
+      )}
+      <p className="mt-4 text-xs tracking-wide text-muted uppercase">{cuisineLabel(recipe.cuisine)}</p>
+      <h1 className="mt-1 font-serif text-4xl">{recipe.title}</h1>
+      <div className="mt-3">
+        <VibePills styles={recipe.dietStyles} />
+      </div>
+      <p className="mt-3 text-muted">
         {portions} {portions === 1 ? "порция" : portions < 5 ? "порции" : "порций"} · {cooking.minutes} мин
       </p>
 
-      <section className="mt-6 grid grid-cols-4 gap-2 rounded-3xl bg-ink p-5 text-cream">
-        <Macro label="ккал" value={String(kcal(cooking) * portions)} />
-        <Macro label="белки" value={`${cooking.protein * portions} г`} />
-        <Macro label="жиры" value={`${cooking.fat * portions} г`} />
-        <Macro label="углеводы" value={`${cooking.carbs * portions} г`} />
+      <section className="mt-6 rounded-3xl bg-ink p-5 text-cream">
+        <p className="text-center text-xs tracking-wide text-cream/70 uppercase">На 1 порцию</p>
+        <div className="mt-3 grid grid-cols-4 gap-2">
+          <Macro label="ккал" value={String(kcal(cooking))} />
+          <Macro label="белки" value={`${cooking.protein} г`} />
+          <Macro label="жиры" value={`${cooking.fat} г`} />
+          <Macro label="углеводы" value={`${cooking.carbs} г`} />
+        </div>
       </section>
-      <p className="mt-2 text-sm text-muted">
-        На 1 порцию: {kcal(cooking)} ккал · Б {cooking.protein} · Ж {cooking.fat} · У {cooking.carbs}
-      </p>
 
-      <RecipeTabs ingredients={ingredients} steps={cooking.steps} />
+      <RecipeTabs ingredients={ingredients} pantry={pantry} steps={cooking.steps} />
     </main>
   );
 }
 
 function Macro({ label, value }: { label: string; value: string }) {
   return (
-    <div>
-      <div className="text-xs tracking-wide text-cream/70 uppercase">{label}</div>
-      <div className="mt-2 font-serif text-lg sm:text-xl">{value}</div>
+    <div className="text-center">
+      <div className="font-serif text-3xl sm:text-4xl">{value}</div>
+      <div className="mt-1 text-xs tracking-wide text-cream/70 uppercase">{label}</div>
     </div>
   );
 }
