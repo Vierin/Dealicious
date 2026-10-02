@@ -9,11 +9,16 @@ import { MealBrowser } from "./meal-browser";
 
 export const dynamic = "force-dynamic";
 
-export default async function MealsPage() {
+export default async function MealsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ favorites?: string }>;
+}) {
   const user = await getSessionUser();
   if (!user) redirect("/login");
   const profile = await getProfile(user.id);
   if (!isProfileComplete(profile)) redirect("/onboarding");
+  const favoritesOnly = (await searchParams).favorites === "1";
 
   const meals = RECIPES.map((recipe) => ({
     id: recipe.id,
@@ -29,9 +34,7 @@ export default async function MealsPage() {
       <Link href="/week" className="text-sm text-muted">
         Неделя
       </Link>
-      <h1 className="mt-3 font-serif text-4xl">Блюда</h1>
-      <p className="mt-2 text-muted">Кухня и вайб. Неделю по-прежнему собирают скидки.</p>
-      <MealBrowser meals={meals} />
+      <MealBrowser meals={meals} favoritesOnly={favoritesOnly} />
     </main>
   );
 }

@@ -47,6 +47,17 @@ export async function savePlan(userId: string, profile: Profile): Promise<PlanVi
   return supabaseConfigured() ? remote.savePlan(userId, profile) : local.savePlan(userId, profile);
 }
 
+export async function replaceMeal(
+  userId: string,
+  profile: Profile,
+  recipeId: string,
+  dayIndex?: number,
+): Promise<PlanView> {
+  return supabaseConfigured()
+    ? remote.replaceMeal(userId, profile, recipeId, dayIndex)
+    : local.replaceMeal(userId, profile, recipeId, dayIndex);
+}
+
 export async function getLatestPlan(userId: string, householdSize: number): Promise<PlanView | null> {
   return supabaseConfigured()
     ? remote.getLatestPlan(userId, householdSize)

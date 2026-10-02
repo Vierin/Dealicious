@@ -188,6 +188,71 @@ export function pickWeek(profile: Profile, catalog: Catalog, from = new Date()) 
   return { shopDate, recipeIds: picked.map((recipe) => recipe.id) };
 }
 
+export function replacementFor(
+  profile: Profile,
+  catalog: Catalog,
+  recipeIds: string[],
+  index: number,
+  shopDate: string,
+): string {
+  const used = new Set(recipeIds);
+  const pool = catalog.recipes.filter((recipe) => allows(profile, recipe) && !used.has(recipe.id));
+  const target = profile.dailyKcal * 0.35;
+  const sized = pool.filter((recipe) => !tooLight(recipe, target));
+  const candidates = sized.length > 0 ? sized : pool;
+  if (candidates.length === 0) throw new Error("Нечем заменить");
+
+  let best = candidates[0];
+  let bestScore = Number.NEGATIVE_INFINITY;
+  for (const recipe of candidates) {
+    const plate = COOKING[recipe.id] ? kcal(COOKING[recipe.id]) : target;
+    const gap = Math.abs(plate - target) / target;
+    const score = promoShare(recipe, catalog, shopDate) + styleBonus(profile, recipe) - gap * 0.45;
+    if (score > bestScore || (score === bestScore && recipe.id < best.id)) {
+      best = recipe;
+      bestScore = score;
+    }
+  }
+  return best.id;
+}
+
+export function placeRecipe(recipeIds: string[], recipeId: string, dayIndex: number): string[] {
+  if (!Number.isInteger(dayIndex) || dayIndex < 0 || dayIndex >= recipeIds.length) {
+    throw new Error("Нет такого дня");
+  }
+  if (recipeIds.includes(recipeId)) throw new Error("Уже в неделе");
+  const next = [...recipeIds];
+  next[dayIndex] = recipeId;
+  return next;
+}
+
+export function swapRecipeIds(
+  profile: Profile,
+  catalog: Catalog,
+  recipeIds: string[],
+  recipeId: string,
+  shopDate: string,
+): string[] {
+  const next = [...recipeIds];
+  const index = next.indexOf(recipeId);
+  if (index >= 0) {
+    next[index] = replacementFor(profile, catalog, next, index, shopDate);
+    return next;
+  }
+  let slot = 0;
+  let worst = Number.POSITIVE_INFINITY;
+  next.forEach((id, itemIndex) => {
+    const recipe = catalog.recipes.find((item) => item.id === id);
+    const score = recipe ? promoShare(recipe, catalog, shopDate) : -1;
+    if (score < worst) {
+      worst = score;
+      slot = itemIndex;
+    }
+  });
+  next[slot] = recipeId;
+  return next;
+}
+
 function basketSpend(
   recipeIds: string[],
   householdSize: number,

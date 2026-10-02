@@ -5,7 +5,7 @@ export function cuisineLabel(cuisine: Cuisine): string {
   return CUISINE_OPTIONS.find((item) => item.id === cuisine)?.label ?? cuisine;
 }
 
-const VIBE_COLOR: Record<DietStyle, string> = {
+export const VIBE_COLOR: Record<DietStyle, string> = {
   healthy: "bg-[#d7e7c8] text-[#2c5134]",
   sport: "bg-[#f3d2c4] text-[#6b3a2c]",
   balanced: "bg-[#e4ddd2] text-[#3f3a34]",

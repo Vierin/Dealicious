@@ -3,11 +3,15 @@ import { notFound, redirect } from "next/navigation";
 import { VibePills, cuisineLabel } from "@/components/pills";
 import { INGREDIENTS, PANTRY, PRODUCTS, RECIPES } from "@/lib/catalog";
 import { COOKING, kcal } from "@/lib/cooking";
+import { formatRuDate } from "@/lib/dates";
 import { formatQty, roundQty } from "@/lib/money";
 import { pantryUseLabel } from "@/lib/pantry";
 import { recipePhoto } from "@/lib/recipes";
 import { isProfileComplete } from "@/lib/profile";
-import { getProfile, getSessionUser } from "@/lib/store";
+import { getLatestPlan, getProfile, getSessionUser } from "@/lib/store";
+import { FavoriteButton } from "@/components/favorite-button";
+import { RememberView } from "@/components/recent-view";
+import { SwapMeal } from "./swap-meal";
 import { RecipeTabs } from "./tabs";
 
 export const dynamic = "force-dynamic";
@@ -23,6 +27,8 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
   const cooking = COOKING[id];
   if (!recipe || !cooking) notFound();
 
+  const plan = await getLatestPlan(user.id, profile.householdSize);
+  const inWeek = plan?.meals.some((meal) => meal.recipeId === recipe.id) ?? false;
   const portions = profile.householdSize;
   const photo = recipe.image ?? recipePhoto(recipe.id);
   const pantry = PANTRY.filter((item) => item.recipeId === recipe.id).map((item) => item.name);
@@ -39,15 +45,19 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
 
   return (
     <main className="mx-auto w-full max-w-2xl px-5 py-8">
+      <RememberView recipeId={recipe.id} />
       <Link href="/week" className="text-sm text-muted">
         Неделя
       </Link>
-      {photo ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={photo} alt="" className="mt-4 aspect-[4/3] w-full rounded-3xl object-cover" />
-      ) : (
-        <div className="mt-4 aspect-[4/3] w-full rounded-3xl bg-paper" />
-      )}
+      <div className="relative mt-4">
+        {photo ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={photo} alt="" className="aspect-[4/3] w-full rounded-3xl object-cover" />
+        ) : (
+          <div className="aspect-[4/3] w-full rounded-3xl bg-paper" />
+        )}
+        <FavoriteButton recipeId={recipe.id} />
+      </div>
       <p className="mt-4 text-xs tracking-wide text-muted uppercase">{cuisineLabel(recipe.cuisine)}</p>
       <h1 className="mt-1 font-serif text-4xl">{recipe.title}</h1>
       <div className="mt-3">
@@ -68,6 +78,17 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
       </section>
 
       <RecipeTabs ingredients={ingredients} pantry={pantry} steps={cooking.steps} />
+      <SwapMeal
+        recipeId={recipe.id}
+        inWeek={inWeek}
+        week={
+          plan?.meals.map((meal) => ({
+            dayIndex: meal.dayIndex,
+            title: meal.title,
+            weekday: formatRuDate(meal.date).weekday,
+          })) ?? []
+        }
+      />
     </main>
   );
 }

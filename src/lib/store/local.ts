@@ -4,7 +4,7 @@ import path from "path";
 import { cookies } from "next/headers";
 import { savingLines, trialOpen, type TrialWeek } from "../billing";
 import { buildCatalog } from "../catalog";
-import { pickWeek, presentPlan } from "../planner";
+import { pickWeek, placeRecipe, presentPlan, swapRecipeIds } from "../planner";
 import type { Profile, PlanView } from "../types";
 import { readTrial, startTrial } from "./trial";
 import { hashPassword, readSession, signSession, verifyPassword } from "./crypto";
@@ -173,6 +173,32 @@ export async function savePlan(userId: string, profile: Profile): Promise<PlanVi
     shopDate: picked.shopDate,
     householdSize: profile.householdSize,
     recipeIds: picked.recipeIds,
+    catalog,
+  });
+}
+
+export async function replaceMeal(
+  userId: string,
+  profile: Profile,
+  recipeId: string,
+  dayIndex?: number,
+): Promise<PlanView> {
+  const catalog = buildCatalog();
+  const row = await withDb((db) => db.plans.filter((plan) => plan.userId === userId).at(-1) ?? null);
+  if (!row) throw new Error("Нет недели");
+  const recipeIds =
+    dayIndex == null
+      ? swapRecipeIds(profile, catalog, row.recipeIds, recipeId, row.shopDate)
+      : placeRecipe(row.recipeIds, recipeId, dayIndex);
+  await withDb((db) => {
+    const plan = db.plans.find((item) => item.id === row.id);
+    if (plan) plan.recipeIds = recipeIds;
+  });
+  return presentPlan({
+    id: row.id,
+    shopDate: row.shopDate,
+    householdSize: profile.householdSize,
+    recipeIds,
     catalog,
   });
 }

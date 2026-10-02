@@ -1,6 +1,6 @@
 import { savingLines, trialOpen, type TrialWeek } from "../billing";
 import { applyLivePromos, INGREDIENTS, PRODUCTS, RECIPES } from "../catalog";
-import { pickWeek, presentPlan } from "../planner";
+import { pickWeek, placeRecipe, presentPlan, swapRecipeIds } from "../planner";
 import type { Catalog, PlanView, Profile } from "../types";
 import { readTrial, startTrial } from "./trial";
 import { createClient } from "../supabase/server";
@@ -220,6 +220,30 @@ export async function savePlan(userId: string, profile: Profile): Promise<PlanVi
     shopDate: picked.shopDate,
     householdSize: profile.householdSize,
     recipeIds: picked.recipeIds,
+    catalog,
+  });
+}
+
+export async function replaceMeal(
+  userId: string,
+  profile: Profile,
+  recipeId: string,
+  dayIndex?: number,
+): Promise<PlanView> {
+  const current = await getLatestPlan(userId, profile.householdSize);
+  if (!current) throw new Error("Нет недели");
+  const catalog = await getCatalog();
+  const currentIds = current.meals.map((meal) => meal.recipeId);
+  const recipeIds =
+    dayIndex == null
+      ? swapRecipeIds(profile, catalog, currentIds, recipeId, current.shopDate)
+      : placeRecipe(currentIds, recipeId, dayIndex);
+  await writePlanRecipes(current.id, recipeIds);
+  return presentPlan({
+    id: current.id,
+    shopDate: current.shopDate,
+    householdSize: profile.householdSize,
+    recipeIds,
     catalog,
   });
 }
