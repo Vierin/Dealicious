@@ -1,0 +1,71 @@
+import { buildCatalog } from "../src/lib/catalog";
+import { pickWeek, presentPlan } from "../src/lib/planner";
+import type { Profile } from "../src/lib/types";
+
+const from = new Date(2026, 9, 2, 12);
+
+function profile(patch: Partial<Profile>): Profile {
+  return {
+    userId: "test",
+    name: "Аня",
+    city: "Warszawa",
+    store: "biedronka",
+    allergies: [],
+    meatPref: "any",
+    isVegan: false,
+    dietStyle: "balanced",
+    householdSize: 2,
+    shopWeekday: 1,
+    ...patch,
+  };
+}
+
+function planFor(patch: Partial<Profile>) {
+  const catalog = buildCatalog(from);
+  const picked = pickWeek(profile(patch), catalog, from);
+  return presentPlan({
+    id: "p",
+    shopDate: picked.shopDate,
+    householdSize: profile(patch).householdSize,
+    recipeIds: picked.recipeIds,
+    catalog,
+  });
+}
+
+const monday = planFor({ shopWeekday: 1, dietStyle: "sport" });
+const sunday = planFor({ shopWeekday: 0, dietStyle: "sport" });
+const vegan = planFor({ isVegan: true, dietStyle: "healthy", allergies: ["soy"] });
+
+function assert(cond: unknown, message: string) {
+  if (!cond) throw new Error(message);
+}
+
+assert(monday.meals.length === 7, "monday meals");
+assert(monday.shopDate === "2026-10-05", `monday shop ${monday.shopDate}`);
+assert(sunday.shopDate === "2026-10-04", `sunday shop ${sunday.shopDate}`);
+assert(
+  monday.meals.map((meal) => meal.recipeId).join() !== sunday.meals.map((meal) => meal.recipeId).join(),
+  `same meals\nmon ${monday.meals.map((m) => m.recipeId)}\nsun ${sunday.meals.map((m) => m.recipeId)}`,
+);
+assert(monday.total <= monday.regularTotal, "monday total");
+assert(monday.saved >= 0 && sunday.saved >= 0, "saved");
+assert(monday.saved !== sunday.saved, `same savings ${monday.saved}`);
+assert(vegan.meals.length === 7, "vegan meals");
+assert(
+  vegan.meals.every((meal) => !["tofu-bowl", "chicken-rice", "bolognese", "omelette"].includes(meal.recipeId)),
+  "vegan filter",
+);
+
+const chicken = monday.lines.find((line) => line.productId === "kurczak");
+if (chicken) {
+  assert(chicken.qty >= 0.1, "chicken qty");
+  assert(chicken.onPromo, "chicken should be on monday promo");
+}
+
+const big = planFor({ householdSize: 4, shopWeekday: 1 });
+const small = planFor({ householdSize: 1, shopWeekday: 1 });
+assert(big.total > small.total, "household scales cost");
+
+console.log("monday", monday.shopDate, monday.total, monday.saved, monday.meals.map((m) => m.title).join(" | "));
+console.log("sunday", sunday.shopDate, sunday.total, sunday.saved, sunday.meals.map((m) => m.title).join(" | "));
+console.log("ok");
