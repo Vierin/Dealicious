@@ -1,0 +1,35 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { isProfileComplete } from "@/lib/profile";
+import { getLatestPlan, getProfile, getSessionUser } from "@/lib/store";
+import type { BasketLine } from "@/lib/types";
+import { ShoppingList } from "./shopping-list";
+
+export const dynamic = "force-dynamic";
+
+export default async function ShopPage() {
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
+  const profile = await getProfile(user.id);
+  if (!isProfileComplete(profile)) redirect("/onboarding");
+  const plan = await getLatestPlan(user.id, profile.householdSize);
+  if (!plan) redirect("/week");
+
+  const groups: { category: string; lines: BasketLine[] }[] = [];
+  for (const line of plan.lines) {
+    const group = groups.find((item) => item.category === line.category);
+    if (group) group.lines.push(line);
+    else groups.push({ category: line.category, lines: [line] });
+  }
+
+  return (
+    <main className="mx-auto w-full max-w-2xl px-5 py-8">
+      <Link href="/week" className="text-sm text-muted">
+        Неделя
+      </Link>
+      <h1 className="mt-3 font-serif text-4xl">Список покупок</h1>
+      <p className="mt-2 text-muted">Biedronka · на {profile.householdSize} чел.</p>
+      <ShoppingList planId={plan.id} groups={groups} />
+    </main>
+  );
+}

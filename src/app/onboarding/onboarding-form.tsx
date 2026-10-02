@@ -3,44 +3,51 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { isWarsaw } from "@/lib/profile";
-import { ALLERGEN_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
-import type { Allergen, DietStyle, MeatPref, Profile } from "@/lib/types";
+import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
+import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "@/lib/types";
 
 type Draft = {
   name: string;
   city: string;
-  isVegan: boolean | null;
+  diet: DietNeed | null;
   meatPref: MeatPref | null;
   allergies: Allergen[];
+  appliances: Appliance[];
   dietStyle: DietStyle | null;
   householdSize: number;
+  weeklyBudget: number | null;
   shopWeekday: number | null;
 };
 
 const emptyDraft: Draft = {
   name: "",
   city: "",
-  isVegan: null,
+  diet: null,
   meatPref: null,
   allergies: [],
+  appliances: [],
   dietStyle: null,
   householdSize: 2,
+  weeklyBudget: null,
   shopWeekday: null,
 };
 
 function stepsFor(draft: Draft) {
-  const steps = ["name", "city", "store", "vegan"] as const;
-  const rest = ["allergies", "style", "people", "day"] as const;
-  if (draft.isVegan === true) return [...steps, ...rest];
+  const steps = ["name", "city", "store", "diet"] as const;
+  const rest = ["allergies", "style", "kitchen", "people", "budget", "day"] as const;
+  if (draft.diet !== null && draft.diet !== "none") return [...steps, ...rest];
   return [...steps, "meat" as const, ...rest];
 }
 
 function stepReady(draft: Draft, step: string) {
   if (step === "name") return draft.name.trim().length > 0;
   if (step === "city") return isWarsaw(draft.city);
-  if (step === "vegan") return draft.isVegan !== null;
+  if (step === "diet") return draft.diet !== null;
   if (step === "meat") return draft.meatPref !== null;
   if (step === "style") return draft.dietStyle !== null;
+  if (step === "budget") {
+    return draft.weeklyBudget !== null && draft.weeklyBudget >= 20 && draft.weeklyBudget <= 10000;
+  }
   if (step === "day") return draft.shopWeekday !== null;
   return true;
 }
@@ -69,11 +76,13 @@ export function OnboardingForm() {
       setDraft({
         name: data.profile.name,
         city: data.profile.city,
-        isVegan: data.profile.isVegan,
+        diet: data.profile.diet,
         meatPref: data.profile.meatPref,
         allergies: data.profile.allergies,
+        appliances: data.profile.appliances ?? [],
         dietStyle: data.profile.dietStyle,
         householdSize: data.profile.householdSize,
+        weeklyBudget: data.profile.weeklyBudgetPln,
         shopWeekday: data.profile.shopWeekday,
       });
       setReady(true);
@@ -90,7 +99,13 @@ export function OnboardingForm() {
   async function next() {
     setError("");
     if (!stepReady(draft, step)) {
-      setError(step === "city" ? "Пока считаем только Варшаву" : "Выбери вариант");
+      setError(
+        step === "city"
+          ? "Пока считаем только Варшаву"
+          : step === "budget"
+            ? "Укажи бюджет от 20 до 10 000 zł"
+            : "Выбери вариант",
+      );
       return;
     }
     if (!last) {
@@ -106,11 +121,13 @@ export function OnboardingForm() {
         body: JSON.stringify({
           name: draft.name,
           city: draft.city,
-          isVegan: draft.isVegan,
-          meatPref: draft.isVegan ? "any" : draft.meatPref,
+          diet: draft.diet,
+          meatPref: draft.diet === "none" ? draft.meatPref : "any",
           allergies: draft.allergies,
+          appliances: draft.appliances,
           dietStyle: draft.dietStyle,
           householdSize: draft.householdSize,
+          weeklyBudgetPln: draft.weeklyBudget,
           shopWeekday: draft.shopWeekday,
         }),
       });
@@ -183,16 +200,21 @@ export function OnboardingForm() {
           </Step>
         ) : null}
 
-        {step === "vegan" ? (
-          <Step title="Ты веган?">
-            <Choices
-              value={draft.isVegan === null ? "" : draft.isVegan ? "yes" : "no"}
-              options={[
-                { id: "yes", label: "Да" },
-                { id: "no", label: "Нет" },
-              ]}
-              onChange={(id) => setDraft({ ...draft, isVegan: id === "yes" })}
-            />
+        {step === "diet" ? (
+          <Step title="Dietary needs">
+            <div className="flex flex-col gap-2">
+              {DIET_OPTIONS.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => setDraft({ ...draft, diet: option.id })}
+                  className={`rounded-2xl border px-4 py-4 text-left ${draft.diet === option.id ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
+                >
+                  <div>{option.label}</div>
+                  <div className="mt-1 text-sm text-muted">{option.hint}</div>
+                </button>
+              ))}
+            </div>
           </Step>
         ) : null}
 
@@ -207,8 +229,15 @@ export function OnboardingForm() {
         ) : null}
 
         {step === "allergies" ? (
-          <Step title="Есть аллергии?" hint="Если нет — просто дальше.">
+          <Step title="Есть аллергии?">
             <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={() => setDraft({ ...draft, allergies: [] })}
+                className={`rounded-2xl border px-4 py-4 text-left ${draft.allergies.length === 0 ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
+              >
+                Нет аллергии
+              </button>
               {ALLERGEN_OPTIONS.map((option) => {
                 const active = draft.allergies.includes(option.id);
                 return (
@@ -251,6 +280,42 @@ export function OnboardingForm() {
           </Step>
         ) : null}
 
+        {step === "kitchen" ? (
+          <Step title="Kitchen appliances" hint="Рецепт попадёт в неделю, только если вся нужная техника есть.">
+            <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={() => setDraft({ ...draft, appliances: [] })}
+                className={`rounded-2xl border px-4 py-4 text-left ${draft.appliances.length === 0 ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
+              >
+                <div>None</div>
+                <div className="mt-1 text-sm text-muted">Только холодные обеды</div>
+              </button>
+              {APPLIANCE_OPTIONS.map((option) => {
+                const active = draft.appliances.includes(option.id);
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() =>
+                      setDraft({
+                        ...draft,
+                        appliances: active
+                          ? draft.appliances.filter((item) => item !== option.id)
+                          : [...draft.appliances, option.id],
+                      })
+                    }
+                    className={`rounded-2xl border px-4 py-4 text-left ${active ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
+                  >
+                    <div>{option.label}</div>
+                    <div className="mt-1 text-sm text-muted">{option.hint}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </Step>
+        ) : null}
+
         {step === "people" ? (
           <Step title="На сколько человек закупка?">
             <div className="flex items-center justify-center gap-6 py-8">
@@ -270,6 +335,38 @@ export function OnboardingForm() {
                 +
               </button>
             </div>
+          </Step>
+        ) : null}
+
+        {step === "budget" ? (
+          <Step title="Какой бюджет на неделю?" hint="Только обеды, в злотых. План будет держаться этой суммы.">
+            <div className="flex gap-2">
+              {[150, 250, 400].map((amount) => (
+                <button
+                  key={amount}
+                  type="button"
+                  onClick={() => setDraft({ ...draft, weeklyBudget: amount })}
+                  className={`flex-1 rounded-2xl border px-3 py-4 ${draft.weeklyBudget === amount ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
+                >
+                  {amount} zł
+                </button>
+              ))}
+            </div>
+            <input
+              type="number"
+              inputMode="decimal"
+              min={20}
+              max={10000}
+              value={draft.weeklyBudget ?? ""}
+              onChange={(event) =>
+                setDraft({
+                  ...draft,
+                  weeklyBudget: event.target.value === "" ? null : Number(event.target.value),
+                })
+              }
+              className="mt-3 h-14 w-full rounded-2xl border border-line bg-paper px-4 text-lg outline-none focus:border-olive"
+              placeholder="Своя сумма"
+            />
           </Step>
         ) : null}
 

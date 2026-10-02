@@ -33,8 +33,18 @@ function primaryProtein(recipe: Recipe): Protein {
 
 function allows(profile: Profile, recipe: Recipe): boolean {
   if (recipe.allergens.some((allergen) => profile.allergies.includes(allergen))) return false;
-  if (profile.isVegan && !recipe.isVegan) return false;
-  if (!profile.isVegan && profile.meatPref !== "any") {
+  if (recipe.appliances.some((appliance) => !profile.appliances.includes(appliance))) return false;
+  if (profile.diet === "vegan" && !recipe.isVegan) return false;
+  if (profile.diet === "vegetarian" && recipe.proteins.some((protein) => protein !== "veg")) {
+    return false;
+  }
+  if (
+    profile.diet === "pescatarian" &&
+    recipe.proteins.some((protein) => protein !== "veg" && protein !== "fish")
+  ) {
+    return false;
+  }
+  if (profile.diet === "none" && profile.meatPref !== "any") {
     const ok = recipe.proteins.every(
       (protein) => protein === "veg" || protein === profile.meatPref,
     );
@@ -82,7 +92,18 @@ export function pickWeek(profile: Profile, catalog: Catalog, from = new Date()) 
       const repeats = picked.filter(
         (item) => primaryProtein(item) === primaryProtein(recipe),
       ).length;
-      const score = promoShare(recipe, catalog, shopDate) + styleBonus(profile, recipe) - repeats * 0.22;
+      const total = basketSpend(
+        [...picked.map((item) => item.id), recipe.id],
+        profile.householdSize,
+        catalog,
+        shopDate,
+      );
+      const over = Math.max(0, total - profile.weeklyBudgetPln);
+      const score =
+        promoShare(recipe, catalog, shopDate) +
+        styleBonus(profile, recipe) -
+        repeats * 0.22 -
+        over / profile.weeklyBudgetPln;
       const better =
         score > bestScore || (score === bestScore && recipe.id < pool[bestIndex].id);
       if (better) {
@@ -99,6 +120,18 @@ export function pickWeek(profile: Profile, catalog: Catalog, from = new Date()) 
   }
 
   return { shopDate, recipeIds: picked.map((recipe) => recipe.id) };
+}
+
+function basketSpend(
+  recipeIds: string[],
+  householdSize: number,
+  catalog: Catalog,
+  shopDate: string,
+): number {
+  return buildBasket(recipeIds, householdSize, catalog, shopDate).reduce(
+    (sum, line) => sum + line.lineTotal,
+    0,
+  );
 }
 
 export function buildBasket(

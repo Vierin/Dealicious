@@ -26,6 +26,7 @@ type RecipeRow = {
   allergens: Profile["allergies"];
   proteins: Catalog["recipes"][number]["proteins"];
   is_vegan: boolean;
+  appliances: Profile["appliances"];
 };
 
 type IngredientRow = {
@@ -40,11 +41,14 @@ type ProfileRow = {
   city: string;
   store: "biedronka";
   allergies: Profile["allergies"];
+  appliances: Profile["appliances"];
   meat_pref: Profile["meatPref"];
   is_vegan: boolean;
+  diet: Profile["diet"];
   diet_style: Profile["dietStyle"];
   household_size: number;
   shop_weekday: number;
+  weekly_budget_pln: number | string;
 };
 
 function num(value: number | string): number {
@@ -58,11 +62,13 @@ function mapProfile(row: ProfileRow): Profile {
     city: row.city,
     store: "biedronka",
     allergies: row.allergies ?? [],
+    appliances: row.appliances ?? [],
     meatPref: row.meat_pref,
-    isVegan: row.is_vegan,
+    diet: row.diet ?? (row.is_vegan ? "vegan" : "none"),
     dietStyle: row.diet_style,
     householdSize: row.household_size,
     shopWeekday: row.shop_weekday,
+    weeklyBudgetPln: num(row.weekly_budget_pln),
   };
 }
 
@@ -126,11 +132,14 @@ export async function saveProfile(profile: Profile) {
     city: profile.city,
     store: profile.store,
     allergies: profile.allergies,
+    appliances: profile.appliances,
     meat_pref: profile.meatPref,
-    is_vegan: profile.isVegan,
+    is_vegan: profile.diet === "vegan",
+    diet: profile.diet,
     diet_style: profile.dietStyle,
     household_size: profile.householdSize,
     shop_weekday: profile.shopWeekday,
+    weekly_budget_pln: profile.weeklyBudgetPln,
   });
   if (error) throw new Error(error.message);
 }
@@ -171,6 +180,7 @@ export async function getCatalog(): Promise<Catalog> {
       allergens: row.allergens,
       proteins: row.proteins,
       isVegan: row.is_vegan,
+      appliances: row.appliances ?? [],
     })),
     ingredients: (ingredients.data as IngredientRow[]).map((row) => ({
       recipeId: row.recipe_id,

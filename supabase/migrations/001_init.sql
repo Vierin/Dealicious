@@ -6,14 +6,19 @@ create table if not exists profiles (
   city text not null default '',
   store text not null default 'biedronka',
   allergies text[] not null default '{}',
+  appliances text[] not null default '{}',
   meat_pref text not null default 'any',
   is_vegan boolean not null default false,
+  diet text not null default 'none',
   diet_style text not null default 'balanced',
   household_size integer not null default 1,
   shop_weekday integer not null default 1,
+  weekly_budget_pln numeric(10, 2) not null default 250,
   constraint profiles_store_chk check (store = 'biedronka'),
   constraint profiles_household_chk check (household_size between 1 and 12),
-  constraint profiles_weekday_chk check (shop_weekday between 0 and 6)
+  constraint profiles_weekday_chk check (shop_weekday between 0 and 6),
+  constraint profiles_budget_chk check (weekly_budget_pln between 20 and 10000),
+  constraint profiles_diet_chk check (diet in ('none', 'vegetarian', 'vegan', 'pescatarian'))
 );
 
 create table if not exists products (
@@ -45,7 +50,8 @@ create table if not exists recipes (
   diet_styles text[] not null,
   allergens text[] not null default '{}',
   proteins text[] not null,
-  is_vegan boolean not null
+  is_vegan boolean not null,
+  appliances text[] not null default '{}'
 );
 
 create table if not exists recipe_ingredients (

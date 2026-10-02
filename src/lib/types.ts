@@ -1,7 +1,9 @@
 export type MeatPref = "any" | "chicken" | "beef" | "pork" | "fish";
+export type DietNeed = "none" | "vegetarian" | "vegan" | "pescatarian";
 export type DietStyle = "healthy" | "sport" | "balanced" | "comfort";
 export type Allergen = "gluten" | "lactose" | "eggs" | "fish" | "soy";
 export type Protein = "chicken" | "beef" | "pork" | "fish" | "veg";
+export type Appliance = "stove" | "oven" | "microwave" | "blender" | "airfryer";
 export type Unit = "kg" | "szt" | "l" | "opak";
 
 export type Product = {
@@ -28,6 +30,7 @@ export type Recipe = {
   allergens: Allergen[];
   proteins: Protein[];
   isVegan: boolean;
+  appliances: Appliance[];
 };
 
 export type RecipeIngredient = {
@@ -50,10 +53,12 @@ export type Profile = {
   store: "biedronka";
   allergies: Allergen[];
   meatPref: MeatPref;
-  isVegan: boolean;
+  diet: DietNeed;
   dietStyle: DietStyle;
+  appliances: Appliance[];
   householdSize: number;
   shopWeekday: number;
+  weeklyBudgetPln: number;
 };
 
 export type BasketLine = {

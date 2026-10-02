@@ -1,7 +1,9 @@
-import type { Allergen, DietStyle, MeatPref, Profile } from "./types";
+import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "./types";
 
 const ALLERGENS: Allergen[] = ["gluten", "lactose", "eggs", "fish", "soy"];
+const APPLIANCES: Appliance[] = ["stove", "oven", "microwave", "blender", "airfryer"];
 const MEAT: MeatPref[] = ["any", "chicken", "beef", "pork", "fish"];
+const DIETS: DietNeed[] = ["none", "vegetarian", "vegan", "pescatarian"];
 const STYLES: DietStyle[] = ["healthy", "sport", "balanced", "comfort"];
 
 export function isWarsaw(value: string): boolean {
@@ -18,7 +20,11 @@ export function isProfileComplete(profile: Profile | null): profile is Profile {
     profile.shopWeekday >= 0 &&
     profile.shopWeekday <= 6 &&
     STYLES.includes(profile.dietStyle) &&
-    (profile.isVegan || MEAT.includes(profile.meatPref))
+    DIETS.includes(profile.diet) &&
+    Array.isArray(profile.appliances) &&
+    (profile.diet !== "none" || MEAT.includes(profile.meatPref)) &&
+    profile.weeklyBudgetPln >= 20 &&
+    profile.weeklyBudgetPln <= 10000
   );
 }
 
@@ -30,9 +36,12 @@ export function parseProfile(userId: string, body: unknown): Profile {
   if (name.length < 1 || name.length > 80) throw new Error("Введи имя");
   if (!isWarsaw(city)) throw new Error("Пока считаем только Варшаву");
 
-  const isVegan = input.isVegan === true;
+  const diet = input.diet;
+  if (typeof diet !== "string" || !DIETS.includes(diet as DietNeed)) {
+    throw new Error("Выбери dietary needs");
+  }
   const meatPref = input.meatPref;
-  if (!isVegan && (typeof meatPref !== "string" || !MEAT.includes(meatPref as MeatPref))) {
+  if (diet === "none" && (typeof meatPref !== "string" || !MEAT.includes(meatPref as MeatPref))) {
     throw new Error("Выбери мясо");
   }
 
@@ -51,9 +60,19 @@ export function parseProfile(userId: string, body: unknown): Profile {
     throw new Error("Выбери день закупки");
   }
 
+  const weeklyBudgetPln = Number(input.weeklyBudgetPln);
+  if (!Number.isFinite(weeklyBudgetPln) || weeklyBudgetPln < 20 || weeklyBudgetPln > 10000) {
+    throw new Error("Укажи бюджет от 20 до 10 000 zł");
+  }
+
   const allergies = Array.isArray(input.allergies) ? input.allergies : [];
   if (!allergies.every((item) => typeof item === "string" && ALLERGENS.includes(item as Allergen))) {
     throw new Error("Неизвестная аллергия");
+  }
+
+  const appliances = Array.isArray(input.appliances) ? input.appliances : [];
+  if (!appliances.every((item) => typeof item === "string" && APPLIANCES.includes(item as Appliance))) {
+    throw new Error("Неизвестная техника");
   }
 
   return {
@@ -62,10 +81,12 @@ export function parseProfile(userId: string, body: unknown): Profile {
     city,
     store: "biedronka",
     allergies: [...new Set(allergies)] as Allergen[],
-    meatPref: isVegan ? "any" : (meatPref as MeatPref),
-    isVegan,
+    appliances: [...new Set(appliances)] as Appliance[],
+    meatPref: diet === "none" ? (meatPref as MeatPref) : "any",
+    diet: diet as DietNeed,
     dietStyle: dietStyle as DietStyle,
     householdSize,
     shopWeekday,
+    weeklyBudgetPln: Math.round(weeklyBudgetPln * 100) / 100,
   };
 }

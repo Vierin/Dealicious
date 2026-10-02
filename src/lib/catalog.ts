@@ -82,6 +82,7 @@ export const RECIPES: Recipe[] = [
     allergens: [],
     proteins: ["chicken"],
     isVegan: false,
+    appliances: ["stove"],
   },
   {
     id: "chicken-salad",
@@ -90,6 +91,7 @@ export const RECIPES: Recipe[] = [
     allergens: [],
     proteins: ["chicken"],
     isVegan: false,
+    appliances: ["stove"],
   },
   {
     id: "chicken-tortilla",
@@ -98,6 +100,7 @@ export const RECIPES: Recipe[] = [
     allergens: ["gluten"],
     proteins: ["chicken"],
     isVegan: false,
+    appliances: ["stove"],
   },
   {
     id: "bolognese",
@@ -106,6 +109,7 @@ export const RECIPES: Recipe[] = [
     allergens: ["gluten"],
     proteins: ["beef"],
     isVegan: false,
+    appliances: ["stove"],
   },
   {
     id: "pork-potato",
@@ -114,6 +118,7 @@ export const RECIPES: Recipe[] = [
     allergens: [],
     proteins: ["pork"],
     isVegan: false,
+    appliances: ["oven"],
   },
   {
     id: "salmon-buckwheat",
@@ -122,6 +127,7 @@ export const RECIPES: Recipe[] = [
     allergens: ["fish"],
     proteins: ["fish"],
     isVegan: false,
+    appliances: ["oven"],
   },
   {
     id: "beef-bake",
@@ -130,6 +136,7 @@ export const RECIPES: Recipe[] = [
     allergens: ["lactose"],
     proteins: ["beef"],
     isVegan: false,
+    appliances: ["oven"],
   },
   {
     id: "omelette",
@@ -138,6 +145,7 @@ export const RECIPES: Recipe[] = [
     allergens: ["eggs", "lactose"],
     proteins: ["veg"],
     isVegan: false,
+    appliances: ["stove"],
   },
   {
     id: "lentil-soup",
@@ -146,6 +154,7 @@ export const RECIPES: Recipe[] = [
     allergens: [],
     proteins: ["veg"],
     isVegan: true,
+    appliances: ["stove"],
   },
   {
     id: "chickpea-curry",
@@ -154,6 +163,7 @@ export const RECIPES: Recipe[] = [
     allergens: [],
     proteins: ["veg"],
     isVegan: true,
+    appliances: ["stove"],
   },
   {
     id: "buckwheat-veg",
@@ -162,6 +172,7 @@ export const RECIPES: Recipe[] = [
     allergens: [],
     proteins: ["veg"],
     isVegan: true,
+    appliances: ["stove"],
   },
   {
     id: "avocado-salad",
@@ -170,6 +181,7 @@ export const RECIPES: Recipe[] = [
     allergens: [],
     proteins: ["veg"],
     isVegan: true,
+    appliances: [],
   },
   {
     id: "veg-risotto",
@@ -178,6 +190,7 @@ export const RECIPES: Recipe[] = [
     allergens: [],
     proteins: ["veg"],
     isVegan: true,
+    appliances: ["stove"],
   },
   {
     id: "lentil-pepper",
@@ -186,6 +199,7 @@ export const RECIPES: Recipe[] = [
     allergens: [],
     proteins: ["veg"],
     isVegan: true,
+    appliances: ["stove"],
   },
   {
     id: "chickpea-salad",
@@ -194,6 +208,7 @@ export const RECIPES: Recipe[] = [
     allergens: [],
     proteins: ["veg"],
     isVegan: true,
+    appliances: [],
   },
   {
     id: "tofu-bowl",
@@ -202,6 +217,115 @@ export const RECIPES: Recipe[] = [
     allergens: ["soy"],
     proteins: ["veg"],
     isVegan: true,
+    appliances: ["stove"],
+  },
+  {
+    id: "broccoli-soup",
+    title: "Суп-пюре из брокколи",
+    dietStyles: ["healthy"],
+    allergens: [],
+    proteins: ["veg"],
+    isVegan: true,
+    appliances: ["stove", "blender"],
+  },
+  {
+    id: "mug-eggs",
+    title: "Яичница в микроволновке",
+    dietStyles: ["sport"],
+    allergens: ["eggs"],
+    proteins: ["veg"],
+    isVegan: false,
+    appliances: ["microwave"],
+  },
+  {
+    id: "airfryer-potato",
+    title: "Картошка в аэрогриле",
+    dietStyles: ["comfort"],
+    allergens: [],
+    proteins: ["veg"],
+    isVegan: true,
+    appliances: ["airfryer"],
+  },
+  {
+    id: "airfryer-chicken",
+    title: "Курица в аэрогриле",
+    dietStyles: ["sport"],
+    allergens: [],
+    proteins: ["chicken"],
+    isVegan: false,
+    appliances: ["airfryer"],
+  },
+  {
+    id: "oven-veg",
+    title: "Овощи из духовки",
+    dietStyles: ["healthy"],
+    allergens: [],
+    proteins: ["veg"],
+    isVegan: true,
+    appliances: ["oven"],
+  },
+  {
+    id: "oven-cod",
+    title: "Треска из духовки",
+    dietStyles: ["healthy"],
+    allergens: ["fish"],
+    proteins: ["fish"],
+    isVegan: false,
+    appliances: ["oven"],
+  },
+  {
+    id: "green-salad",
+    title: "Зелёный салат",
+    dietStyles: ["healthy"],
+    allergens: [],
+    proteins: ["veg"],
+    isVegan: true,
+    appliances: [],
+  },
+  {
+    id: "feta-salad",
+    title: "Салат с фетой",
+    dietStyles: ["balanced"],
+    allergens: ["lactose"],
+    proteins: ["veg"],
+    isVegan: false,
+    appliances: [],
+  },
+  {
+    id: "tomato-bread",
+    title: "Помидоры с хлебом",
+    dietStyles: ["comfort"],
+    allergens: ["gluten"],
+    proteins: ["veg"],
+    isVegan: true,
+    appliances: [],
+  },
+  {
+    id: "tortilla-veg",
+    title: "Овощная тортилья",
+    dietStyles: ["comfort"],
+    allergens: ["gluten"],
+    proteins: ["veg"],
+    isVegan: true,
+    appliances: [],
+  },
+  {
+    id: "spinach-salad",
+    title: "Шпинат с лимоном",
+    dietStyles: ["healthy"],
+    allergens: [],
+    proteins: ["veg"],
+    isVegan: true,
+    appliances: [],
+  },
+  {
+    id: "pepper-salad",
+    title: "Паприка с огурцом",
+    dietStyles: ["healthy", "balanced"],
+    allergens: [],
+    proteins: ["veg"],
+    isVegan: true,
+    appliances: [],
   },
 ];
 
@@ -302,6 +426,60 @@ export const INGREDIENTS: RecipeIngredient[] = [
   { recipeId: "tofu-bowl", productId: "brokuly", qtyPerPerson: 0.4 },
   { recipeId: "tofu-bowl", productId: "papryka", qtyPerPerson: 0.08 },
   { recipeId: "tofu-bowl", productId: "czosnek", qtyPerPerson: 0.1 },
+
+  { recipeId: "broccoli-soup", productId: "brokuly", qtyPerPerson: 0.5 },
+  { recipeId: "broccoli-soup", productId: "ziemniaki", qtyPerPerson: 0.12 },
+  { recipeId: "broccoli-soup", productId: "cebula", qtyPerPerson: 0.04 },
+  { recipeId: "broccoli-soup", productId: "czosnek", qtyPerPerson: 0.1 },
+
+  { recipeId: "mug-eggs", productId: "jaja", qtyPerPerson: 0.2 },
+  { recipeId: "mug-eggs", productId: "szpinak", qtyPerPerson: 0.3 },
+
+  { recipeId: "airfryer-potato", productId: "ziemniaki", qtyPerPerson: 0.3 },
+  { recipeId: "airfryer-potato", productId: "czosnek", qtyPerPerson: 0.1 },
+  { recipeId: "airfryer-potato", productId: "oliwa", qtyPerPerson: 0.02 },
+
+  { recipeId: "airfryer-chicken", productId: "kurczak", qtyPerPerson: 0.18 },
+  { recipeId: "airfryer-chicken", productId: "papryka", qtyPerPerson: 0.08 },
+
+  { recipeId: "oven-veg", productId: "cukinia", qtyPerPerson: 0.15 },
+  { recipeId: "oven-veg", productId: "papryka", qtyPerPerson: 0.1 },
+  { recipeId: "oven-veg", productId: "cebula", qtyPerPerson: 0.04 },
+  { recipeId: "oven-veg", productId: "oliwa", qtyPerPerson: 0.02 },
+
+  { recipeId: "oven-cod", productId: "dorsz", qtyPerPerson: 0.16 },
+  { recipeId: "oven-cod", productId: "ziemniaki", qtyPerPerson: 0.2 },
+  { recipeId: "oven-cod", productId: "cytryna", qtyPerPerson: 0.3 },
+
+  { recipeId: "green-salad", productId: "salata", qtyPerPerson: 0.5 },
+  { recipeId: "green-salad", productId: "pomidory", qtyPerPerson: 0.12 },
+  { recipeId: "green-salad", productId: "ogorki", qtyPerPerson: 0.1 },
+  { recipeId: "green-salad", productId: "oliwa", qtyPerPerson: 0.02 },
+
+  { recipeId: "feta-salad", productId: "feta", qtyPerPerson: 0.25 },
+  { recipeId: "feta-salad", productId: "pomidory", qtyPerPerson: 0.12 },
+  { recipeId: "feta-salad", productId: "ogorki", qtyPerPerson: 0.08 },
+  { recipeId: "feta-salad", productId: "oliwa", qtyPerPerson: 0.02 },
+
+  { recipeId: "tomato-bread", productId: "chleb", qtyPerPerson: 0.5 },
+  { recipeId: "tomato-bread", productId: "pomidory", qtyPerPerson: 0.15 },
+  { recipeId: "tomato-bread", productId: "oliwa", qtyPerPerson: 0.02 },
+  { recipeId: "tomato-bread", productId: "czosnek", qtyPerPerson: 0.1 },
+
+  { recipeId: "tortilla-veg", productId: "tortilla", qtyPerPerson: 0.5 },
+  { recipeId: "tortilla-veg", productId: "salata", qtyPerPerson: 0.3 },
+  { recipeId: "tortilla-veg", productId: "pomidory", qtyPerPerson: 0.1 },
+  { recipeId: "tortilla-veg", productId: "ogorki", qtyPerPerson: 0.08 },
+
+  { recipeId: "spinach-salad", productId: "szpinak", qtyPerPerson: 0.5 },
+  { recipeId: "spinach-salad", productId: "cytryna", qtyPerPerson: 0.25 },
+  { recipeId: "spinach-salad", productId: "oliwa", qtyPerPerson: 0.02 },
+  { recipeId: "spinach-salad", productId: "ogorki", qtyPerPerson: 0.08 },
+
+  { recipeId: "pepper-salad", productId: "papryka", qtyPerPerson: 0.12 },
+  { recipeId: "pepper-salad", productId: "ogorki", qtyPerPerson: 0.1 },
+  { recipeId: "pepper-salad", productId: "cebula", qtyPerPerson: 0.03 },
+  { recipeId: "pepper-salad", productId: "oliwa", qtyPerPerson: 0.02 },
 ];
 
 export function buildPromotions(from = new Date()): Promotion[] {

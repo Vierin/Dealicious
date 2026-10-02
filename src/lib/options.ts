@@ -1,4 +1,19 @@
-import type { Allergen, DietStyle, MeatPref } from "./types";
+import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref } from "./types";
+
+export const APPLIANCE_OPTIONS: { id: Appliance; label: string; hint: string }[] = [
+  { id: "stove", label: "Stove", hint: "Плита" },
+  { id: "oven", label: "Oven", hint: "Духовка" },
+  { id: "microwave", label: "Microwave", hint: "Микроволновка" },
+  { id: "blender", label: "Blender", hint: "Блендер" },
+  { id: "airfryer", label: "Air fryer", hint: "Аэрогриль" },
+];
+
+export const DIET_OPTIONS: { id: DietNeed; label: string; hint: string }[] = [
+  { id: "none", label: "None", hint: "Без ограничений" },
+  { id: "vegetarian", label: "Vegetarian", hint: "Без мяса и рыбы" },
+  { id: "vegan", label: "Vegan", hint: "Без мяса, рыбы, яиц и молочки" },
+  { id: "pescatarian", label: "Pescatarian", hint: "Рыба и растительная еда" },
+];
 
 export const ALLERGEN_OPTIONS: { id: Allergen; label: string }[] = [
   { id: "gluten", label: "Глютен" },

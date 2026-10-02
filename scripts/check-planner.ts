@@ -12,10 +12,12 @@ function profile(patch: Partial<Profile>): Profile {
     store: "biedronka",
     allergies: [],
     meatPref: "any",
-    isVegan: false,
+    diet: "none",
     dietStyle: "balanced",
     householdSize: 2,
     shopWeekday: 1,
+    weeklyBudgetPln: 400,
+    appliances: ["stove", "oven", "microwave", "blender", "airfryer"],
     ...patch,
   };
 }
@@ -34,7 +36,7 @@ function planFor(patch: Partial<Profile>) {
 
 const monday = planFor({ shopWeekday: 1, dietStyle: "sport" });
 const sunday = planFor({ shopWeekday: 0, dietStyle: "sport" });
-const vegan = planFor({ isVegan: true, dietStyle: "healthy", allergies: ["soy"] });
+const vegan = planFor({ diet: "vegan", dietStyle: "healthy", allergies: ["soy"] });
 
 function assert(cond: unknown, message: string) {
   if (!cond) throw new Error(message);
@@ -55,6 +57,16 @@ assert(
   vegan.meals.every((meal) => !["tofu-bowl", "chicken-rice", "bolognese", "omelette"].includes(meal.recipeId)),
   "vegan filter",
 );
+const vegetarian = planFor({ diet: "vegetarian", meatPref: "chicken" });
+assert(
+  vegetarian.meals.every((meal) => !["chicken-rice", "salmon-buckwheat", "bolognese", "pork-potato"].includes(meal.recipeId)),
+  "vegetarian filter",
+);
+const pescatarian = planFor({ diet: "pescatarian", meatPref: "chicken" });
+assert(
+  pescatarian.meals.every((meal) => !["chicken-rice", "bolognese", "pork-potato"].includes(meal.recipeId)),
+  "pescatarian filter",
+);
 
 const chicken = monday.lines.find((line) => line.productId === "kurczak");
 if (chicken) {
@@ -65,6 +77,21 @@ if (chicken) {
 const big = planFor({ householdSize: 4, shopWeekday: 1 });
 const small = planFor({ householdSize: 1, shopWeekday: 1 });
 assert(big.total > small.total, "household scales cost");
+
+const tight = planFor({ weeklyBudgetPln: 40, shopWeekday: 1, householdSize: 2 });
+const loose = planFor({ weeklyBudgetPln: 2000, shopWeekday: 1, householdSize: 2 });
+assert(tight.total <= loose.total, `tight ${tight.total} vs loose ${loose.total}`);
+
+const stoveOnly = planFor({ appliances: ["stove"] });
+assert(
+  stoveOnly.meals.every((meal) => !["beef-bake", "salmon-buckwheat", "airfryer-chicken", "broccoli-soup"].includes(meal.recipeId)),
+  "stove filter",
+);
+const noGear = planFor({ appliances: [], diet: "vegan", allergies: [] });
+assert(
+  noGear.meals.every((meal) => !["chicken-rice", "lentil-soup", "beef-bake"].includes(meal.recipeId)),
+  "no appliance filter",
+);
 
 console.log("monday", monday.shopDate, monday.total, monday.saved, monday.meals.map((m) => m.title).join(" | "));
 console.log("sunday", sunday.shopDate, sunday.total, sunday.saved, sunday.meals.map((m) => m.title).join(" | "));

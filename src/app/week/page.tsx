@@ -1,9 +1,9 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { formatRuDate } from "@/lib/dates";
-import { formatPln, formatQty } from "@/lib/money";
+import { formatPln } from "@/lib/money";
 import { isProfileComplete } from "@/lib/profile";
 import { getLatestPlan, getProfile, getSessionUser } from "@/lib/store";
-import type { BasketLine } from "@/lib/types";
 import { SHOP_DAYS } from "@/lib/options";
 import { WeekActions } from "./week-actions";
 
@@ -17,13 +17,6 @@ export default async function WeekPage() {
   const plan = await getLatestPlan(user.id, profile.householdSize);
   const shop = plan ? formatRuDate(plan.shopDate) : null;
   const shopLabel = SHOP_DAYS.find((day) => day.value === profile.shopWeekday)?.label;
-
-  const groups: { category: string; lines: BasketLine[] }[] = [];
-  for (const line of plan?.lines ?? []) {
-    const group = groups.find((item) => item.category === line.category);
-    if (group) group.lines.push(line);
-    else groups.push({ category: line.category, lines: [line] });
-  }
 
   return (
     <main className="mx-auto w-full max-w-2xl px-5 py-8">
@@ -48,6 +41,12 @@ export default async function WeekPage() {
           <p className="mt-3 text-sm text-muted">
             Семь обедов с {shop.dayMonth}. Цены по газете, которая действует в день закупки.
           </p>
+          <p className="mt-1 text-sm text-muted">
+            Бюджет {formatPln(profile.weeklyBudgetPln)}
+            {plan.total <= profile.weeklyBudgetPln
+              ? ` · осталось ${formatPln(profile.weeklyBudgetPln - plan.total)}`
+              : ` · выше на ${formatPln(plan.total - profile.weeklyBudgetPln)}`}
+          </p>
 
           <section className="mt-8">
             <h2 className="font-serif text-2xl">Обеды</h2>
@@ -70,35 +69,16 @@ export default async function WeekPage() {
             </ol>
           </section>
 
-          <section className="mt-10">
-            <h2 className="font-serif text-2xl">Список покупок</h2>
-            {groups.map((group) => (
-              <div key={group.category} className="mt-6">
-                <h3 className="text-sm tracking-wide text-muted uppercase">{group.category}</h3>
-                <ul className="mt-2">
-                  {group.lines.map((line) => {
-                    const pct = line.onPromo
-                      ? Math.round((1 - line.unitPrice / (line.regularLineTotal / line.qty)) * 100)
-                      : 0;
-                    return (
-                      <li key={line.productId} className="flex items-start justify-between gap-4 border-b border-line py-3">
-                        <div>
-                          <div>{line.namePl}</div>
-                          <div className="text-sm text-muted">{formatQty(line.qty, line.unit)}</div>
-                        </div>
-                        <div className="text-right">
-                          <div>{formatPln(line.lineTotal)}</div>
-                          {line.onPromo ? (
-                            <div className="text-sm text-olive">−{pct}% · было {formatPln(line.regularLineTotal)}</div>
-                          ) : null}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
-          </section>
+          <Link
+            href="/shop"
+            className="mt-10 flex items-center justify-between rounded-3xl border border-line bg-paper px-5 py-5"
+          >
+            <div>
+              <div className="font-serif text-2xl">Список покупок</div>
+              <div className="mt-1 text-sm text-muted">{plan.lines.length} позиций</div>
+            </div>
+            <span className="text-olive">Открыть</span>
+          </Link>
         </>
       ) : (
         <p className="mt-10 text-muted">Неделя ещё не собрана. Открой анкету и дойди до конца.</p>
