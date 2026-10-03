@@ -119,12 +119,6 @@ export function recipeAllowed(profile: Profile, recipe: Recipe, catalog: Catalog
   if (recipe.allergens.some((allergen) => profile.allergies.includes(allergen))) return false;
   if (recipe.appliances.some((appliance) => !profile.appliances.includes(appliance))) return false;
   if (profile.diet !== "none" && !recipe.diets.includes(profile.diet)) return false;
-  if (profile.diet === "none" && profile.meatPref !== "any") {
-    const ok = recipe.proteins.every(
-      (protein) => protein === "veg" || protein === profile.meatPref,
-    );
-    if (!ok) return false;
-  }
   const cooking = catalog.cooking[recipe.id];
   if (!cooking || !inLunchBand(kcal(cooking), profile.dailyKcal)) return false;
   return catalog.ingredients

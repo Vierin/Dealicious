@@ -11,7 +11,6 @@ function profile(patch: Partial<Profile>): Profile {
     city: "Warszawa",
     store: "biedronka",
     allergies: [],
-    meatPref: "any",
     diet: "none",
     dietStyle: "family-favs",
     householdSize: 2,
@@ -65,12 +64,12 @@ assert(
   vegan.meals.every((meal) => !["tofu-bowl", "chicken-rice", "bolognese", "omelette"].includes(meal.recipeId)),
   "vegan filter",
 );
-const vegetarian = planFor({ diet: "vegetarian", meatPref: "chicken" });
+const vegetarian = planFor({ diet: "vegetarian" });
 assert(
   vegetarian.meals.every((meal) => !["chicken-rice", "salmon-buckwheat", "bolognese", "pork-potato"].includes(meal.recipeId)),
   "vegetarian filter",
 );
-const pescatarian = planFor({ diet: "pescatarian", meatPref: "chicken" });
+const pescatarian = planFor({ diet: "pescatarian" });
 assert(
   pescatarian.meals.every((meal) => !["chicken-rice", "bolognese", "pork-potato"].includes(meal.recipeId)),
   "pescatarian filter",

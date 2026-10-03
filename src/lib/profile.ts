@@ -1,8 +1,7 @@
-import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "./types";
+import type { Allergen, Appliance, DietNeed, DietStyle, Profile } from "./types";
 
 const ALLERGENS: Allergen[] = ["gluten", "lactose", "eggs", "fish", "soy"];
 const APPLIANCES: Appliance[] = ["stove", "oven", "microwave", "blender", "airfryer"];
-const MEAT: MeatPref[] = ["any", "chicken", "beef", "pork", "fish"];
 const DIETS: DietNeed[] = ["none", "vegetarian", "vegan", "pescatarian"];
 const STYLES: DietStyle[] = [
   "healthy-comfort",
@@ -90,7 +89,6 @@ export function isProfileComplete(profile: Profile | null): profile is Profile {
     DIETS.includes(profile.diet) &&
     Array.isArray(profile.appliances) &&
     profile.appliances.length >= 1 &&
-    (profile.diet !== "none" || MEAT.includes(profile.meatPref)) &&
     profile.weeklyBudgetPln >= 20 &&
     profile.weeklyBudgetPln <= 10000 &&
     profile.dailyKcal >= 1200 &&
@@ -111,11 +109,6 @@ export function parseProfile(userId: string, body: unknown): Profile {
   if (typeof diet !== "string" || !DIETS.includes(diet as DietNeed)) {
     throw new Error("errors.diet");
   }
-  const meatPref = input.meatPref;
-  if (diet === "none" && (typeof meatPref !== "string" || !MEAT.includes(meatPref as MeatPref))) {
-    throw new Error("errors.meat");
-  }
-
   const dietStyle = input.dietStyle;
   if (typeof dietStyle !== "string" || !STYLES.includes(dietStyle as DietStyle)) {
     throw new Error("errors.style");
@@ -162,7 +155,6 @@ export function parseProfile(userId: string, body: unknown): Profile {
     store: "biedronka",
     allergies: [...new Set(allergies)] as Allergen[],
     appliances: [...new Set(appliances)] as Appliance[],
-    meatPref: diet === "none" ? (meatPref as MeatPref) : "any",
     diet: diet as DietNeed,
     dietStyle: dietStyle as DietStyle,
     householdSize,

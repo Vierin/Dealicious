@@ -19,7 +19,7 @@ function product(id: string, price: number): Product {
   };
 }
 
-function recipe(id: string, protein: "chicken" | "beef"): Recipe {
+function recipe(id: string, protein: "chicken" | "beef" | "pork", cuisine: "polish" | "mexican" = "polish"): Recipe {
   return {
     id,
     title: id,
@@ -28,7 +28,7 @@ function recipe(id: string, protein: "chicken" | "beef"): Recipe {
     proteins: [protein],
     diets: [],
     appliances: ["stove"],
-    cuisines: ["polish"],
+    cuisines: [cuisine],
   };
 }
 
@@ -69,7 +69,6 @@ const profile: Profile = {
   city: "Warszawa",
   store: "biedronka",
   allergies: [],
-  meatPref: "any",
   diet: "none",
   dietStyle: "healthy-comfort",
   appliances: ["stove"],
@@ -139,5 +138,31 @@ describe("acceptWeek", () => {
     });
     assert.equal(next[0], "lunch");
     assert.equal(next[1], "grill");
+  });
+
+  it("rejects a third day on the same protein", () => {
+    const data = catalog();
+    data.products.push(product("pork", 30));
+    data.recipes.push(recipe("roast", "pork", "mexican"), recipe("bake", "chicken", "mexican"));
+    data.ingredients.push(
+      { recipeId: "roast", productId: "pork", qtyPerPerson: 0.2 },
+      { recipeId: "roast", productId: "rice", qtyPerPerson: 0.2 },
+      { recipeId: "bake", productId: "chicken", qtyPerPerson: 0.2 },
+      { recipeId: "bake", productId: "pasta", qtyPerPerson: 0.2 },
+    );
+    data.cooking.roast = { minutes: 30, protein: 35, fat: 12, carbs: 60, kcal: 650, steps: [] };
+    data.cooking.bake = { minutes: 30, protein: 35, fat: 12, carbs: 60, kcal: 650, steps: [] };
+    assert.throws(
+      () =>
+        acceptWeek({
+          profile,
+          catalog: data,
+          shopDate,
+          currentIds: ["lunch", "stew", "roast", "", "", "", ""],
+          proposedIds: ["lunch", "grill", "bake", "", "", "", ""],
+          lockedDays: [],
+        }),
+      /errors\.cookQuality/,
+    );
   });
 });

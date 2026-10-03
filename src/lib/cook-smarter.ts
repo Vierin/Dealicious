@@ -1,16 +1,17 @@
-import { shopDeals, readLivePromos } from "./catalog";
 import { kcal } from "./cooking";
 import { activePromo, assertWithinBudget, isDiscount, presentPlan, recipeAllowed } from "./planner";
 import { PANTRY_PRODUCT_IDS } from "./pantry";
 import type { Catalog, PlanView, Profile, Recipe } from "./types";
 
+const NEIGHBORS = 6;
+
 const SYSTEM = `You replan dinners for a Polish grocery app.
 Return JSON only: {"recipeIds":["id or empty", ...]} with exactly 7 strings.
-Copy candidate ids exactly. Keep empty slots empty. Keep locked day indexes unchanged. Fill every other occupied day. Use each recipe at most once.
+For each occupied unlocked day pick exactly one id from that day's list. Do not invent ids. Keep empty slots empty. Keep locked day indexes unchanged. Use each recipe at most once.
 Lower what the household pays. Do not reduce promo savings.
-Do not drop food quality: protein, calories, cuisine variety, and the user's diet style stay in the same range. A faster meal is fine. A much longer one is not.
-A leaflet row changes the bill only when it has a productId and a candidate uses that product. Starred ingredients are already on a catalog discount for this shop date. Prefer meals that reuse the same starred products across days.
-The server prices the whole basket and rejects a menu that does not get cheaper, saves less, breaks diet or appliances, or loses quality.
+Do not drop food quality: protein, calories, cuisine variety, and the user's diet style stay in the same range. The same protein and the same cuisine may each appear on at most two days. A faster meal is fine. A much longer one is not.
+A listed deal changes the bill only when a chosen recipe uses that productId. Starred ingredients are already on a catalog discount for this shop date. Prefer meals that reuse the same starred products across days.
+The server prices the whole basket and rejects a menu that does not get cheaper, saves less, breaks diet or appliances, leaves the day's list, or loses quality.
 If nothing qualifies, return the current recipeIds unchanged.`;
 
 export function cookBrief(input: {
@@ -21,42 +22,30 @@ export function cookBrief(input: {
   lockedDays: number[];
 }): { system: string; user: string } {
   const plan = priced(input.recipeIds, input.profile, input.catalog, input.shopDate);
-  const deals = filteredDeals(input.catalog, input.shopDate);
-  const current = new Set(input.recipeIds.filter(Boolean));
-  const allowed = input.catalog.recipes.filter((recipe) =>
-    recipeAllowed(input.profile, recipe, input.catalog, input.shopDate),
-  );
-  const ranked = [...allowed].sort(
-    (a, b) => promoIngredients(b, input.catalog, input.shopDate) - promoIngredients(a, input.catalog, input.shopDate),
-  );
-  const pool = ranked.filter((recipe) => current.has(recipe.id) || promoIngredients(recipe, input.catalog, input.shopDate) > 0);
-  const candidates = (pool.length >= input.recipeIds.filter(Boolean).length ? pool : ranked).slice(0, 80);
-  for (const id of current) {
-    const recipe = allowed.find((item) => item.id === id);
-    if (recipe && !candidates.some((item) => item.id === id)) candidates.push(recipe);
-  }
-
+  const choices = dayChoices(input);
+  const listed = listedRecipes(input.catalog, choices);
   const lines = [
     `people ${input.profile.householdSize}`,
     `budget ${input.profile.weeklyBudgetPln}`,
     `diet ${input.profile.diet}`,
-    `meat ${input.profile.meatPref}`,
     `style ${input.profile.dietStyle}`,
     `dailyKcal ${input.profile.dailyKcal}`,
     `shop ${input.shopDate}`,
     `pay ${plan.total} saved ${plan.saved}`,
     `locked ${input.lockedDays.join(",") || "-"}`,
-    `current ${JSON.stringify(input.recipeIds)}`,
+    `current ${JSON.stringify(normalizeSlots(input.recipeIds))}`,
     "",
-    "deals name | promo | regular | productId",
-    ...deals.map((deal) =>
-      [deal.name, deal.promo, deal.regular ?? "", deal.productId ?? ""].join(" | "),
-    ),
-    "",
-    "candidates id | title | cuisine | vibes | proteins | min | kcal | P F C | ingredients",
-    ...candidates.map((recipe) => plateLine(recipe, input.catalog, input.shopDate)),
+    "days",
   ];
-
+  for (const [day, ids] of choices) {
+    if (input.lockedDays.includes(day)) continue;
+    lines.push(`day ${day}`);
+    for (const id of ids) {
+      const recipe = input.catalog.recipes.find((item) => item.id === id);
+      if (recipe) lines.push(plateLine(recipe, input.catalog, input.shopDate));
+    }
+  }
+  lines.push("", "deals name | promo | regular | productId", ...dealLines(listed, input.catalog, input.shopDate));
   return { system: SYSTEM, user: lines.join("\n") };
 }
 
@@ -79,13 +68,14 @@ export function acceptWeek(input: {
 }): string[] {
   const current = normalizeSlots(input.currentIds);
   const locked = new Set(input.lockedDays.filter((day) => day >= 0 && day < 7));
+  const choices = dayChoices({ ...input, recipeIds: current, lockedDays: [...locked] });
   const next = input.proposedIds.map((id, day) => {
     if (!current[day]) {
       if (id) throw new Error("errors.cookBad");
       return "";
     }
     if (locked.has(day)) return current[day];
-    if (!id) throw new Error("errors.cookBad");
+    if (!id || !choices.get(day)?.includes(id)) throw new Error("errors.cookBad");
     return id;
   });
 
@@ -95,7 +85,7 @@ export function acceptWeek(input: {
     if (!id) continue;
     if (seen.has(id)) throw new Error("errors.cookBad");
     seen.add(id);
-    if (locked.has(day)) continue;
+    if (locked.has(day) || id === current[day]) continue;
     const recipe = input.catalog.recipes.find((item) => item.id === id);
     if (!recipe || !recipeAllowed(input.profile, recipe, input.catalog, input.shopDate)) {
       throw new Error("errors.cookBad");
@@ -113,6 +103,77 @@ export function acceptWeek(input: {
   return next;
 }
 
+function dayChoices(input: {
+  profile: Profile;
+  catalog: Catalog;
+  shopDate: string;
+  recipeIds: string[];
+  lockedDays: number[];
+}): Map<number, string[]> {
+  const current = normalizeSlots(input.recipeIds);
+  const locked = new Set(input.lockedDays);
+  const placed = new Set(current.filter(Boolean));
+  const open: { day: number; recipe: Recipe }[] = [];
+  for (let day = 0; day < 7; day += 1) {
+    const id = current[day];
+    if (!id || locked.has(day)) continue;
+    const recipe = input.catalog.recipes.find((item) => item.id === id);
+    if (recipe) open.push({ day, recipe });
+  }
+
+  const ranked = input.catalog.recipes
+    .filter(
+      (recipe) =>
+        !placed.has(recipe.id) &&
+        recipeAllowed(input.profile, recipe, input.catalog, input.shopDate) &&
+        promoIngredients(recipe, input.catalog, input.shopDate) > 0,
+    )
+    .sort(
+      (a, b) =>
+        promoIngredients(b, input.catalog, input.shopDate) - promoIngredients(a, input.catalog, input.shopDate) ||
+        a.id.localeCompare(b.id),
+    );
+
+  const neighbors = new Map<number, string[]>();
+  const claimed = new Set<string>();
+  for (const candidate of ranked) {
+    const fits = open
+      .map((slot) => ({ day: slot.day, score: plateFit(slot.recipe, candidate, input) }))
+      .filter((row) => row.score > 0 && (neighbors.get(row.day)?.length ?? 0) < NEIGHBORS)
+      .sort((a, b) => b.score - a.score || a.day - b.day);
+    const pick = fits[0];
+    if (!pick) continue;
+    neighbors.set(pick.day, [...(neighbors.get(pick.day) ?? []), candidate.id]);
+    claimed.add(candidate.id);
+  }
+
+  for (const slot of open) {
+    if ((neighbors.get(slot.day)?.length ?? 0) > 0) continue;
+    const extra = ranked.filter((recipe) => !claimed.has(recipe.id)).slice(0, NEIGHBORS);
+    for (const recipe of extra) claimed.add(recipe.id);
+    if (extra.length > 0) neighbors.set(slot.day, extra.map((recipe) => recipe.id));
+  }
+
+  return new Map(open.map((slot) => [slot.day, [slot.recipe.id, ...(neighbors.get(slot.day) ?? [])]]));
+}
+
+function plateFit(
+  current: Recipe,
+  recipe: Recipe,
+  input: { catalog: Catalog; shopDate: string },
+): number {
+  const cuisine = current.cuisines.some((item) => recipe.cuisines.includes(item)) ? 2 : 0;
+  const vibe = current.vibes.some((item) => recipe.vibes.includes(item)) ? 1 : 0;
+  if (cuisine + vibe === 0) return 0;
+  const needy = promoIngredients(current, input.catalog, input.shopDate) === 0 ? 1 : 0;
+  return cuisine * 10 + vibe * 5 + needy;
+}
+
+function listedRecipes(catalog: Catalog, choices: Map<number, string[]>): Recipe[] {
+  const ids = new Set([...choices.values()].flat());
+  return catalog.recipes.filter((recipe) => ids.has(recipe.id));
+}
+
 function priced(recipeIds: string[], profile: Profile, catalog: Catalog, shopDate: string): PlanView {
   return presentPlan({
     id: "week",
@@ -127,18 +188,18 @@ function normalizeSlots(ids: string[]): string[] {
   return Array.from({ length: 7 }, (_, day) => ids[day] ?? "");
 }
 
-function filteredDeals(catalog: Catalog, shopDate: string) {
-  const live = readLivePromos();
-  const byId = new Map((live?.promotions ?? []).map((promo) => [promo.id, promo.productId]));
-  const known = new Set(catalog.products.map((product) => product.id));
-  return shopDeals(shopDate).map((deal) => {
-    const productId = byId.get(deal.id);
-    return {
-      name: deal.namePl,
-      promo: deal.promoPricePln,
-      regular: deal.regularPricePln,
-      productId: productId && known.has(productId) ? productId : null,
-    };
+function dealLines(recipes: Recipe[], catalog: Catalog, shopDate: string): string[] {
+  const ids = new Set<string>();
+  for (const recipe of recipes) {
+    for (const item of catalog.ingredients) {
+      if (item.recipeId !== recipe.id) continue;
+      if (onPromo(item.productId, catalog, shopDate)) ids.add(item.productId);
+    }
+  }
+  return [...ids].sort().map((id) => {
+    const product = catalog.products.find((item) => item.id === id);
+    const promo = activePromo(id, catalog.promotions, shopDate);
+    return [product?.namePl ?? id, promo?.promoPricePln ?? "", product?.regularPricePln ?? "", id].join(" | ");
   });
 }
 
@@ -189,8 +250,7 @@ function sameQuality(profile: Profile, catalog: Catalog, current: string[], next
   if (kcalBefore > 0 && Math.abs(kcalAfter - kcalBefore) / kcalBefore > 0.08) return false;
   if (styleHits(after, profile) < styleHits(before, profile)) return false;
   if (uniqueCuisines(after) < uniqueCuisines(before)) return false;
-  const proteinKey = (plate: Plate) => plate.recipe.proteins.find((item) => item !== "veg") ?? "veg";
-  if (maxCount(after, proteinKey) > maxCount(before, proteinKey) + 1) return false;
+  if (!varietyOk(profile, after)) return false;
   const minutesBefore = mean(before, "minutes");
   const minutesAfter = mean(after, "minutes");
   if (minutesAfter > minutesBefore * 1.4 && minutesAfter > minutesBefore + 15) return false;
@@ -209,6 +269,12 @@ function sameQuality(profile: Profile, catalog: Catalog, current: string[], next
     if (proposed.protein < prev.protein - 4 && proposed.protein < prev.protein * 0.85) return false;
   }
   return true;
+}
+
+function varietyOk(profile: Profile, rows: Plate[]): boolean {
+  if (maxCount(rows, (plate) => plate.recipe.cuisines[0] ?? "") > 2) return false;
+  if (profile.diet === "vegetarian" || profile.diet === "vegan") return true;
+  return maxCount(rows, proteinKey) <= 2;
 }
 
 type Plate = {
@@ -235,6 +301,10 @@ function plates(ids: string[], catalog: Catalog): Plate[] {
       },
     ];
   });
+}
+
+function proteinKey(plate: Plate): string {
+  return plate.recipe.proteins.find((item) => item !== "veg") ?? "veg";
 }
 
 function mean(rows: Plate[], key: "protein" | "fat" | "kcal" | "minutes"): number {

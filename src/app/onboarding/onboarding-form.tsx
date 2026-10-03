@@ -11,14 +11,13 @@ import { MenuLevelCards } from "@/components/menu-level";
 import { RangeSlider } from "@/components/range-slider";
 import { saveProfileAndPlan } from "@/lib/http";
 import { BUDGET_MAX, BUDGET_MIN, BUDGET_STEP, isWarsaw, menuLevelOf, sliderBudget } from "@/lib/profile";
-import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
-import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "@/lib/types";
+import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
+import type { Allergen, Appliance, DietNeed, DietStyle, Profile } from "@/lib/types";
 
 type Draft = {
   name: string;
   city: string;
   diet: DietNeed | null;
-  meatPref: MeatPref | null;
   allergies: Allergen[];
   appliances: Appliance[];
   dietStyle: DietStyle | null;
@@ -34,7 +33,6 @@ const emptyDraft: Draft = {
   name: "",
   city: "",
   diet: null,
-  meatPref: null,
   allergies: [],
   appliances: [],
   dietStyle: null,
@@ -46,18 +44,14 @@ const emptyDraft: Draft = {
   cookDays: SHOP_DAYS.map((day) => day.value),
 };
 
-function stepsFor(draft: Draft) {
-  const steps = ["name", "city", "store", "diet"] as const;
-  const rest = ["allergies", "style", "kcal", "kitchen", "people", "budget", "day", "cook"] as const;
-  if (draft.diet !== null && draft.diet !== "none") return [...steps, ...rest];
-  return [...steps, "meat" as const, ...rest];
+function stepsFor() {
+  return ["name", "city", "store", "diet", "allergies", "style", "kcal", "kitchen", "people", "budget", "day", "cook"] as const;
 }
 
 function stepReady(draft: Draft, step: string) {
   if (step === "name") return draft.name.trim().length > 0;
   if (step === "city") return isWarsaw(draft.city);
   if (step === "diet") return draft.diet !== null;
-  if (step === "meat") return draft.meatPref !== null;
   if (step === "style") return draft.dietStyle !== null;
   if (step === "kitchen") return draft.appliances.length > 0;
   if (step === "budget") {
@@ -72,7 +66,6 @@ export function OnboardingForm() {
   const router = useRouter();
   const t = useTranslations("onboarding");
   const dietT = useTranslations("diet");
-  const meatT = useTranslations("meat");
   const allergenT = useTranslations("allergen");
   const styleT = useTranslations("vibe");
   const applianceT = useTranslations("appliance");
@@ -101,7 +94,6 @@ export function OnboardingForm() {
         name: data.profile.name,
         city: data.profile.city,
         diet: data.profile.diet,
-        meatPref: data.profile.meatPref,
         allergies: data.profile.allergies,
         appliances: data.profile.appliances ?? [],
         dietStyle: data.profile.dietStyle,
@@ -119,7 +111,7 @@ export function OnboardingForm() {
     };
   }, [router]);
 
-  const steps = stepsFor(draft);
+  const steps = stepsFor();
   const step = steps[Math.min(index, steps.length - 1)];
   const last = index === steps.length - 1;
 
@@ -147,7 +139,6 @@ export function OnboardingForm() {
           name: draft.name,
           city: draft.city,
           diet: draft.diet ?? "none",
-          meatPref: draft.diet === "none" ? (draft.meatPref ?? "any") : "any",
           allergies: draft.allergies,
           appliances: draft.appliances,
           dietStyle: draft.dietStyle ?? "family-favs",
@@ -238,16 +229,6 @@ export function OnboardingForm() {
                 </Choice>
               ))}
             </div>
-          </Step>
-        ) : null}
-
-        {step === "meat" ? (
-          <Step title={t("meat")} hint={t("meatHint")}>
-            <Choices
-              value={draft.meatPref ?? ""}
-              options={MEAT_OPTIONS}
-              onChange={(id) => setDraft({ ...draft, meatPref: id as MeatPref })}
-            />
           </Step>
         ) : null}
 
@@ -450,26 +431,5 @@ function Step({ title, hint, children }: { title: string; hint?: string; childre
       {hint ? <p className="mt-3 text-muted">{hint}</p> : null}
       <div className="mt-8">{children}</div>
     </section>
-  );
-}
-
-function Choices({
-  value,
-  options,
-  onChange,
-}: {
-  value: string;
-  options: { id: MeatPref }[];
-  onChange: (id: string) => void;
-}) {
-  const meatT = useTranslations("meat");
-  return (
-    <div className="flex flex-col gap-2">
-      {options.map((option) => (
-        <Choice key={option.id} pad="px-4 py-4" on={value === option.id} onClick={() => onChange(option.id)}>
-          {meatT(option.id)}
-        </Choice>
-      ))}
-    </div>
   );
 }

@@ -1,4 +1,3 @@
-export type MeatPref = "any" | "chicken" | "beef" | "pork" | "fish";
 export type DietNeed = "none" | "vegetarian" | "vegan" | "pescatarian";
 export type DietStyle =
   | "healthy-comfort"
@@ -97,7 +96,6 @@ export type Profile = {
   city: string;
   store: "biedronka";
   allergies: Allergen[];
-  meatPref: MeatPref;
   diet: DietNeed;
   dietStyle: DietStyle;
   appliances: Appliance[];

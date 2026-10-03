@@ -22,7 +22,7 @@ type ProfileRow = {
   store: "biedronka";
   allergies: Profile["allergies"];
   appliances: Profile["appliances"];
-  meat_pref: Profile["meatPref"];
+  meat_pref: string;
   is_vegan: boolean;
   diet: Profile["diet"];
   diet_style: string;
@@ -46,7 +46,6 @@ function mapProfile(row: ProfileRow): Profile {
     store: "biedronka",
     allergies: row.allergies ?? [],
     appliances: row.appliances ?? [],
-    meatPref: row.meat_pref,
     diet: row.diet ?? (row.is_vegan ? "vegan" : "none"),
     dietStyle: vibeOf(row.diet_style),
     householdSize: row.household_size,
@@ -99,7 +98,7 @@ export async function saveProfile(profile: Profile) {
     store: profile.store,
     allergies: profile.allergies,
     appliances: profile.appliances,
-    meat_pref: profile.meatPref,
+    meat_pref: "any",
     is_vegan: profile.diet === "vegan",
     diet: profile.diet,
     diet_style: profile.dietStyle,

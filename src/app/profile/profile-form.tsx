@@ -14,14 +14,13 @@ import { MenuLevelCards } from "@/components/menu-level";
 import { RangeSlider } from "@/components/range-slider";
 import { saveProfileAndPlan } from "@/lib/http";
 import { BUDGET_MAX, BUDGET_MIN, BUDGET_STEP, isWarsaw, menuLevelOf, sliderBudget } from "@/lib/profile";
-import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
-import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "@/lib/types";
+import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
+import type { Allergen, Appliance, DietNeed, DietStyle, Profile } from "@/lib/types";
 
 export function ProfileForm({ profile, email }: { profile: Profile; email: string }) {
   const router = useRouter();
   const t = useTranslations("profile");
   const dietT = useTranslations("diet");
-  const meatT = useTranslations("meat");
   const allergenT = useTranslations("allergen");
   const styleT = useTranslations("vibe");
   const applianceT = useTranslations("appliance");
@@ -30,7 +29,6 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
   const [name, setName] = useState(profile.name);
   const [city, setCity] = useState(profile.city);
   const [diet, setDiet] = useState<DietNeed>(profile.diet);
-  const [meatPref, setMeatPref] = useState<MeatPref>(profile.meatPref);
   const [allergies, setAllergies] = useState<Allergen[]>(profile.allergies);
   const [dietStyle, setDietStyle] = useState<DietStyle>(profile.dietStyle);
   const [appliances, setAppliances] = useState<Appliance[]>(profile.appliances);
@@ -79,7 +77,6 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
           name,
           city,
           diet,
-          meatPref: diet === "none" ? meatPref : "any",
           allergies,
           appliances,
           dietStyle,
@@ -155,18 +152,6 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
           ))}
         </div>
       </Section>
-
-      {diet === "none" ? (
-        <Section title={t("meat")}>
-          <div className="flex flex-col gap-2">
-            {MEAT_OPTIONS.map((option) => (
-              <Choice key={option.id} on={meatPref === option.id} onClick={() => setMeatPref(option.id)}>
-                {meatT(option.id)}
-              </Choice>
-            ))}
-          </div>
-        </Section>
-      ) : null}
 
       <Section title={t("allergies")}>
         <div className="flex flex-col gap-2">
