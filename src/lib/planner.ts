@@ -2,7 +2,8 @@ import { addISODays, cookOffsets, nextShopDate, parseISODate } from "./dates";
 import { ALL_COOK_DAYS } from "./profile";
 import { PANTRY_PRODUCT_IDS } from "./pantry";
 import { money, roundQty } from "./money";
-import { recipeScore, type RecipeRatings } from "./score";
+import { COOKING, kcal } from "./cooking";
+import { inLunchBand, recipeScore, type RecipeRatings } from "./score";
 import type {
   BasketLine,
   Catalog,
@@ -124,6 +125,8 @@ function allows(profile: Profile, recipe: Recipe, catalog: Catalog, shopDate: st
     );
     if (!ok) return false;
   }
+  const cooking = COOKING[recipe.id];
+  if (!cooking || !inLunchBand(kcal(cooking), profile.dailyKcal)) return false;
   return catalog.ingredients
     .filter((item) => item.recipeId === recipe.id)
     .every((item) => stocked(productById(catalog, item.productId), catalog, shopDate));
@@ -163,7 +166,7 @@ function judge(
   const beforeIds = picked.map((item) => item.id);
   const before = beforeIds.length === 0 ? 0 : basketSpend(beforeIds, profile.householdSize, catalog, shopDate);
   const after = basketSpend([...beforeIds, recipe.id], profile.householdSize, catalog, shopDate);
-  const over = Math.max(0, after - profile.weeklyBudgetPln);
+  const over = Math.max(0, money(after) - money(profile.weeklyBudgetPln));
   return {
     over,
     score: recipeScore({
@@ -190,23 +193,17 @@ function takeBest(
   ratings: RecipeRatings,
 ): Recipe | null {
   if (pool.length === 0) return null;
-  const gourmet = profile.menuLevel === 5;
-  let best = pool[0];
+  let best: Recipe | null = null;
   let bestScore = Number.NEGATIVE_INFINITY;
-  let affordable: Recipe | null = null;
-  let affordableScore = Number.NEGATIVE_INFINITY;
   for (const recipe of pool) {
     const { score, over } = judge(recipe, picked, profile, catalog, shopDate, weekday, ratings);
-    if (score > bestScore || (score === bestScore && recipe.id < best.id)) {
+    if (over > 0) continue;
+    if (!best || score > bestScore || (score === bestScore && recipe.id < best.id)) {
       best = recipe;
       bestScore = score;
     }
-    if (gourmet && over === 0 && (score > affordableScore || (score === affordableScore && recipe.id < (affordable?.id ?? "~")))) {
-      affordable = recipe;
-      affordableScore = score;
-    }
   }
-  return gourmet && affordable ? affordable : best;
+  return best;
 }
 
 function fillSlots(
@@ -324,23 +321,18 @@ export function replacementFor(
     catalog,
   );
   const weekday = parseISODate(addISODays(shopDate, index)).getDay();
-  const gourmet = profile.menuLevel === 5;
-  let best = pool[0];
+  let best: Recipe | null = null;
   let bestScore = Number.NEGATIVE_INFINITY;
-  let affordable: Recipe | null = null;
-  let affordableScore = Number.NEGATIVE_INFINITY;
   for (const recipe of pool) {
     const { score, over } = judge(recipe, kept, profile, catalog, shopDate, weekday, ratings);
-    if (score > bestScore || (score === bestScore && recipe.id < best.id)) {
+    if (over > 0) continue;
+    if (!best || score > bestScore || (score === bestScore && recipe.id < best.id)) {
       best = recipe;
       bestScore = score;
     }
-    if (gourmet && over === 0 && (score > affordableScore || (score === affordableScore && recipe.id < (affordable?.id ?? "~")))) {
-      affordable = recipe;
-      affordableScore = score;
-    }
   }
-  return (gourmet && affordable ? affordable : best).id;
+  if (!best) throw new Error("errors.overBudget");
+  return best.id;
 }
 
 export function placeRecipe(recipeIds: string[], recipeId: string, dayIndex: number): string[] {
@@ -385,7 +377,23 @@ export function swapRecipeIds(
     }
   });
   next[slot] = recipeId;
+  assertWithinBudget(profile, catalog, next, shopDate);
   return next;
+}
+
+export function assertWithinBudget(
+  profile: Profile,
+  catalog: Catalog,
+  recipeIds: string[],
+  shopDate: string,
+): void {
+  const spend = basketSpend(
+    recipeIds.filter((id) => id),
+    profile.householdSize,
+    catalog,
+    shopDate,
+  );
+  if (money(spend) > money(profile.weeklyBudgetPln)) throw new Error("errors.overBudget");
 }
 
 function basketSpend(

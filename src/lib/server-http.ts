@@ -10,6 +10,7 @@ const ERROR_KEYS = [
   "email",
   "exists",
   "notEnoughMeals",
+  "overBudget",
   "pickCookDay",
   "cookDays",
   "nothingToSwap",

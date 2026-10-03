@@ -51,6 +51,10 @@ function sharedPacks(recipe: Recipe, picked: Recipe[], catalog: Catalog): number
   return shared;
 }
 
+export function inLunchBand(plateKcal: number, dailyKcal: number): boolean {
+  return plateKcal * 20 >= dailyKcal * 6 && plateKcal * 20 <= dailyKcal * 7;
+}
+
 export function recipeScore(input: {
   profile: Profile;
   recipe: Recipe;
@@ -64,10 +68,11 @@ export function recipeScore(input: {
 }): number {
   const { profile, recipe, picked, catalog } = input;
   const cooking = COOKING[recipe.id];
-  const lunchKcal = profile.dailyKcal * 0.35;
-  const plate = cooking ? kcal(cooking) : lunchKcal;
-  const kcalGap = Math.abs(plate - lunchKcal) / Math.max(lunchKcal, 1);
-  const light = cooking && kcal(cooking) < lunchKcal * 0.75 ? 0.35 : 0;
+  const plate = cooking ? kcal(cooking) : profile.dailyKcal * 0.325;
+  const low = profile.dailyKcal * 0.3;
+  const high = profile.dailyKcal * 0.35;
+  const kcalGap =
+    plate < low ? (low - plate) / Math.max(high, 1) : plate > high ? (plate - high) / Math.max(high, 1) : 0;
 
   const protein = cooking?.protein ?? 30;
   const proteinTarget = profile.dietStyle === "protein-packed" ? 40 : 32;
@@ -126,7 +131,6 @@ export function recipeScore(input: {
     macro * 0.35 +
     proteinFit * proteinWeight -
     kcalGap * 0.7 -
-    light -
     variety +
     timeFit * 0.3 +
     complexity(menuLevelOf(profile.menuLevel), recipe, catalog) * 1.05 +

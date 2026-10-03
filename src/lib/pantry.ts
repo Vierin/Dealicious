@@ -11,26 +11,57 @@ type Staple = {
 };
 
 const SPICE_USE: Record<string, { id: string; grams: number }> = {
-  Соль: { id: "sol", grams: 3 },
-  Перец: { id: "perec", grams: 1 },
-  Орегано: { id: "oregano", grams: 1 },
-  "Паприка молотая": { id: "papryka-miel", grams: 2 },
-  Карри: { id: "curry", grams: 3 },
-  Зира: { id: "kumin", grams: 1 },
-  "Соевый соус": { id: "soja", grams: 15 },
+  Sól: { id: "sol", grams: 2 },
+  Pieprz: { id: "perec", grams: 1 },
+  Oregano: { id: "oregano", grams: 1 },
+  "Papryka mielona": { id: "papryka-miel", grams: 2 },
+  Curry: { id: "curry", grams: 2 },
+  Kumin: { id: "kumin", grams: 2 },
+  Chili: { id: "chili", grams: 1 },
+  "Garam masala": { id: "garam", grams: 2 },
+  Kurkuma: { id: "kurkuma", grams: 1 },
+  Zioła: { id: "ziolka", grams: 1 },
+  Bazylia: { id: "bazylia", grams: 2 },
+  Pietruszka: { id: "pietruszka", grams: 3 },
+  Koperek: { id: "koperek", grams: 2 },
+  Szczypiorek: { id: "szczypiorek", grams: 5 },
+  Imbir: { id: "imbir", grams: 8 },
+  Sezam: { id: "sezam", grams: 5 },
+  "Olej sezamowy": { id: "olej-sezam", grams: 5 },
+  Skrobia: { id: "skrobia", grams: 5 },
+  Mąka: { id: "maka", grams: 20 },
+  "Liść laurowy": { id: "laurowy", grams: 1 },
+  Kminek: { id: "kminek", grams: 1 },
+  "Sos sojowy": { id: "soja", grams: 15 },
+  "Glazura balsamiczna": { id: "balsamic", grams: 10 },
 };
 
 export const STAPLES: Staple[] = [
   { id: "oliwa", name: "Oliwa z oliwek", unit: "ml", pack: 500, productId: "oliwa" },
   { id: "maslo", name: "Masło ekstra", unit: "g", pack: 200, productId: "maslo" },
   { id: "maka", name: "Mąka", unit: "g", pack: 1000, productId: null },
-  { id: "sol", name: "Соль", unit: "g", pack: 1000, productId: null },
-  { id: "perec", name: "Перец", unit: "g", pack: 50, productId: null },
-  { id: "oregano", name: "Орегано", unit: "g", pack: 15, productId: null },
-  { id: "papryka-miel", name: "Паприка молотая", unit: "g", pack: 40, productId: null },
-  { id: "curry", name: "Карри", unit: "g", pack: 50, productId: null },
-  { id: "kumin", name: "Зира", unit: "g", pack: 30, productId: null },
-  { id: "soja", name: "Соевый соус", unit: "ml", pack: 150, productId: null },
+  { id: "sol", name: "Sól", unit: "g", pack: 1000, productId: null },
+  { id: "perec", name: "Pieprz", unit: "g", pack: 50, productId: null },
+  { id: "oregano", name: "Oregano", unit: "g", pack: 15, productId: null },
+  { id: "papryka-miel", name: "Papryka mielona", unit: "g", pack: 40, productId: null },
+  { id: "curry", name: "Curry", unit: "g", pack: 50, productId: null },
+  { id: "kumin", name: "Kumin", unit: "g", pack: 30, productId: null },
+  { id: "chili", name: "Chili", unit: "g", pack: 30, productId: null },
+  { id: "garam", name: "Garam masala", unit: "g", pack: 40, productId: null },
+  { id: "kurkuma", name: "Kurkuma", unit: "g", pack: 40, productId: null },
+  { id: "ziolka", name: "Zioła", unit: "g", pack: 15, productId: null },
+  { id: "bazylia", name: "Bazylia", unit: "g", pack: 15, productId: null },
+  { id: "pietruszka", name: "Pietruszka", unit: "g", pack: 20, productId: null },
+  { id: "koperek", name: "Koperek", unit: "g", pack: 20, productId: null },
+  { id: "szczypiorek", name: "Szczypiorek", unit: "g", pack: 20, productId: null },
+  { id: "imbir", name: "Imbir", unit: "g", pack: 50, productId: null },
+  { id: "sezam", name: "Sezam", unit: "g", pack: 50, productId: null },
+  { id: "olej-sezam", name: "Olej sezamowy", unit: "ml", pack: 150, productId: null },
+  { id: "skrobia", name: "Skrobia", unit: "g", pack: 200, productId: null },
+  { id: "laurowy", name: "Liść laurowy", unit: "g", pack: 10, productId: null },
+  { id: "kminek", name: "Kminek", unit: "g", pack: 30, productId: null },
+  { id: "soja", name: "Sos sojowy", unit: "ml", pack: 150, productId: null },
+  { id: "balsamic", name: "Glazura balsamiczna", unit: "g", pack: 150, productId: null },
 ];
 
 export type PantryNeed = Staple & {
@@ -48,7 +79,7 @@ export function pantryNeeds(
   recipeIds: string[],
   householdSize: number,
   ingredients: { recipeId: string; productId: string; qtyPerPerson: number }[],
-  pantryNames: { recipeId: string; name: string }[],
+  pantryNames: { recipeId: string; name: string; grams?: number }[],
   prices: Record<string, { pay: number; regular: number } | undefined>,
 ): PantryNeed[] {
   const ids = new Set(recipeIds);
@@ -67,7 +98,8 @@ export function pantryNeeds(
     if (!ids.has(item.recipeId)) continue;
     const spice = SPICE_USE[item.name];
     if (!spice) continue;
-    need.set(spice.id, (need.get(spice.id) ?? 0) + spice.grams * householdSize);
+    const grams = item.grams ?? spice.grams;
+    need.set(spice.id, (need.get(spice.id) ?? 0) + grams * householdSize);
   }
 
   return STAPLES.map((staple) => {

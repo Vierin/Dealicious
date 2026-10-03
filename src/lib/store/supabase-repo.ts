@@ -1,6 +1,6 @@
 import { savingLines, trialOpen, type TrialWeek } from "../billing";
 import { applyLivePromos, INGREDIENTS, PRODUCTS, RECIPES } from "../catalog";
-import { pickWeek, placeRecipe, presentPlan, repickWeek, swapRecipeIds } from "../planner";
+import { assertWithinBudget, pickWeek, placeRecipe, presentPlan, repickWeek, swapRecipeIds } from "../planner";
 import type { RecipeRatings } from "../score";
 import type { Catalog, PlanView, Profile } from "../types";
 import { createClient } from "../supabase/server";
@@ -293,6 +293,7 @@ export async function replaceMeal(
     dayIndex == null
       ? swapRecipeIds(profile, catalog, currentIds, recipeId, current.shopDate, ratings)
       : placeRecipe(currentIds, recipeId, dayIndex);
+  assertWithinBudget(profile, catalog, recipeIds, current.shopDate);
   const changedDays = recipeIds.flatMap((id, day) => (currentIds[day] === id ? [] : [day]));
   const supabase = await createClient();
   if (changedDays.length > 0) {

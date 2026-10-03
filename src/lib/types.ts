@@ -62,6 +62,7 @@ export type Recipe = {
 export type PantryItem = {
   recipeId: string;
   name: string;
+  grams?: number;
 };
 
 export type RecipeIngredient = {
