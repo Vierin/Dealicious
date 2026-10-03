@@ -6,47 +6,79 @@ import { INGREDIENTS, RECIPES } from "./recipes";
 
 export { INGREDIENTS, PANTRY, RECIPES } from "./recipes";
 
+const SEASONAL = new Set(["pomidory", "ogorki", "papryka", "salata", "cukinia", "brokuly", "szpinak", "awokado"]);
+
+function packOf(id: string, unit: Product["unit"]): string {
+  if (id === "jaja") return "10 szt";
+  if (unit === "kg") return "1 kg";
+  if (unit === "l") return "1 l";
+  if (unit === "opak") return "1 opak";
+  return "1 szt";
+}
+
+function product(
+  id: string,
+  namePl: string,
+  category: string,
+  unit: Product["unit"],
+  regularPricePln: number,
+  extra?: Pick<Product, "kind" | "substituteId">,
+): Product {
+  return {
+    id,
+    namePl,
+    category,
+    unit,
+    pack: packOf(id, unit),
+    kind: extra?.kind ?? (SEASONAL.has(id) ? "seasonal" : "core"),
+    substituteId: extra?.substituteId,
+    estimatePricePln: regularPricePln,
+    regularPricePln,
+    priceConfirmed: false,
+  };
+}
+
 export const PRODUCTS: Product[] = [
-  { id: "pomidory", namePl: "Pomidory", category: "Овощи", unit: "kg", regularPricePln: 9.99 },
-  { id: "ogorki", namePl: "Ogórki", category: "Овощи", unit: "kg", regularPricePln: 6.99 },
-  { id: "cebula", namePl: "Cebula", category: "Овощи", unit: "kg", regularPricePln: 2.99 },
-  { id: "marchew", namePl: "Marchew", category: "Овощи", unit: "kg", regularPricePln: 2.99 },
-  { id: "ziemniaki", namePl: "Ziemniaki", category: "Овощи", unit: "kg", regularPricePln: 2.99 },
-  { id: "papryka", namePl: "Papryka czerwona", category: "Овощи", unit: "kg", regularPricePln: 12.99 },
-  { id: "salata", namePl: "Sałata masłowa", category: "Овощи", unit: "szt", regularPricePln: 3.99 },
-  { id: "cukinia", namePl: "Cukinia", category: "Овощи", unit: "kg", regularPricePln: 6.49 },
-  { id: "brokuly", namePl: "Brokuły", category: "Овощи", unit: "szt", regularPricePln: 5.49 },
-  { id: "szpinak", namePl: "Szpinak baby", category: "Овощи", unit: "szt", regularPricePln: 5.49 },
-  { id: "czosnek", namePl: "Czosnek", category: "Овощи", unit: "szt", regularPricePln: 1.79 },
-  { id: "cytryna", namePl: "Cytryna", category: "Овощи", unit: "szt", regularPricePln: 1.69 },
-  { id: "awokado", namePl: "Awokado", category: "Овощи", unit: "szt", regularPricePln: 5.99 },
-  { id: "kurczak", namePl: "Filet z kurczaka", category: "Мясо", unit: "kg", regularPricePln: 25.49 },
-  { id: "mielone", namePl: "Mięso mielone wołowe", category: "Мясо", unit: "kg", regularPricePln: 34.99 },
-  { id: "schab", namePl: "Schab wieprzowy", category: "Мясо", unit: "kg", regularPricePln: 19.99 },
-  { id: "tofu", namePl: "Tofu naturalne", category: "Мясо", unit: "szt", regularPricePln: 6.99 },
-  { id: "losos", namePl: "Łosoś filet", category: "Рыба", unit: "kg", regularPricePln: 62.99 },
-  { id: "dorsz", namePl: "Dorsz filet", category: "Рыба", unit: "kg", regularPricePln: 39.99 },
-  { id: "mleko", namePl: "Mleko 2%", category: "Молочка", unit: "l", regularPricePln: 3.49 },
-  { id: "jogurt", namePl: "Jogurt naturalny", category: "Молочка", unit: "szt", regularPricePln: 3.49 },
-  { id: "gouda", namePl: "Ser gouda", category: "Молочка", unit: "kg", regularPricePln: 34.99 },
-  { id: "smietana", namePl: "Śmietana 18%", category: "Молочка", unit: "szt", regularPricePln: 2.89 },
-  { id: "jaja", namePl: "Jaja M 10 szt.", category: "Молочка", unit: "opak", regularPricePln: 12.49 },
-  { id: "feta", namePl: "Ser feta", category: "Молочка", unit: "szt", regularPricePln: 6.99 },
-  { id: "maslo", namePl: "Masło ekstra", category: "Молочка", unit: "szt", regularPricePln: 7.99 },
-  { id: "ryz", namePl: "Ryż jaśminowy", category: "Бакалея", unit: "kg", regularPricePln: 5.99 },
-  { id: "penne", namePl: "Makaron penne", category: "Бакалея", unit: "szt", regularPricePln: 3.79 },
-  { id: "spaghetti", namePl: "Makaron spaghetti", category: "Бакалея", unit: "szt", regularPricePln: 3.49 },
-  { id: "kasza", namePl: "Kasza gryczana", category: "Бакалея", unit: "kg", regularPricePln: 6.99 },
-  { id: "soczewica", namePl: "Soczewica czerwona", category: "Бакалея", unit: "kg", regularPricePln: 8.49 },
-  { id: "ciecierzyca", namePl: "Ciecierzyca konserwowa", category: "Бакалея", unit: "szt", regularPricePln: 2.99 },
-  { id: "pomidory-puszka", namePl: "Pomidory krojone", category: "Бакалея", unit: "szt", regularPricePln: 3.29 },
-  { id: "passata", namePl: "Passata pomidorowa", category: "Бакалея", unit: "szt", regularPricePln: 4.79 },
-  { id: "oliwa", namePl: "Oliwa z oliwek", category: "Бакалея", unit: "szt", regularPricePln: 18.99 },
-  { id: "tortilla", namePl: "Tortilla pszenna", category: "Бакалея", unit: "opak", regularPricePln: 5.49 },
-  { id: "fasola", namePl: "Fasola czerwona", category: "Бакалея", unit: "szt", regularPricePln: 3.29 },
-  { id: "kukurydza", namePl: "Kukurydza konserwowa", category: "Бакалея", unit: "szt", regularPricePln: 2.99 },
-  { id: "chleb", namePl: "Chleb żytni", category: "Бакалея", unit: "szt", regularPricePln: 4.29 },
-  { id: "bulka", namePl: "Bułka kajzerka", category: "Бакалея", unit: "szt", regularPricePln: 0.55 },
+  product("pomidory", "Pomidory", "Овощи", "kg", 9.99),
+  product("ogorki", "Ogórki", "Овощи", "kg", 6.99),
+  product("cebula", "Cebula", "Овощи", "kg", 2.99),
+  product("marchew", "Marchew", "Овощи", "kg", 2.99),
+  product("ziemniaki", "Ziemniaki", "Овощи", "kg", 2.99),
+  product("papryka", "Papryka czerwona", "Овощи", "kg", 12.99),
+  product("salata", "Sałata masłowa", "Овощи", "szt", 3.99),
+  product("cukinia", "Cukinia", "Овощи", "kg", 6.49),
+  product("brokuly", "Brokuły", "Овощи", "szt", 5.49),
+  product("szpinak", "Szpinak baby", "Овощи", "szt", 5.49),
+  product("czosnek", "Czosnek", "Овощи", "szt", 1.79),
+  product("cytryna", "Cytryna", "Овощи", "szt", 1.69),
+  product("awokado", "Awokado", "Овощи", "szt", 5.99),
+  product("kurczak", "Filet z kurczaka", "Мясо", "kg", 25.49),
+  product("mielone", "Mięso mielone wołowe", "Мясо", "kg", 34.99),
+  product("schab", "Schab wieprzowy", "Мясо", "kg", 19.99),
+  product("tofu", "Tofu naturalne", "Мясо", "szt", 6.99),
+  product("losos", "Łosoś filet", "Рыба", "kg", 62.99),
+  product("dorsz", "Dorsz filet", "Рыба", "kg", 39.99),
+  product("mleko", "Mleko 2%", "Молочка", "l", 3.49),
+  product("jogurt", "Jogurt naturalny", "Молочка", "szt", 3.49),
+  product("gouda", "Ser gouda", "Молочка", "kg", 34.99),
+  product("smietana", "Śmietana 18%", "Молочка", "szt", 2.89),
+  product("jaja", "Jaja M 10 szt.", "Молочка", "opak", 12.49),
+  product("feta", "Ser feta", "Молочка", "szt", 6.99),
+  product("maslo", "Masło ekstra", "Молочка", "szt", 7.99),
+  product("ryz", "Ryż jaśminowy", "Бакалея", "kg", 5.99),
+  product("penne", "Makaron penne", "Бакалея", "szt", 3.79),
+  product("spaghetti", "Makaron spaghetti", "Бакалея", "szt", 3.49),
+  product("kasza", "Kasza gryczana", "Бакалея", "kg", 6.99),
+  product("soczewica", "Soczewica czerwona", "Бакалея", "kg", 8.49),
+  product("ciecierzyca", "Ciecierzyca konserwowa", "Бакалея", "szt", 2.99),
+  product("pomidory-puszka", "Pomidory krojone", "Бакалея", "szt", 3.29),
+  product("passata", "Passata pomidorowa", "Бакалея", "szt", 4.79),
+  product("oliwa", "Oliwa z oliwek", "Бакалея", "szt", 18.99),
+  product("tortilla", "Tortilla pszenna", "Бакалея", "opak", 5.49),
+  product("fasola", "Fasola czerwona", "Бакалея", "szt", 3.29),
+  product("kukurydza", "Kukurydza konserwowa", "Бакалея", "szt", 2.99),
+  product("chleb", "Chleb żytni", "Бакалея", "szt", 4.29),
+  product("bulka", "Bułka kajzerka", "Бакалея", "szt", 0.55),
 ];
 
 export const MON_PROMO: { productId: string; price: number }[] = [
@@ -187,12 +219,18 @@ function shelfById(): Map<string, ShelfItem> {
   }
 }
 
-export function shelfPrice(productId: string): number | undefined {
+export function confirmedShelf(productId: string): ShelfItem | undefined {
   const product = PRODUCTS.find((item) => item.id === productId);
   if (!product) return undefined;
   const row = shelfById().get(productId);
-  if (row && row.unit === product.unit && row.regularPricePln > 0) return row.regularPricePln;
-  return product.regularPricePln;
+  if (!row || row.unit !== product.unit || row.regularPricePln <= 0) return undefined;
+  return row;
+}
+
+export function shelfPrice(productId: string): number | undefined {
+  const confirmed = confirmedShelf(productId);
+  if (confirmed) return confirmed.regularPricePln;
+  return PRODUCTS.find((item) => item.id === productId)?.regularPricePln;
 }
 
 export function plausiblePromo(productId: string, price: number): boolean {
@@ -206,8 +244,14 @@ function applyShelfPrices(catalog: Catalog): Catalog {
   return {
     ...catalog,
     products: catalog.products.map((product) => {
-      const regular = shelfPrice(product.id);
-      return regular == null ? product : { ...product, regularPricePln: regular };
+      const row = confirmedShelf(product.id);
+      if (!row) return { ...product, priceConfirmed: false };
+      return {
+        ...product,
+        regularPricePln: row.regularPricePln,
+        priceConfirmed: true,
+        priceCheckedAt: row.checkedAt,
+      };
     }),
   };
 }

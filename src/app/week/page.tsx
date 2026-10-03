@@ -8,8 +8,9 @@ import { recipePhoto } from "@/lib/recipes";
 import { formatRuDate } from "@/lib/dates";
 import { formatPln, money } from "@/lib/money";
 import { isProfileComplete } from "@/lib/profile";
-import { getLatestPlan, getProfile, getSessionUser, getTrial } from "@/lib/store";
-import { RebuildPlan } from "./rebuild-plan";
+import { MarkCooked } from "@/components/mark-cooked";
+import { getCookedDays, getLatestPlan, getProfile, getSessionUser, getTrial } from "@/lib/store";
+import { ReplaceMeal } from "./replace-meal";
 import { WeekActions } from "./week-actions";
 import { ShopCard } from "./shop-card";
 
@@ -21,9 +22,11 @@ export default async function WeekPage() {
   const profile = await getProfile(user.id);
   if (!isProfileComplete(profile)) redirect("/onboarding");
   const plan = await getLatestPlan(user.id, profile.householdSize);
+  const cookedDays = plan ? await getCookedDays(user.id, plan.id) : [];
   const trial = await getTrial(user.id, profile.householdSize);
   const stale = plan?.meals.some((meal) => !RECIPES.some((recipe) => recipe.id === meal.recipeId)) ?? false;
   const noLeaflet = plan != null && plan.saved === 0 && leafletsOn(plan.shopDate).length === 0;
+  const approx = plan?.lines.some((line) => line.approx) ?? false;
 
   return (
     <main className="mx-auto w-full max-w-5xl px-5 py-8">
@@ -50,7 +53,7 @@ export default async function WeekPage() {
           <div className="mt-8 grid gap-4 md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)]">
             <div>
               <section className="grid grid-cols-3 gap-3 rounded-3xl bg-ink p-5 text-cream">
-                <Stat label="К оплате" value={formatPln(plan.total)} />
+                <Stat label="К оплате" value={`${approx ? "≈ " : ""}${formatPln(plan.total)}`} />
                 <Stat label="Без акций" value={formatPln(plan.regularTotal)} />
                 <Stat label="Сэкономили" value={formatPln(plan.saved)} accent />
               </section>
@@ -66,7 +69,7 @@ export default async function WeekPage() {
           ) : null}
 
           {stale && trial.open ? (
-            <p className="mt-4 text-sm text-olive">Каталог обновился. Нажми Rebuild plan, чтобы собрать неделю заново.</p>
+            <p className="mt-4 text-sm text-olive">Каталог обновился. Замени блюдо, которого больше нет.</p>
           ) : null}
 
           <section className="mt-8 max-w-2xl">
@@ -83,13 +86,13 @@ export default async function WeekPage() {
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={photo} alt="" className="aspect-[16/7] w-full object-cover" />
                       ) : null}
-                      <div className="px-5 py-4">
+                      <div className={`px-5 py-4 ${photo ? "" : "pr-16"}`}>
                       <p className="text-sm text-muted capitalize">{date.weekday}</p>
                       <h3 className="mt-1 font-serif text-2xl">{meal.title}</h3>
                       {recipe ? (
                         <div className="mt-3 flex flex-col gap-2">
-                          <p className="text-xs tracking-wide text-muted uppercase">{cuisineLabel(recipe.cuisine)}</p>
-                          <VibePills styles={recipe.dietStyles} />
+                          <p className="text-xs tracking-wide text-muted uppercase">{recipe.cuisines.map(cuisineLabel).join(" · ")}</p>
+                          <VibePills styles={recipe.vibes} />
                         </div>
                       ) : null}
                       <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
@@ -115,7 +118,7 @@ export default async function WeekPage() {
                     </div>
                 );
                 return (
-                  <li key={meal.dayIndex}>
+                  <li key={meal.dayIndex} className="relative">
                     {recipe ? (
                       <Link href={`/recipe/${meal.recipeId}`} className="block">
                         {card}
@@ -123,17 +126,18 @@ export default async function WeekPage() {
                     ) : (
                       card
                     )}
+                    <ReplaceMeal recipeId={meal.recipeId} />
+                    <div className="mt-2 px-1">
+                      <MarkCooked
+                        planId={plan.id}
+                        dayIndex={meal.dayIndex}
+                        cooked={cookedDays.includes(meal.dayIndex)}
+                      />
+                    </div>
                   </li>
                 );
               })}
             </ol>
-            <RebuildPlan
-              meals={plan.meals.map((meal) => ({
-                dayIndex: meal.dayIndex,
-                title: meal.title,
-                weekday: formatRuDate(meal.date).weekday,
-              }))}
-            />
           </section>
         </>
       ) : (

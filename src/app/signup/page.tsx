@@ -5,11 +5,11 @@ import { getProfile, getSessionUser } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
-export default async function LoginPage() {
+export default async function SignupPage() {
   const user = await getSessionUser();
   if (user) {
     const profile = await getProfile(user.id);
     redirect(isProfileComplete(profile) ? "/week" : "/onboarding");
   }
-  return <AuthForm mode="login" />;
+  return <AuthForm mode="signup" />;
 }

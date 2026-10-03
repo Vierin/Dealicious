@@ -16,7 +16,7 @@ const products = PRODUCTS.map(
 
 const recipes = RECIPES.map(
   (recipe) =>
-    `(${q(recipe.id)}, ${q(recipe.title)}, ${arr(recipe.dietStyles)}, ${arr(recipe.allergens)}, ${arr(recipe.proteins)}, ${recipe.isVegan}, ${arr(recipe.appliances)})`,
+    `(${q(recipe.id)}, ${q(recipe.title)}, ${arr(recipe.vibes)}, ${arr(recipe.allergens)}, ${arr(recipe.proteins)}, ${arr(recipe.diets)}, ${arr(recipe.appliances)}, ${arr(recipe.cuisines)})`,
 ).join(",\n");
 
 const ingredients = INGREDIENTS.map(
@@ -48,7 +48,7 @@ restart identity cascade;
 insert into products (id, name_pl, category, unit, regular_price_pln) values
 ${products};
 
-insert into recipes (id, title, diet_styles, allergens, proteins, is_vegan, appliances) values
+insert into recipes (id, title, diet_styles, allergens, proteins, diets, appliances, cuisines) values
 ${recipes};
 
 insert into recipe_ingredients (recipe_id, product_id, qty_per_person) values

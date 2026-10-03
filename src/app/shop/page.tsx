@@ -32,7 +32,7 @@ export default async function ShopPage() {
     <main className="mx-auto w-full max-w-2xl px-5 py-8">
       <div className="flex items-center justify-between gap-4">
         <BackLink href="/week" label="Неделя" />
-        <Link href="/pantry" className="inline-flex items-center gap-1.5 text-sm">
+        <Link href="/pantry" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-3 py-1.5 text-sm">
           <Refrigerator size={16} strokeWidth={1.75} />
           Кладовая
         </Link>

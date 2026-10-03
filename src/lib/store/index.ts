@@ -1,4 +1,5 @@
 import { trialDaysLeft, trialEndsAt, trialLedger, trialOpen, type TrialWeek } from "../billing";
+import type { RecipeRatings } from "../score";
 import type { PlanView, Profile } from "../types";
 import * as remote from "./supabase-repo";
 
@@ -48,6 +49,22 @@ export async function replaceMeal(
   dayIndex?: number,
 ): Promise<PlanView> {
   return remote.replaceMeal(userId, profile, recipeId, dayIndex);
+}
+
+export async function getRatings(userId: string): Promise<RecipeRatings> {
+  return remote.getRatings(userId);
+}
+
+export async function setRating(userId: string, recipeId: string, score: number): Promise<void> {
+  return remote.setRating(userId, recipeId, score);
+}
+
+export async function getCookedDays(userId: string, planId: string): Promise<number[]> {
+  return remote.getCookedDays(userId, planId);
+}
+
+export async function setCooked(userId: string, planId: string, dayIndex: number, cooked: boolean): Promise<void> {
+  return remote.setCooked(userId, planId, dayIndex, cooked);
 }
 
 export async function getLatestPlan(userId: string, householdSize: number): Promise<PlanView | null> {

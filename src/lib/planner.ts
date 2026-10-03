@@ -1,8 +1,8 @@
-import { COOKING, kcal } from "./cooking";
-import { addISODays, cookOffsets, nextShopDate } from "./dates";
+import { addISODays, cookOffsets, nextShopDate, parseISODate } from "./dates";
 import { ALL_COOK_DAYS } from "./profile";
 import { PANTRY_PRODUCT_IDS } from "./pantry";
 import { money, roundQty } from "./money";
+import { recipeScore, type RecipeRatings } from "./score";
 import type {
   BasketLine,
   Catalog,
@@ -10,29 +10,40 @@ import type {
   Product,
   Profile,
   Promotion,
-  Protein,
   Recipe,
 } from "./types";
 import { CATEGORY_ORDER } from "./types";
 
-function knownRegular(promo: Promotion, product: Product): number {
-  return typeof promo.regularPricePln === "number" ? promo.regularPricePln : product.regularPricePln;
+function knownRegular(promo: Promotion, product: Product): number | null {
+  if (typeof promo.regularPricePln === "number") return promo.regularPricePln;
+  if (product.priceConfirmed) return product.regularPricePln;
+  return null;
 }
 
 export function isDiscount(promo: Promotion, product: Product): boolean {
-  return product.regularPricePln > promo.promoPricePln && knownRegular(promo, product) > promo.promoPricePln;
+  const regular = knownRegular(promo, product);
+  return regular != null && regular > promo.promoPricePln;
 }
 
 function priced(promo: Promotion | undefined, product: Product): {
   unitPrice: number;
   regularUnit: number;
   onPromo: boolean;
+  approx: boolean;
 } {
-  const shelf = product.regularPricePln;
-  if (!promo || !isDiscount(promo, product)) {
-    return { unitPrice: shelf, regularUnit: shelf, onPromo: false };
+  const regular = promo ? knownRegular(promo, product) : product.priceConfirmed ? product.regularPricePln : null;
+  if (promo && regular != null && regular > promo.promoPricePln) {
+    return { unitPrice: promo.promoPricePln, regularUnit: regular, onPromo: true, approx: false };
   }
-  return { unitPrice: promo.promoPricePln, regularUnit: knownRegular(promo, product), onPromo: true };
+  if (promo && regular == null) {
+    return { unitPrice: promo.promoPricePln, regularUnit: promo.promoPricePln, onPromo: false, approx: true };
+  }
+  return {
+    unitPrice: product.regularPricePln,
+    regularUnit: product.regularPricePln,
+    onPromo: false,
+    approx: !product.priceConfirmed,
+  };
 }
 
 export function packQuote(productId: string, catalog: Catalog, shopDate: string): { pay: number; regular: number } {
@@ -57,35 +68,35 @@ export function activePromo(
     .sort((a, b) => a.promoPricePln - b.promoPricePln)[0];
 }
 
-function primaryProtein(recipe: Recipe): Protein {
-  return recipe.proteins.find((protein) => protein !== "veg") ?? "veg";
+function stocked(product: Product, catalog: Catalog, shopDate: string, depth = 0): boolean {
+  const promo = activePromo(product.id, catalog.promotions, shopDate);
+  if (product.kind === "specialty") {
+    if (product.priceConfirmed || promo) return true;
+    if (depth < 2 && product.substituteId) {
+      const substitute = catalog.products.find((item) => item.id === product.substituteId);
+      return substitute ? stocked(substitute, catalog, shopDate, depth + 1) : false;
+    }
+    return false;
+  }
+  if (product.kind !== "seasonal") return true;
+  if (promo) return true;
+  if (!product.priceConfirmed) return false;
+  return product.estimatePricePln > 0 && product.regularPricePln <= product.estimatePricePln * 1.15;
 }
 
-function allows(profile: Profile, recipe: Recipe): boolean {
+function allows(profile: Profile, recipe: Recipe, catalog: Catalog, shopDate: string): boolean {
   if (recipe.allergens.some((allergen) => profile.allergies.includes(allergen))) return false;
   if (recipe.appliances.some((appliance) => !profile.appliances.includes(appliance))) return false;
-  if (profile.diet === "vegan" && !recipe.isVegan) return false;
-  if (profile.diet === "vegetarian" && recipe.proteins.some((protein) => protein !== "veg")) {
-    return false;
-  }
-  if (
-    profile.diet === "pescatarian" &&
-    recipe.proteins.some((protein) => protein !== "veg" && protein !== "fish")
-  ) {
-    return false;
-  }
+  if (profile.diet !== "none" && !recipe.diets.includes(profile.diet)) return false;
   if (profile.diet === "none" && profile.meatPref !== "any") {
     const ok = recipe.proteins.every(
       (protein) => protein === "veg" || protein === profile.meatPref,
     );
     if (!ok) return false;
   }
-  return true;
-}
-
-function styleBonus(profile: Profile, recipe: Recipe): number {
-  if (profile.dietStyle === "balanced") return 0.05;
-  return recipe.dietStyles.includes(profile.dietStyle) ? 0.35 : 0;
+  return catalog.ingredients
+    .filter((item) => item.recipeId === recipe.id)
+    .every((item) => stocked(productById(catalog, item.productId), catalog, shopDate));
 }
 
 function promoShare(recipe: Recipe, catalog: Catalog, shopDate: string): number {
@@ -110,28 +121,33 @@ function productById(catalog: Catalog, productId: string): Product {
   return product;
 }
 
-const STAPLES = new Set(["cebula", "czosnek", "oliwa", "cytryna"]);
-
-function plateProducts(recipeId: string, catalog: Catalog): string[] {
-  return catalog.ingredients
-    .filter((item) => item.recipeId === recipeId && !STAPLES.has(item.productId))
-    .map((item) => item.productId);
-}
-
-function tooLight(recipe: Recipe, target: number): boolean {
-  const cooking = COOKING[recipe.id];
-  if (!cooking) return false;
-  return kcal(cooking) < target * 0.75;
-}
-
-function repeatsProduct(recipe: Recipe, picked: Recipe[], catalog: Catalog): boolean {
-  const used = new Map<string, number>();
-  for (const item of picked) {
-    for (const productId of plateProducts(item.id, catalog)) {
-      used.set(productId, (used.get(productId) ?? 0) + 1);
-    }
-  }
-  return plateProducts(recipe.id, catalog).some((productId) => (used.get(productId) ?? 0) >= 2);
+function judge(
+  recipe: Recipe,
+  picked: Recipe[],
+  profile: Profile,
+  catalog: Catalog,
+  shopDate: string,
+  weekday: number | null,
+  ratings: RecipeRatings,
+): { score: number; over: number } {
+  const beforeIds = picked.map((item) => item.id);
+  const before = beforeIds.length === 0 ? 0 : basketSpend(beforeIds, profile.householdSize, catalog, shopDate);
+  const after = basketSpend([...beforeIds, recipe.id], profile.householdSize, catalog, shopDate);
+  const over = Math.max(0, after - profile.weeklyBudgetPln);
+  return {
+    over,
+    score: recipeScore({
+      profile,
+      recipe,
+      picked,
+      catalog,
+      marginalCost: after - before,
+      basketOver: over,
+      promoShare: promoShare(recipe, catalog, shopDate),
+      weekday,
+      rating: ratings[recipe.id] ?? null,
+    }),
+  };
 }
 
 function takeBest(
@@ -140,41 +156,27 @@ function takeBest(
   profile: Profile,
   catalog: Catalog,
   shopDate: string,
+  weekday: number | null,
+  ratings: RecipeRatings,
 ): Recipe | null {
   if (pool.length === 0) return null;
-  const target = profile.dailyKcal * 0.35;
-  const varied = pool.filter((recipe) => !repeatsProduct(recipe, picked, catalog));
-  const sized = pool.filter((recipe) => !tooLight(recipe, target));
-  const variedSized = varied.filter((recipe) => !tooLight(recipe, target));
-  const candidates =
-    variedSized.length > 0 ? variedSized : sized.length > 0 ? sized : varied.length > 0 ? varied : pool;
-  let best = candidates[0];
+  const gourmet = profile.menuLevel === 5;
+  let best = pool[0];
   let bestScore = Number.NEGATIVE_INFINITY;
-  for (const recipe of candidates) {
-    const repeats = picked.filter((item) => primaryProtein(item) === primaryProtein(recipe)).length;
-    const cuisineRepeats = picked.filter((item) => item.cuisine === recipe.cuisine).length;
-    const total = basketSpend(
-      [...picked.map((item) => item.id), recipe.id],
-      profile.householdSize,
-      catalog,
-      shopDate,
-    );
-    const over = Math.max(0, total - profile.weeklyBudgetPln);
-    const plate = COOKING[recipe.id] ? kcal(COOKING[recipe.id]) : target;
-    const gap = Math.abs(plate - target) / target;
-    const score =
-      promoShare(recipe, catalog, shopDate) +
-      styleBonus(profile, recipe) -
-      gap * 0.45 -
-      repeats * 0.22 -
-      cuisineRepeats * 0.08 -
-      over / profile.weeklyBudgetPln;
+  let affordable: Recipe | null = null;
+  let affordableScore = Number.NEGATIVE_INFINITY;
+  for (const recipe of pool) {
+    const { score, over } = judge(recipe, picked, profile, catalog, shopDate, weekday, ratings);
     if (score > bestScore || (score === bestScore && recipe.id < best.id)) {
       best = recipe;
       bestScore = score;
     }
+    if (gourmet && over === 0 && (score > affordableScore || (score === affordableScore && recipe.id < (affordable?.id ?? "~")))) {
+      affordable = recipe;
+      affordableScore = score;
+    }
   }
-  return best;
+  return gourmet && affordable ? affordable : best;
 }
 
 function fillSlots(
@@ -184,11 +186,13 @@ function fillSlots(
   catalog: Catalog,
   shopDate: string,
   count: number,
+  weekdays: number[],
+  ratings: RecipeRatings,
 ): Recipe[] {
   const picked = [...locked];
   const fresh: Recipe[] = [];
   while (fresh.length < count && pool.length > 0) {
-    const best = takeBest(pool, picked, profile, catalog, shopDate);
+    const best = takeBest(pool, picked, profile, catalog, shopDate, weekdays[fresh.length] ?? null, ratings);
     if (!best) break;
     pool.splice(pool.indexOf(best), 1);
     picked.push(best);
@@ -202,12 +206,16 @@ function activeCookDays(profile: Profile): number[] {
   return profile.cookDays?.length ? profile.cookDays : ALL_COOK_DAYS;
 }
 
-export function pickWeek(profile: Profile, catalog: Catalog, from = new Date()) {
+function weekdaysFor(shopDate: string, offsets: number[]): number[] {
+  return offsets.map((offset) => parseISODate(addISODays(shopDate, offset)).getDay());
+}
+
+export function pickWeek(profile: Profile, catalog: Catalog, from = new Date(), ratings: RecipeRatings = {}) {
   const shopDate = nextShopDate(profile.shopWeekday, from);
   const offsets = cookOffsets(shopDate, activeCookDays(profile));
   if (offsets.length === 0) throw new Error("Выбери хотя бы один день готовки");
-  const pool = catalog.recipes.filter((recipe) => allows(profile, recipe));
-  const picked = fillSlots(pool, [], profile, catalog, shopDate, offsets.length);
+  const pool = catalog.recipes.filter((recipe) => allows(profile, recipe, catalog, shopDate));
+  const picked = fillSlots(pool, [], profile, catalog, shopDate, offsets.length, weekdaysFor(shopDate, offsets), ratings);
   const recipeIds = Array.from({ length: 7 }, () => "");
   offsets.forEach((offset, index) => {
     recipeIds[offset] = picked[index].id;
@@ -221,6 +229,7 @@ export function repickWeek(
   currentIds: string[],
   shopDate: string,
   keep: number[],
+  ratings: RecipeRatings = {},
 ): string[] {
   const offsets = cookOffsets(shopDate, activeCookDays(profile));
   if (offsets.length === 0) throw new Error("Выбери хотя бы один день готовки");
@@ -231,7 +240,7 @@ export function repickWeek(
   for (const index of keep) {
     if (!active.has(index) || keepSet.has(index) || !base[index]) continue;
     const recipe = catalog.recipes.find((item) => item.id === base[index]);
-    if (!recipe || !allows(profile, recipe)) continue;
+    if (!recipe || !allows(profile, recipe, catalog, shopDate)) continue;
     keepSet.add(index);
     locked.push(recipe);
   }
@@ -242,14 +251,30 @@ export function repickWeek(
 
   const lockedIds = new Set(locked.map((recipe) => recipe.id));
   const avoid = new Set(openIndexes.map((index) => base[index]).filter((id) => id.length > 0));
-  const allowed = catalog.recipes.filter((recipe) => allows(profile, recipe) && !lockedIds.has(recipe.id));
+  const allowed = catalog.recipes.filter((recipe) => allows(profile, recipe, catalog, shopDate) && !lockedIds.has(recipe.id));
   const fresh = allowed.filter((recipe) => !avoid.has(recipe.id));
   const pool = fresh.length >= openIndexes.length ? [...fresh] : [...allowed];
-  const added = fillSlots(pool, locked, profile, catalog, shopDate, openIndexes.length);
+  const added = fillSlots(
+    pool,
+    locked,
+    profile,
+    catalog,
+    shopDate,
+    openIndexes.length,
+    weekdaysFor(shopDate, openIndexes),
+    ratings,
+  );
   openIndexes.forEach((index, cursor) => {
     next[index] = added[cursor].id;
   });
   return next;
+}
+
+function recipesFrom(ids: string[], catalog: Catalog): Recipe[] {
+  return ids.flatMap((id) => {
+    const recipe = catalog.recipes.find((item) => item.id === id);
+    return recipe ? [recipe] : [];
+  });
 }
 
 export function replacementFor(
@@ -258,26 +283,34 @@ export function replacementFor(
   recipeIds: string[],
   index: number,
   shopDate: string,
+  ratings: RecipeRatings = {},
 ): string {
   const used = new Set(recipeIds);
-  const pool = catalog.recipes.filter((recipe) => allows(profile, recipe) && !used.has(recipe.id));
-  const target = profile.dailyKcal * 0.35;
-  const sized = pool.filter((recipe) => !tooLight(recipe, target));
-  const candidates = sized.length > 0 ? sized : pool;
-  if (candidates.length === 0) throw new Error("Нечем заменить");
+  const pool = catalog.recipes.filter((recipe) => allows(profile, recipe, catalog, shopDate) && !used.has(recipe.id));
+  if (pool.length === 0) throw new Error("Нечем заменить");
 
-  let best = candidates[0];
+  const kept = recipesFrom(
+    recipeIds.filter((id, itemIndex) => itemIndex !== index && id),
+    catalog,
+  );
+  const weekday = parseISODate(addISODays(shopDate, index)).getDay();
+  const gourmet = profile.menuLevel === 5;
+  let best = pool[0];
   let bestScore = Number.NEGATIVE_INFINITY;
-  for (const recipe of candidates) {
-    const plate = COOKING[recipe.id] ? kcal(COOKING[recipe.id]) : target;
-    const gap = Math.abs(plate - target) / target;
-    const score = promoShare(recipe, catalog, shopDate) + styleBonus(profile, recipe) - gap * 0.45;
+  let affordable: Recipe | null = null;
+  let affordableScore = Number.NEGATIVE_INFINITY;
+  for (const recipe of pool) {
+    const { score, over } = judge(recipe, kept, profile, catalog, shopDate, weekday, ratings);
     if (score > bestScore || (score === bestScore && recipe.id < best.id)) {
       best = recipe;
       bestScore = score;
     }
+    if (gourmet && over === 0 && (score > affordableScore || (score === affordableScore && recipe.id < (affordable?.id ?? "~")))) {
+      affordable = recipe;
+      affordableScore = score;
+    }
   }
-  return best.id;
+  return (gourmet && affordable ? affordable : best).id;
 }
 
 export function placeRecipe(recipeIds: string[], recipeId: string, dayIndex: number): string[] {
@@ -296,11 +329,12 @@ export function swapRecipeIds(
   recipeIds: string[],
   recipeId: string,
   shopDate: string,
+  ratings: RecipeRatings = {},
 ): string[] {
   const next = [...recipeIds];
   const index = next.indexOf(recipeId);
   if (index >= 0) {
-    next[index] = replacementFor(profile, catalog, next, index, shopDate);
+    next[index] = replacementFor(profile, catalog, next, index, shopDate, ratings);
     return next;
   }
   let slot = 0;
@@ -308,7 +342,13 @@ export function swapRecipeIds(
   next.forEach((id, itemIndex) => {
     if (!id) return;
     const recipe = catalog.recipes.find((item) => item.id === id);
-    const score = recipe ? promoShare(recipe, catalog, shopDate) : -1;
+    const others = recipesFrom(
+      next.filter((other, otherIndex) => otherIndex !== itemIndex && other),
+      catalog,
+    );
+    const score = recipe
+      ? judge(recipe, others, profile, catalog, shopDate, parseISODate(addISODays(shopDate, itemIndex)).getDay(), ratings).score
+      : Number.NEGATIVE_INFINITY;
     if (score < worst) {
       worst = score;
       slot = itemIndex;
@@ -353,7 +393,7 @@ export function buildBasket(
     const product = productById(catalog, productId);
     const rounded = roundQty(qty, product.unit);
     const promo = activePromo(productId, catalog.promotions, shopDate);
-    const { unitPrice, regularUnit, onPromo } = priced(promo, product);
+    const price = priced(promo, product);
     if (PANTRY_PRODUCT_IDS.has(productId)) continue;
     lines.push({
       productId,
@@ -361,11 +401,12 @@ export function buildBasket(
       category: product.category,
       qty: rounded,
       unit: product.unit,
-      unitPrice,
-      regularUnitPrice: regularUnit,
-      lineTotal: money(rounded * unitPrice),
-      regularLineTotal: money(rounded * regularUnit),
-      onPromo,
+      unitPrice: price.unitPrice,
+      regularUnitPrice: price.regularUnit,
+      lineTotal: money(rounded * price.unitPrice),
+      regularLineTotal: money(rounded * price.regularUnit),
+      onPromo: price.onPromo,
+      approx: price.approx,
     });
   }
 
@@ -398,6 +439,9 @@ export function presentPlan(input: {
   const lines = buildBasket(input.recipeIds, input.householdSize, input.catalog, input.shopDate);
   const total = money(lines.reduce((sum, line) => sum + line.lineTotal, 0));
   const regularTotal = money(lines.reduce((sum, line) => sum + line.regularLineTotal, 0));
+  const saved = money(
+    lines.reduce((sum, line) => (line.onPromo && !line.approx ? sum + (line.regularLineTotal - line.lineTotal) : sum), 0),
+  );
 
   return {
     id: input.id,
@@ -423,6 +467,6 @@ export function presentPlan(input: {
     lines,
     total,
     regularTotal,
-    saved: money(regularTotal - total),
+    saved,
   };
 }

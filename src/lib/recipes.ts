@@ -4,6 +4,7 @@ import type {
   Allergen,
   Appliance,
   Cuisine,
+  DietNeed,
   DietStyle,
   PantryItem,
   Protein,
@@ -22,8 +23,8 @@ export type Cooking = {
 type Meal = {
   id: string;
   title: string;
-  cuisine: Cuisine;
-  dietStyles: DietStyle[];
+  cuisines: Cuisine[];
+  vibes: DietStyle[];
   proteins: Protein[];
   isVegan: boolean;
   appliances: Appliance[];
@@ -57,8 +58,8 @@ const MEALS: Meal[] = [
   {
     id: "dom-schab-ziem",
     title: "Свинина с луком и картошкой",
-    cuisine: "domowa",
-    dietStyles: ["comfort", "balanced"],
+    cuisines: ["polish"],
+    vibes: ["home-style", "family-favs"],
     proteins: ["pork"],
     isVegan: false,
     appliances: ["stove"],
@@ -86,8 +87,8 @@ const MEALS: Meal[] = [
   {
     id: "dom-mielone",
     title: "Котлеты из говяжьего фарша",
-    cuisine: "domowa",
-    dietStyles: ["comfort"],
+    cuisines: ["polish"],
+    vibes: ["home-style"],
     proteins: ["beef"],
     isVegan: false,
     appliances: ["stove"],
@@ -116,8 +117,8 @@ const MEALS: Meal[] = [
   {
     id: "dom-kurczak-cebula",
     title: "Курица, тушённая с луком",
-    cuisine: "domowa",
-    dietStyles: ["sport", "comfort"],
+    cuisines: ["polish"],
+    vibes: ["protein-packed", "home-style"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -145,8 +146,8 @@ const MEALS: Meal[] = [
   {
     id: "dom-zupa-pomidor",
     title: "Томатный суп с курицей и рисом",
-    cuisine: "domowa",
-    dietStyles: ["comfort", "balanced"],
+    cuisines: ["polish"],
+    vibes: ["home-style", "family-favs"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -175,8 +176,8 @@ const MEALS: Meal[] = [
   {
     id: "dom-dorsz-maslo",
     title: "Треска с маслом и картошкой",
-    cuisine: "domowa",
-    dietStyles: ["healthy"],
+    cuisines: ["polish"],
+    vibes: ["healthy-comfort"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -204,8 +205,8 @@ const MEALS: Meal[] = [
   {
     id: "dom-losos-ogorek",
     title: "Лосось с огурцом и молодой картошкой",
-    cuisine: "domowa",
-    dietStyles: ["healthy", "sport"],
+    cuisines: ["polish"],
+    vibes: ["healthy-comfort", "protein-packed"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -234,8 +235,8 @@ const MEALS: Meal[] = [
   {
     id: "dom-kasza-cukinia",
     title: "Гречка с цукини и чесноком",
-    cuisine: "domowa",
-    dietStyles: ["healthy", "balanced"],
+    cuisines: ["polish"],
+    vibes: ["healthy-comfort", "family-favs"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -264,8 +265,8 @@ const MEALS: Meal[] = [
   {
     id: "dom-soczewica",
     title: "Чечевица с морковью",
-    cuisine: "domowa",
-    dietStyles: ["sport", "healthy"],
+    cuisines: ["polish"],
+    vibes: ["protein-packed", "healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -293,8 +294,8 @@ const MEALS: Meal[] = [
   {
     id: "dom-ciecierzyca-salat",
     title: "Нут с огурцом и помидором",
-    cuisine: "domowa",
-    dietStyles: ["healthy"],
+    cuisines: ["polish"],
+    vibes: ["healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: [],
@@ -325,8 +326,8 @@ const MEALS: Meal[] = [
   {
     id: "dom-fasola-salat",
     title: "Фасоль с кукурузой и паприкой",
-    cuisine: "domowa",
-    dietStyles: ["balanced", "healthy"],
+    cuisines: ["polish"],
+    vibes: ["family-favs", "healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: [],
@@ -356,8 +357,8 @@ const MEALS: Meal[] = [
   {
     id: "wlo-bolognese",
     title: "Паста болоньезе",
-    cuisine: "wloska",
-    dietStyles: ["comfort"],
+    cuisines: ["italian"],
+    vibes: ["home-style"],
     proteins: ["beef"],
     isVegan: false,
     appliances: ["stove"],
@@ -387,8 +388,8 @@ const MEALS: Meal[] = [
   {
     id: "wlo-kurczak-penne",
     title: "Пенне с курицей и пассатой",
-    cuisine: "wloska",
-    dietStyles: ["sport", "balanced"],
+    cuisines: ["italian"],
+    vibes: ["protein-packed", "family-favs"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -416,8 +417,8 @@ const MEALS: Meal[] = [
   {
     id: "wlo-aglio-brokul",
     title: "Спагетти с брокколи и чесноком",
-    cuisine: "wloska",
-    dietStyles: ["balanced", "healthy"],
+    cuisines: ["italian"],
+    vibes: ["family-favs", "healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -445,8 +446,8 @@ const MEALS: Meal[] = [
   {
     id: "wlo-risotto",
     title: "Ризотто с помидором",
-    cuisine: "wloska",
-    dietStyles: ["healthy", "comfort"],
+    cuisines: ["italian"],
+    vibes: ["healthy-comfort", "home-style"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -475,8 +476,8 @@ const MEALS: Meal[] = [
   {
     id: "wlo-zapiekanka",
     title: "Запеканка из пенне с фаршем",
-    cuisine: "wloska",
-    dietStyles: ["comfort"],
+    cuisines: ["italian"],
+    vibes: ["home-style"],
     proteins: ["beef"],
     isVegan: false,
     appliances: ["oven"],
@@ -505,8 +506,8 @@ const MEALS: Meal[] = [
   {
     id: "wlo-losos-pasta",
     title: "Спагетти с лососем и шпинатом",
-    cuisine: "wloska",
-    dietStyles: ["comfort", "sport"],
+    cuisines: ["italian"],
+    vibes: ["home-style", "protein-packed"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -535,8 +536,8 @@ const MEALS: Meal[] = [
   {
     id: "wlo-dorsz-pomidor",
     title: "Треска в томатах",
-    cuisine: "wloska",
-    dietStyles: ["healthy"],
+    cuisines: ["italian"],
+    vibes: ["healthy-comfort"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -565,8 +566,8 @@ const MEALS: Meal[] = [
   {
     id: "wlo-feta-piec",
     title: "Пенне с фетой из духовки",
-    cuisine: "wloska",
-    dietStyles: ["comfort"],
+    cuisines: ["italian"],
+    vibes: ["home-style"],
     proteins: ["veg"],
     isVegan: false,
     appliances: ["oven"],
@@ -595,8 +596,8 @@ const MEALS: Meal[] = [
   {
     id: "wlo-salat-awokado",
     title: "Салат с авокадо и помидором",
-    cuisine: "wloska",
-    dietStyles: ["healthy"],
+    cuisines: ["italian"],
+    vibes: ["healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: [],
@@ -626,8 +627,8 @@ const MEALS: Meal[] = [
   {
     id: "wlo-ciecierzyca-passata",
     title: "Нут в пассате со шпинатом",
-    cuisine: "wloska",
-    dietStyles: ["sport", "healthy"],
+    cuisines: ["italian"],
+    vibes: ["protein-packed", "healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -656,8 +657,8 @@ const MEALS: Meal[] = [
   {
     id: "mex-kurczak-tortilla",
     title: "Тортилья с курицей и паприкой",
-    cuisine: "meksykanska",
-    dietStyles: ["sport", "comfort"],
+    cuisines: ["mexican"],
+    vibes: ["protein-packed", "home-style"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -686,8 +687,8 @@ const MEALS: Meal[] = [
   {
     id: "mex-mielone-tortilla",
     title: "Тортилья с фаршем и фасолью",
-    cuisine: "meksykanska",
-    dietStyles: ["comfort"],
+    cuisines: ["mexican"],
+    vibes: ["home-style"],
     proteins: ["beef"],
     isVegan: false,
     appliances: ["stove"],
@@ -716,8 +717,8 @@ const MEALS: Meal[] = [
   {
     id: "mex-dorsz-taco",
     title: "Тортилья с треской и салатом",
-    cuisine: "meksykanska",
-    dietStyles: ["healthy"],
+    cuisines: ["mexican"],
+    vibes: ["healthy-comfort"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -746,8 +747,8 @@ const MEALS: Meal[] = [
   {
     id: "mex-losos-ryz",
     title: "Лосось с рисом и кукурузой",
-    cuisine: "meksykanska",
-    dietStyles: ["sport", "healthy"],
+    cuisines: ["mexican"],
+    vibes: ["protein-packed", "healthy-comfort"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -776,8 +777,8 @@ const MEALS: Meal[] = [
   {
     id: "mex-fasola-ryz",
     title: "Рис с фасолью и паприкой",
-    cuisine: "meksykanska",
-    dietStyles: ["sport", "balanced"],
+    cuisines: ["mexican"],
+    vibes: ["protein-packed", "family-favs"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -806,8 +807,8 @@ const MEALS: Meal[] = [
   {
     id: "mex-ciecierzyca-taco",
     title: "Тортилья с нутом",
-    cuisine: "meksykanska",
-    dietStyles: ["balanced", "healthy"],
+    cuisines: ["mexican"],
+    vibes: ["family-favs", "healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -836,8 +837,8 @@ const MEALS: Meal[] = [
   {
     id: "mex-salsa",
     title: "Фасоль с кукурузой и хлебом",
-    cuisine: "meksykanska",
-    dietStyles: ["healthy"],
+    cuisines: ["mexican"],
+    vibes: ["healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: [],
@@ -868,8 +869,8 @@ const MEALS: Meal[] = [
   {
     id: "mex-kurczak-ryz",
     title: "Курица с рисом и фасолью",
-    cuisine: "meksykanska",
-    dietStyles: ["sport"],
+    cuisines: ["mexican"],
+    vibes: ["protein-packed"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -897,8 +898,8 @@ const MEALS: Meal[] = [
   {
     id: "mex-schab-tortilla",
     title: "Тортилья со свининой",
-    cuisine: "meksykanska",
-    dietStyles: ["comfort"],
+    cuisines: ["mexican"],
+    vibes: ["home-style"],
     proteins: ["pork"],
     isVegan: false,
     appliances: ["stove"],
@@ -926,8 +927,8 @@ const MEALS: Meal[] = [
   {
     id: "mex-zapiekanka",
     title: "Тортилья с фасолью и гаудой",
-    cuisine: "meksykanska",
-    dietStyles: ["comfort"],
+    cuisines: ["mexican"],
+    vibes: ["home-style"],
     proteins: ["veg"],
     isVegan: false,
     appliances: ["oven"],
@@ -955,8 +956,8 @@ const MEALS: Meal[] = [
   {
     id: "ind-kurczak-curry",
     title: "Курица карри с рисом",
-    cuisine: "indyjska",
-    dietStyles: ["sport", "comfort"],
+    cuisines: ["indian"],
+    vibes: ["protein-packed", "home-style"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -986,8 +987,8 @@ const MEALS: Meal[] = [
   {
     id: "ind-ciecierzyca",
     title: "Нут карри с рисом",
-    cuisine: "indyjska",
-    dietStyles: ["sport", "healthy"],
+    cuisines: ["indian"],
+    vibes: ["protein-packed", "healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -1016,8 +1017,8 @@ const MEALS: Meal[] = [
   {
     id: "ind-dal",
     title: "Чечевица карри",
-    cuisine: "indyjska",
-    dietStyles: ["healthy", "sport"],
+    cuisines: ["indian"],
+    vibes: ["healthy-comfort", "protein-packed"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -1046,8 +1047,8 @@ const MEALS: Meal[] = [
   {
     id: "ind-losos",
     title: "Лосось в томате со шпинатом",
-    cuisine: "indyjska",
-    dietStyles: ["healthy"],
+    cuisines: ["indian"],
+    vibes: ["healthy-comfort"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -1076,8 +1077,8 @@ const MEALS: Meal[] = [
   {
     id: "ind-dorsz",
     title: "Треска в йогурте с рисом",
-    cuisine: "indyjska",
-    dietStyles: ["sport", "healthy"],
+    cuisines: ["indian"],
+    vibes: ["protein-packed", "healthy-comfort"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -1106,8 +1107,8 @@ const MEALS: Meal[] = [
   {
     id: "ind-ziemniaki",
     title: "Картофель с нутом в пассате",
-    cuisine: "indyjska",
-    dietStyles: ["comfort", "balanced"],
+    cuisines: ["indian"],
+    vibes: ["home-style", "family-favs"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -1135,8 +1136,8 @@ const MEALS: Meal[] = [
   {
     id: "ind-salat",
     title: "Холодный нут с зирой",
-    cuisine: "indyjska",
-    dietStyles: ["healthy"],
+    cuisines: ["indian"],
+    vibes: ["healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: [],
@@ -1167,8 +1168,8 @@ const MEALS: Meal[] = [
   {
     id: "ind-tofu",
     title: "Тофу карри со шпинатом",
-    cuisine: "indyjska",
-    dietStyles: ["sport", "healthy"],
+    cuisines: ["indian"],
+    vibes: ["protein-packed", "healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -1196,8 +1197,8 @@ const MEALS: Meal[] = [
   {
     id: "ind-keema",
     title: "Фарш карри с рисом",
-    cuisine: "indyjska",
-    dietStyles: ["comfort", "sport"],
+    cuisines: ["indian"],
+    vibes: ["home-style", "protein-packed"],
     proteins: ["beef"],
     isVegan: false,
     appliances: ["stove"],
@@ -1225,8 +1226,8 @@ const MEALS: Meal[] = [
   {
     id: "ind-kurczak-kasza",
     title: "Курица со шпинатом и гречкой",
-    cuisine: "indyjska",
-    dietStyles: ["sport"],
+    cuisines: ["indian"],
+    vibes: ["protein-packed"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -1254,8 +1255,8 @@ const MEALS: Meal[] = [
   {
     id: "azj-kurczak-soja",
     title: "Курица с рисом и брокколи",
-    cuisine: "azjatycka",
-    dietStyles: ["sport"],
+    cuisines: ["asian"],
+    vibes: ["protein-packed"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -1283,8 +1284,8 @@ const MEALS: Meal[] = [
   {
     id: "azj-tofu",
     title: "Тофу с рисом и брокколи",
-    cuisine: "azjatycka",
-    dietStyles: ["sport", "healthy"],
+    cuisines: ["asian"],
+    vibes: ["protein-packed", "healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -1311,8 +1312,8 @@ const MEALS: Meal[] = [
   {
     id: "azj-kurczak-cytryna",
     title: "Курица с лимоном и брокколи",
-    cuisine: "azjatycka",
-    dietStyles: ["healthy", "sport"],
+    cuisines: ["asian"],
+    vibes: ["healthy-comfort", "protein-packed"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -1341,8 +1342,8 @@ const MEALS: Meal[] = [
   {
     id: "azj-soczewica-makaron",
     title: "Лапша с чечевицей и морковью",
-    cuisine: "azjatycka",
-    dietStyles: ["balanced", "sport"],
+    cuisines: ["asian"],
+    vibes: ["family-favs", "protein-packed"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -1371,8 +1372,8 @@ const MEALS: Meal[] = [
   {
     id: "azj-losos",
     title: "Лосось с рисом и шпинатом",
-    cuisine: "azjatycka",
-    dietStyles: ["healthy", "sport"],
+    cuisines: ["asian"],
+    vibes: ["healthy-comfort", "protein-packed"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -1401,8 +1402,8 @@ const MEALS: Meal[] = [
   {
     id: "azj-dorsz",
     title: "Треска с рисом и огурцом",
-    cuisine: "azjatycka",
-    dietStyles: ["sport", "healthy"],
+    cuisines: ["asian"],
+    vibes: ["protein-packed", "healthy-comfort"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -1431,8 +1432,8 @@ const MEALS: Meal[] = [
   {
     id: "azj-ryz-jaja",
     title: "Рис с яйцом и паприкой",
-    cuisine: "azjatycka",
-    dietStyles: ["comfort", "balanced"],
+    cuisines: ["asian"],
+    vibes: ["home-style", "family-favs"],
     proteins: ["veg"],
     isVegan: false,
     appliances: ["stove"],
@@ -1462,8 +1463,8 @@ const MEALS: Meal[] = [
   {
     id: "azj-salat",
     title: "Нут с огурцом и морковью",
-    cuisine: "azjatycka",
-    dietStyles: ["healthy"],
+    cuisines: ["asian"],
+    vibes: ["healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: [],
@@ -1493,8 +1494,8 @@ const MEALS: Meal[] = [
   {
     id: "azj-kasza",
     title: "Гречка с цукини и паприкой",
-    cuisine: "azjatycka",
-    dietStyles: ["healthy", "balanced"],
+    cuisines: ["asian"],
+    vibes: ["healthy-comfort", "family-favs"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -1522,8 +1523,8 @@ const MEALS: Meal[] = [
   {
     id: "azj-schab",
     title: "Свинина с рисом и морковью",
-    cuisine: "azjatycka",
-    dietStyles: ["comfort"],
+    cuisines: ["asian"],
+    vibes: ["home-style"],
     proteins: ["pork"],
     isVegan: false,
     appliances: ["stove"],
@@ -1551,8 +1552,8 @@ const MEALS: Meal[] = [
   {
     id: "srd-kurczak-feta",
     title: "Курица с фетой и помидорами",
-    cuisine: "srodziemnomorska",
-    dietStyles: ["comfort", "balanced"],
+    cuisines: ["mediterranean"],
+    vibes: ["home-style", "family-favs"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -1581,8 +1582,8 @@ const MEALS: Meal[] = [
   {
     id: "srd-dorsz",
     title: "Треска с картошкой и помидорами",
-    cuisine: "srodziemnomorska",
-    dietStyles: ["healthy"],
+    cuisines: ["mediterranean"],
+    vibes: ["healthy-comfort"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -1611,8 +1612,8 @@ const MEALS: Meal[] = [
   {
     id: "srd-losos",
     title: "Лосось с гречкой и шпинатом",
-    cuisine: "srodziemnomorska",
-    dietStyles: ["sport", "healthy"],
+    cuisines: ["mediterranean"],
+    vibes: ["protein-packed", "healthy-comfort"],
     proteins: ["fish"],
     isVegan: false,
     appliances: ["stove"],
@@ -1640,8 +1641,8 @@ const MEALS: Meal[] = [
   {
     id: "srd-ciecierzyca",
     title: "Нут с цукини в пассате",
-    cuisine: "srodziemnomorska",
-    dietStyles: ["healthy", "balanced"],
+    cuisines: ["mediterranean"],
+    vibes: ["healthy-comfort", "family-favs"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -1669,8 +1670,8 @@ const MEALS: Meal[] = [
   {
     id: "srd-soczewica",
     title: "Чечевица со шпинатом",
-    cuisine: "srodziemnomorska",
-    dietStyles: ["sport", "healthy"],
+    cuisines: ["mediterranean"],
+    vibes: ["protein-packed", "healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: ["stove"],
@@ -1699,8 +1700,8 @@ const MEALS: Meal[] = [
   {
     id: "srd-salat",
     title: "Салат с авокадо и лимоном",
-    cuisine: "srodziemnomorska",
-    dietStyles: ["healthy"],
+    cuisines: ["mediterranean"],
+    vibes: ["healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: [],
@@ -1731,8 +1732,8 @@ const MEALS: Meal[] = [
   {
     id: "srd-fasola",
     title: "Фасоль с помидором и лимоном",
-    cuisine: "srodziemnomorska",
-    dietStyles: ["balanced", "healthy"],
+    cuisines: ["mediterranean"],
+    vibes: ["family-favs", "healthy-comfort"],
     proteins: ["veg"],
     isVegan: true,
     appliances: [],
@@ -1762,8 +1763,8 @@ const MEALS: Meal[] = [
   {
     id: "srd-penne",
     title: "Пенне с цукини и гаудой",
-    cuisine: "srodziemnomorska",
-    dietStyles: ["comfort"],
+    cuisines: ["mediterranean"],
+    vibes: ["home-style"],
     proteins: ["veg"],
     isVegan: false,
     appliances: ["stove"],
@@ -1793,8 +1794,8 @@ const MEALS: Meal[] = [
   {
     id: "srd-feta-piec",
     title: "Фета с цукини из духовки",
-    cuisine: "srodziemnomorska",
-    dietStyles: ["comfort"],
+    cuisines: ["mediterranean"],
+    vibes: ["home-style"],
     proteins: ["veg"],
     isVegan: false,
     appliances: ["oven"],
@@ -1822,8 +1823,8 @@ const MEALS: Meal[] = [
   {
     id: "srd-kurczak-ziem",
     title: "Курица с лимоном и картошкой",
-    cuisine: "srodziemnomorska",
-    dietStyles: ["sport", "balanced"],
+    cuisines: ["mediterranean"],
+    vibes: ["protein-packed", "family-favs"],
     proteins: ["chicken"],
     isVegan: false,
     appliances: ["stove"],
@@ -1848,7 +1849,58 @@ const MEALS: Meal[] = [
       "Подавай сразу, картофель должен хрустеть снаружи.",
     ],
   },
+  {
+    id: "chicken-caesar-wrap",
+    title: "Chicken Caesar Wrap",
+    cuisines: ["italian"],
+    vibes: ["fakeway", "speedy-meals"],
+    proteins: ["chicken"],
+    isVegan: false,
+    appliances: ["stove"],
+    minutes: 15,
+    protein: 40,
+    fat: 18,
+    carbs: 55,
+    paid: [
+      ["kurczak", 0.16],
+      ["tortilla", 0.5],
+      ["salata", 0.5],
+      ["jogurt", 0.12],
+      ["cytryna", 0.25],
+    ],
+    pantry: ["Соль", "Перец", "Чеснок сухой"],
+    steps: [
+      "Курицу обсуши, посоли и поперчи.",
+      "Сильный огонь, 4 минуты с одной стороны до румянца, переверни и ещё 3 минуты.",
+      "Сними с огня и дай минуту отдохнуть, затем нарежь полосками.",
+      "Йогурт смешай с лимонным соком и сухим чесноком. Это заправка вместо майонеза.",
+      "Салат нарви руками, не режь ножом, иначе он пустит воду в лепёшку.",
+      "Лепёшку прогрей 20 секунд на сухой сковороде. Выложи салат, курицу и заправку полосой по центру.",
+      "Заверни плотно, разрежь пополам и ешь сразу.",
+    ],
+  },
 ];
+
+const LEGUMES = new Set(["soczewica", "ciecierzyca", "fasola"]);
+
+export function dietsFor(proteins: Protein[], isVegan: boolean): DietNeed[] {
+  if (isVegan) return ["vegan", "vegetarian", "pescatarian"];
+  if (proteins.every((protein) => protein === "veg")) return ["vegetarian", "pescatarian"];
+  if (proteins.every((protein) => protein === "veg" || protein === "fish") && proteins.includes("fish")) {
+    return ["pescatarian"];
+  }
+  return [];
+}
+
+function vibesOf(meal: Meal): DietStyle[] {
+  const vibes = new Set<DietStyle>(meal.vibes);
+  if (meal.minutes <= 20) vibes.add("speedy-meals");
+  const energy = meal.protein * 4 + meal.carbs * 4 + meal.fat * 9;
+  if (energy <= 560) vibes.add("low-calories");
+  if (meal.paid.some(([id]) => LEGUMES.has(id))) vibes.add("gut-friendly");
+  if (meal.paid.some(([id]) => id === "tortilla")) vibes.add("fakeway");
+  return [...vibes];
+}
 
 function cookingOf(meal: Meal): Cooking {
   return {
@@ -1863,12 +1915,12 @@ function cookingOf(meal: Meal): Cooking {
 export const RECIPES: Recipe[] = MEALS.map((meal) => ({
   id: meal.id,
   title: meal.title,
-  dietStyles: meal.dietStyles,
+  vibes: vibesOf(meal),
   allergens: allergens(meal),
   proteins: meal.proteins,
-  isVegan: meal.isVegan,
+  diets: dietsFor(meal.proteins, meal.isVegan),
   appliances: meal.appliances,
-  cuisine: meal.cuisine,
+  cuisines: meal.cuisines,
 }));
 
 export const INGREDIENTS: RecipeIngredient[] = MEALS.flatMap((meal) =>

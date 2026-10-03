@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -18,9 +19,8 @@ function redirectTo(): string {
   return `${window.location.origin}/login`;
 }
 
-export function LoginForm() {
+export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
-  const [mode, setMode] = useState<"login" | "signup">("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -88,8 +88,7 @@ export function LoginForm() {
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-lg flex-col justify-center px-5 py-16">
-      <p className="text-sm tracking-wide text-olive uppercase">Варшава · Biedronka</p>
-      <h1 className="mt-3 font-serif text-5xl leading-none">Dealicious</h1>
+      <h1 className="font-serif text-5xl leading-none">Dealicious</h1>
       <p className="mt-4 max-w-sm text-lg text-muted">Неделя обедов из того, что сейчас по акции.</p>
 
       <form onSubmit={submit} className="mt-10 flex flex-col gap-3">
@@ -132,16 +131,15 @@ export function LoginForm() {
         </button>
       </form>
 
-      <button
-        type="button"
-        onClick={() => {
-          setMode(mode === "signup" ? "login" : "signup");
-          setError("");
-        }}
-        className="mt-6 text-left text-sm text-muted"
-      >
-        {mode === "signup" ? "Уже есть аккаунт" : "Нет аккаунта — создать"}
-      </button>
+      {mode === "signup" ? (
+        <Link href="/login" className="mt-6 text-sm text-muted">
+          Уже есть аккаунт
+        </Link>
+      ) : (
+        <Link href="/signup" className="mt-6 text-sm text-muted">
+          Нет аккаунта — создать
+        </Link>
+      )}
     </main>
   );
 }

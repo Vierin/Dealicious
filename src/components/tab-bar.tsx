@@ -13,7 +13,7 @@ const tabs = [
 
 export function TabBar() {
   const path = usePathname();
-  if (path === "/" || path.startsWith("/login") || path.startsWith("/onboarding")) return null;
+  if (path === "/" || path.startsWith("/login") || path.startsWith("/signup") || path.startsWith("/onboarding")) return null;
 
   return (
     <>

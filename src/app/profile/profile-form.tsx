@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { BackLink } from "@/components/back-link";
 import { createClient } from "@/lib/supabase/client";
-import { isWarsaw } from "@/lib/profile";
+import { DayPills } from "@/components/day-pills";
+import { MenuLevelCards } from "@/components/menu-level";
+import { RangeSlider } from "@/components/range-slider";
+import { BUDGET_MAX, BUDGET_MIN, BUDGET_STEP, isWarsaw, menuLevelOf, sliderBudget } from "@/lib/profile";
 import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
 import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "@/lib/types";
 
@@ -22,7 +25,8 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
   const [dietStyle, setDietStyle] = useState<DietStyle>(profile.dietStyle);
   const [appliances, setAppliances] = useState<Appliance[]>(profile.appliances);
   const [householdSize, setHouseholdSize] = useState(profile.householdSize);
-  const [weeklyBudget, setWeeklyBudget] = useState(String(profile.weeklyBudgetPln));
+  const [weeklyBudget, setWeeklyBudget] = useState(sliderBudget(profile.weeklyBudgetPln));
+  const [menuLevel, setMenuLevel] = useState(menuLevelOf(profile.menuLevel));
   const [dailyKcal, setDailyKcal] = useState(profile.dailyKcal ?? 2000);
   const [shopWeekday, setShopWeekday] = useState(profile.shopWeekday);
   const [cookDays, setCookDays] = useState<number[]>(
@@ -41,17 +45,12 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
 
   async function save() {
     setError("");
-    const budget = Number(weeklyBudget);
     if (name.trim().length < 1) {
       setError("Введи имя");
       return;
     }
     if (!isWarsaw(city)) {
       setError("Пока считаем только Варшаву");
-      return;
-    }
-    if (!Number.isFinite(budget) || budget < 20 || budget > 10000) {
-      setError("Укажи бюджет от 20 до 10 000 zł");
       return;
     }
     if (cookDays.length < 1) {
@@ -78,7 +77,8 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
           dietStyle,
           householdSize,
           dailyKcal,
-          weeklyBudgetPln: budget,
+          weeklyBudgetPln: weeklyBudget,
+          menuLevel,
           shopWeekday,
           cookDays,
         }),
@@ -232,60 +232,34 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
         </div>
       </Section>
 
-      <Section title="Бюджет на неделю">
-        <div className="flex gap-2">
-          {[150, 250, 400].map((amount) => (
-            <button
-              key={amount}
-              type="button"
-              onClick={() => setWeeklyBudget(String(amount))}
-              className={`flex-1 ${Number(weeklyBudget) === amount ? on : off}`}
-            >
-              {amount} zł
-            </button>
-          ))}
-        </div>
-        <input
-          type="number"
-          inputMode="decimal"
-          min={20}
-          max={10000}
+      <Section title="Бюджет на неделю" hint="Только обеды. План будет держаться этой суммы.">
+        <RangeSlider
+          min={BUDGET_MIN}
+          max={BUDGET_MAX}
+          step={BUDGET_STEP}
           value={weeklyBudget}
-          onChange={(event) => setWeeklyBudget(event.target.value)}
-          className="mt-3 h-14 w-full rounded-2xl border border-line bg-paper px-4 text-lg outline-none focus:border-olive"
+          onChange={setWeeklyBudget}
+          readout={`${weeklyBudget} zł`}
+          minLabel={`${BUDGET_MIN} zł`}
+          maxLabel={`${BUDGET_MAX} zł`}
         />
       </Section>
 
+      <Section title="Уровень меню">
+        <MenuLevelCards value={menuLevel} onChange={setMenuLevel} />
+      </Section>
+
       <Section title="Дни готовки" hint="Меню соберётся только на отмеченные дни.">
-        <div className="flex flex-col gap-2">
-          {SHOP_DAYS.map((day) => {
-            const selected = cookDays.includes(day.value);
-            return (
-              <button
-                key={day.value}
-                type="button"
-                onClick={() =>
-                  setCookDays((current) =>
-                    current.includes(day.value) ? current.filter((value) => value !== day.value) : [...current, day.value],
-                  )
-                }
-                className={selected ? on : off}
-              >
-                {day.label}
-              </button>
-            );
-          })}
-        </div>
+        <DayPills
+          selected={cookDays}
+          onPick={(day) =>
+            setCookDays((current) => (current.includes(day) ? current.filter((value) => value !== day) : [...current, day]))
+          }
+        />
       </Section>
 
       <Section title="День закупки">
-        <div className="flex flex-col gap-2">
-          {SHOP_DAYS.map((day) => (
-            <button key={day.value} type="button" onClick={() => setShopWeekday(day.value)} className={shopWeekday === day.value ? on : off}>
-              {day.label}
-            </button>
-          ))}
-        </div>
+        <DayPills selected={[shopWeekday]} onPick={setShopWeekday} />
       </Section>
 
       {error ? <p className="mt-6 text-sm text-[#8a3d32]">{error}</p> : null}

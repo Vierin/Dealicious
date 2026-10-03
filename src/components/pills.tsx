@@ -6,10 +6,14 @@ export function cuisineLabel(cuisine: Cuisine): string {
 }
 
 export const VIBE_COLOR: Record<DietStyle, string> = {
-  healthy: "bg-[#d7e7c8] text-[#2c5134]",
-  sport: "bg-[#f3d2c4] text-[#6b3a2c]",
-  balanced: "bg-[#e4ddd2] text-[#3f3a34]",
-  comfort: "bg-[#f3e3b0] text-[#5c4a1e]",
+  "healthy-comfort": "bg-[#d7e7c8] text-[#2c5134]",
+  "protein-packed": "bg-[#f3d2c4] text-[#6b3a2c]",
+  "speedy-meals": "bg-[#f6d7a8] text-[#6a4514]",
+  "low-calories": "bg-[#d5eadf] text-[#1f4d3a]",
+  "family-favs": "bg-[#e4ddd2] text-[#3f3a34]",
+  fakeway: "bg-[#f3c9c2] text-[#6b3028]",
+  "gut-friendly": "bg-[#d9e4c4] text-[#3d4a22]",
+  "home-style": "bg-[#f3e3b0] text-[#5c4a1e]",
 };
 
 export function VibePills({ styles }: { styles: DietStyle[] }) {

@@ -1,24 +1,37 @@
 export type MeatPref = "any" | "chicken" | "beef" | "pork" | "fish";
 export type DietNeed = "none" | "vegetarian" | "vegan" | "pescatarian";
-export type DietStyle = "healthy" | "sport" | "balanced" | "comfort";
+export type DietStyle =
+  | "healthy-comfort"
+  | "protein-packed"
+  | "speedy-meals"
+  | "low-calories"
+  | "family-favs"
+  | "fakeway"
+  | "gut-friendly"
+  | "home-style";
 export type Allergen = "gluten" | "lactose" | "eggs" | "fish" | "soy";
 export type Protein = "chicken" | "beef" | "pork" | "fish" | "veg";
 export type Appliance = "stove" | "oven" | "microwave" | "blender" | "airfryer";
-export type Cuisine =
-  | "domowa"
-  | "wloska"
-  | "azjatycka"
-  | "meksykanska"
-  | "indyjska"
-  | "srodziemnomorska";
+export type Cuisine = "mexican" | "italian" | "indian" | "asian" | "mediterranean" | "polish";
 export type Unit = "kg" | "szt" | "l" | "opak";
+export type IngredientKind = "core" | "seasonal" | "specialty";
 
 export type Product = {
   id: string;
   namePl: string;
   category: string;
   unit: Unit;
+  /** Что покрывает regularPricePln: «1 kg», «10 szt». */
+  pack: string;
+  kind: IngredientKind;
+  /** Справочная цена. Не значит, что товар лежит в конкретной Biedronka. */
+  estimatePricePln: number;
   regularPricePln: number;
+  /** true только если цену сняли с карточки магазина или с газетки. */
+  priceConfirmed: boolean;
+  priceCheckedAt?: string;
+  /** Чем заменить specialty, если самой позиции на полке нет. */
+  substituteId?: string;
 };
 
 export type Promotion = {
@@ -35,12 +48,13 @@ export type Promotion = {
 export type Recipe = {
   id: string;
   title: string;
-  dietStyles: DietStyle[];
+  vibes: DietStyle[];
   allergens: Allergen[];
   proteins: Protein[];
-  isVegan: boolean;
+  /** Кто может это есть. Пусто — только без диетических ограничений. */
+  diets: DietNeed[];
   appliances: Appliance[];
-  cuisine: Cuisine;
+  cuisines: Cuisine[];
   /** Путь к фото, если файл уже лежит в public. Пусто — слот без картинки. */
   image?: string;
 };
@@ -79,6 +93,8 @@ export type Profile = {
   cookDays: number[];
   weeklyBudgetPln: number;
   dailyKcal: number;
+  /** 1 Simple, 3 Balanced, 5 Gourmet. */
+  menuLevel: number;
 };
 
 export type BasketLine = {
@@ -92,6 +108,8 @@ export type BasketLine = {
   lineTotal: number;
   regularLineTotal: number;
   onPromo: boolean;
+  /** Обычная цена не подтверждена: сумма ориентир, экономию по строке не считаем. */
+  approx: boolean;
 };
 
 export type PlanMeal = {

@@ -32,27 +32,31 @@ export const MEAT_OPTIONS: { id: MeatPref; label: string }[] = [
 ];
 
 export const CUISINE_OPTIONS: { id: Cuisine; label: string }[] = [
-  { id: "domowa", label: "Домашняя" },
-  { id: "wloska", label: "Итальянская" },
-  { id: "azjatycka", label: "Азиатская" },
-  { id: "meksykanska", label: "Мексиканская" },
-  { id: "indyjska", label: "Индийская" },
-  { id: "srodziemnomorska", label: "Средиземноморская" },
+  { id: "mexican", label: "Mexican" },
+  { id: "italian", label: "Italian" },
+  { id: "indian", label: "Indian" },
+  { id: "asian", label: "Asian" },
+  { id: "mediterranean", label: "Mediterranean" },
+  { id: "polish", label: "Polish" },
 ];
 
 export const STYLE_OPTIONS: { id: DietStyle; label: string; hint: string }[] = [
-  { id: "healthy", label: "Здоровое", hint: "Овощи, рыба, меньше жирного" },
-  { id: "sport", label: "Спорт", hint: "Больше белка" },
-  { id: "balanced", label: "Обычное", hint: "Без перекоса" },
-  { id: "comfort", label: "Домашнее", hint: "Простая сытная еда" },
+  { id: "healthy-comfort", label: "Healthy comfort", hint: "Сытно, но легче по жиру" },
+  { id: "protein-packed", label: "Protein packed", hint: "Больше белка" },
+  { id: "speedy-meals", label: "Speedy meals", hint: "До 20 минут" },
+  { id: "low-calories", label: "Low calories", hint: "Порция легче обычного обеда" },
+  { id: "family-favs", label: "Family favs", hint: "На всех, без перекоса" },
+  { id: "fakeway", label: "Fakeway", hint: "Как навынос, только дома" },
+  { id: "gut-friendly", label: "Gut friendly", hint: "Бобовые и клетчатка" },
+  { id: "home-style", label: "Home style", hint: "Простая домашняя еда" },
 ];
 
-export const SHOP_DAYS: { value: number; label: string }[] = [
-  { value: 1, label: "Понедельник" },
-  { value: 2, label: "Вторник" },
-  { value: 3, label: "Среда" },
-  { value: 4, label: "Четверг" },
-  { value: 5, label: "Пятница" },
-  { value: 6, label: "Суббота" },
-  { value: 0, label: "Воскресенье" },
+export const SHOP_DAYS: { value: number; label: string; short: string }[] = [
+  { value: 1, label: "Понедельник", short: "Пн" },
+  { value: 2, label: "Вторник", short: "Вт" },
+  { value: 3, label: "Среда", short: "Ср" },
+  { value: 4, label: "Четверг", short: "Чт" },
+  { value: 5, label: "Пятница", short: "Пт" },
+  { value: 6, label: "Суббота", short: "Сб" },
+  { value: 0, label: "Воскресенье", short: "Вс" },
 ];

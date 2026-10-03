@@ -13,11 +13,12 @@ function profile(patch: Partial<Profile>): Profile {
     allergies: [],
     meatPref: "any",
     diet: "none",
-    dietStyle: "balanced",
+    dietStyle: "family-favs",
     householdSize: 2,
     shopWeekday: 1,
     weeklyBudgetPln: 400,
     dailyKcal: 2000,
+    menuLevel: 3,
     cookDays: [0, 1, 2, 3, 4, 5, 6],
     appliances: ["stove", "oven", "microwave", "blender", "airfryer"],
     ...patch,
@@ -36,9 +37,9 @@ function planFor(patch: Partial<Profile>) {
   });
 }
 
-const monday = planFor({ shopWeekday: 1, dietStyle: "sport" });
-const sunday = planFor({ shopWeekday: 0, dietStyle: "sport" });
-const vegan = planFor({ diet: "vegan", dietStyle: "healthy", allergies: ["soy"] });
+const monday = planFor({ shopWeekday: 1, dietStyle: "protein-packed" });
+const sunday = planFor({ shopWeekday: 0, dietStyle: "protein-packed" });
+const vegan = planFor({ diet: "vegan", dietStyle: "healthy-comfort", allergies: ["soy"] });
 
 function assert(cond: unknown, message: string) {
   if (!cond) throw new Error(message);

@@ -72,8 +72,9 @@ export function ShoppingList({ planId, groups }: { planId: string; groups: Group
                       <span className="block text-sm">{formatQty(line.qty, line.unit)}</span>
                     </span>
                     <span className={`text-right ${on ? "text-muted" : ""}`}>
-                      <span className="block">{formatPln(line.lineTotal)}</span>
-                      {discounted ? (
+                      <span className="block">{line.approx ? `≈ ${formatPln(line.lineTotal)}` : formatPln(line.lineTotal)}</span>
+                      {line.approx ? <span className="block text-sm text-muted">ориентир, без точной экономии</span> : null}
+                      {discounted && !line.approx ? (
                         <span className={`block text-sm ${on ? "" : "text-olive"}`}>
                           −{pct}% · было {formatPln(line.regularLineTotal)}
                         </span>

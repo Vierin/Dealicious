@@ -9,19 +9,19 @@ import { CUISINE_OPTIONS, STYLE_OPTIONS } from "@/lib/options";
 import type { Cuisine, DietStyle } from "@/lib/types";
 
 const CUISINE_TAGS: Record<Cuisine, string[]> = {
-  domowa: ["картошка", "котлеты", "гречка"],
-  wloska: ["паста", "ризотто", "пенне"],
-  azjatycka: ["рис", "лапша", "брокколи"],
-  meksykanska: ["тортилья", "фасоль", "рис"],
-  indyjska: ["карри", "нут", "рис"],
-  srodziemnomorska: ["фета", "пенне", "салат"],
+  polish: ["картошка", "котлеты", "гречка"],
+  italian: ["паста", "ризотто", "пенне"],
+  asian: ["рис", "лапша", "брокколи"],
+  mexican: ["тортилья", "фасоль", "рис"],
+  indian: ["карри", "нут", "рис"],
+  mediterranean: ["фета", "лимон", "салат"],
 };
 
 export type MealCard = {
   id: string;
   title: string;
   cuisine: Cuisine;
-  dietStyles: DietStyle[];
+  vibes: DietStyle[];
   minutes: number;
   photo: string | null;
 };
@@ -42,7 +42,7 @@ export function MealBrowser({ meals, favoritesOnly = false }: { meals: MealCard[
   const searching = needle.length > 0;
   const pool = favoritesOnly ? meals.filter((meal) => saved?.includes(meal.id)) : meals;
   const shown = pool.filter((meal) => {
-    if (vibe && !meal.dietStyles.includes(vibe)) return false;
+    if (vibe && !meal.vibes.includes(vibe)) return false;
     if (searching && !meal.title.toLowerCase().includes(needle)) return false;
     return true;
   });
@@ -94,7 +94,7 @@ export function MealBrowser({ meals, favoritesOnly = false }: { meals: MealCard[
                   key={item.id}
                   type="button"
                   onClick={() => { setVibe(item.id); setShowAll(false); }}
-                  className={`flex h-28 w-36 shrink-0 items-end rounded-3xl px-4 py-4 text-left font-serif text-2xl ${VIBE_COLOR[item.id]} ${vibe === item.id ? "ring-2 ring-ink" : ""}`}
+                  className={`flex h-28 w-40 shrink-0 items-end rounded-3xl px-4 py-4 text-left font-serif text-xl leading-tight ${VIBE_COLOR[item.id]} ${vibe === item.id ? "ring-2 ring-ink" : ""}`}
                 >
                   {item.label}
                 </button>
@@ -172,7 +172,7 @@ export function MealBrowser({ meals, favoritesOnly = false }: { meals: MealCard[
                     <p className="text-xs tracking-wide text-muted uppercase">{cuisineLabel(meal.cuisine)}</p>
                     <h2 className="mt-1 font-serif text-2xl">{meal.title}</h2>
                     <div className="mt-3">
-                      <VibePills styles={meal.dietStyles} />
+                      <VibePills styles={meal.vibes} />
                     </div>
                     <p className="mt-3 text-sm text-muted">{meal.minutes} мин</p>
                   </div>

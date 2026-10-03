@@ -17,3 +17,43 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
+
+input[type="range"].deal-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 28px;
+  background: transparent;
+}
+
+input[type="range"].deal-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 28px;
+  width: 28px;
+  margin-top: -12px;
+  border-radius: 999px;
+  background: var(--color-olive);
+  border: 3px solid var(--color-paper);
+  box-shadow: 0 1px 3px rgb(28 25 21 / 18%);
+  cursor: pointer;
+}
+
+input[type="range"].deal-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-line);
+}
+
+input[type="range"].deal-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-line);
+}
+
+input[type="range"].deal-range::-moz-range-thumb {
+  height: 28px;
+  width: 28px;
+  border-radius: 999px;
+  background: var(--color-olive);
+  border: 3px solid var(--color-paper);
+  cursor: pointer;
+}

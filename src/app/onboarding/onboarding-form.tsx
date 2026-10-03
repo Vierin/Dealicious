@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import { BackButton } from "@/components/back-link";
 import { useRouter } from "next/navigation";
-import { isWarsaw } from "@/lib/profile";
+import { DayPills } from "@/components/day-pills";
+import { MenuLevelCards } from "@/components/menu-level";
+import { RangeSlider } from "@/components/range-slider";
+import { BUDGET_MAX, BUDGET_MIN, BUDGET_STEP, isWarsaw, menuLevelOf, sliderBudget } from "@/lib/profile";
 import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
 import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "@/lib/types";
 
@@ -17,7 +20,8 @@ type Draft = {
   dietStyle: DietStyle | null;
   householdSize: number;
   dailyKcal: number;
-  weeklyBudget: number | null;
+  weeklyBudget: number;
+  menuLevel: number;
   shopWeekday: number | null;
   cookDays: number[];
 };
@@ -32,7 +36,8 @@ const emptyDraft: Draft = {
   dietStyle: null,
   householdSize: 2,
   dailyKcal: 2000,
-  weeklyBudget: null,
+  weeklyBudget: 250,
+  menuLevel: 3,
   shopWeekday: null,
   cookDays: SHOP_DAYS.map((day) => day.value),
 };
@@ -52,7 +57,7 @@ function stepReady(draft: Draft, step: string) {
   if (step === "style") return draft.dietStyle !== null;
   if (step === "kitchen") return draft.appliances.length > 0;
   if (step === "budget") {
-    return draft.weeklyBudget !== null && draft.weeklyBudget >= 20 && draft.weeklyBudget <= 10000;
+    return draft.weeklyBudget >= BUDGET_MIN && draft.weeklyBudget <= BUDGET_MAX;
   }
   if (step === "day") return draft.shopWeekday !== null;
   if (step === "cook") return draft.cookDays.length > 0;
@@ -90,7 +95,8 @@ export function OnboardingForm() {
         dietStyle: data.profile.dietStyle,
         householdSize: data.profile.householdSize,
         dailyKcal: data.profile.dailyKcal ?? 2000,
-        weeklyBudget: data.profile.weeklyBudgetPln,
+        weeklyBudget: sliderBudget(data.profile.weeklyBudgetPln),
+        menuLevel: menuLevelOf(data.profile.menuLevel),
         shopWeekday: data.profile.shopWeekday,
         cookDays: data.profile.cookDays?.length ? data.profile.cookDays : SHOP_DAYS.map((day) => day.value),
       });
@@ -138,6 +144,7 @@ export function OnboardingForm() {
           householdSize: draft.householdSize,
           dailyKcal: draft.dailyKcal,
           weeklyBudgetPln: draft.weeklyBudget,
+          menuLevel: draft.menuLevel,
           shopWeekday: draft.shopWeekday,
           cookDays: draft.cookDays,
         }),
@@ -365,70 +372,47 @@ export function OnboardingForm() {
 
         {step === "budget" ? (
           <Step title="Какой бюджет на неделю?" hint="Только обеды, в злотых. План будет держаться этой суммы.">
-            <div className="flex gap-2">
-              {[150, 250, 400].map((amount) => (
-                <button
-                  key={amount}
-                  type="button"
-                  onClick={() => setDraft({ ...draft, weeklyBudget: amount })}
-                  className={`flex-1 rounded-2xl border px-3 py-4 ${draft.weeklyBudget === amount ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
-                >
-                  {amount} zł
-                </button>
-              ))}
-            </div>
-            <input
-              type="number"
-              inputMode="decimal"
-              min={20}
-              max={10000}
-              value={draft.weeklyBudget ?? ""}
-              onChange={(event) =>
-                setDraft({
-                  ...draft,
-                  weeklyBudget: event.target.value === "" ? null : Number(event.target.value),
-                })
-              }
-              className="mt-3 h-14 w-full rounded-2xl border border-line bg-paper px-4 text-lg outline-none focus:border-olive"
-              placeholder="Своя сумма"
+            <RangeSlider
+              min={BUDGET_MIN}
+              max={BUDGET_MAX}
+              step={BUDGET_STEP}
+              value={draft.weeklyBudget}
+              onChange={(weeklyBudget) => setDraft({ ...draft, weeklyBudget })}
+              readout={`${draft.weeklyBudget} zł`}
+              minLabel={`${BUDGET_MIN} zł`}
+              maxLabel={`${BUDGET_MAX} zł`}
             />
+            <div className="mt-10">
+              <h2 className="font-serif text-2xl leading-tight">Уровень меню</h2>
+              <div className="mt-4">
+                <MenuLevelCards value={draft.menuLevel} onChange={(menuLevel) => setDraft({ ...draft, menuLevel })} />
+              </div>
+            </div>
           </Step>
         ) : null}
 
         {step === "day" ? (
           <Step title="В какой день закупаешься?" hint="От этого зависят акции, которые ещё живы в магазине.">
-            <Choices
-              value={draft.shopWeekday === null ? "" : String(draft.shopWeekday)}
-              options={SHOP_DAYS.map((day) => ({ id: String(day.value), label: day.label }))}
-              onChange={(id) => setDraft({ ...draft, shopWeekday: Number(id) })}
+            <DayPills
+              selected={draft.shopWeekday === null ? [] : [draft.shopWeekday]}
+              onPick={(shopWeekday) => setDraft({ ...draft, shopWeekday })}
             />
           </Step>
         ) : null}
 
         {step === "cook" ? (
           <Step title="В какие дни готовишь?" hint="Меню соберётся только на эти дни, не обязательно на всю неделю.">
-            <div className="flex flex-col gap-2">
-              {SHOP_DAYS.map((day) => {
-                const on = draft.cookDays.includes(day.value);
-                return (
-                  <button
-                    key={day.value}
-                    type="button"
-                    onClick={() =>
-                      setDraft({
-                        ...draft,
-                        cookDays: on
-                          ? draft.cookDays.filter((value) => value !== day.value)
-                          : [...draft.cookDays, day.value],
-                      })
-                    }
-                    className={`rounded-2xl border px-4 py-4 text-left ${on ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
-                  >
-                    {day.label}
-                  </button>
-                );
-              })}
-            </div>
+            <DayPills
+              selected={draft.cookDays}
+              onPick={(day) =>
+                setDraft({
+                  ...draft,
+                  cookDays: draft.cookDays.includes(day)
+                    ? draft.cookDays.filter((value) => value !== day)
+                    : [...draft.cookDays, day],
+                })
+              }
+            />
           </Step>
         ) : null}
       </div>

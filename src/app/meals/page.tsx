@@ -23,8 +23,8 @@ export default async function MealsPage({
   const meals = RECIPES.map((recipe) => ({
     id: recipe.id,
     title: recipe.title,
-    cuisine: recipe.cuisine,
-    dietStyles: recipe.dietStyles,
+    cuisine: recipe.cuisines[0] ?? "polish",
+    vibes: recipe.vibes,
     minutes: COOKING[recipe.id]?.minutes ?? 0,
     photo: recipe.image ?? recipePhoto(recipe.id),
   }));

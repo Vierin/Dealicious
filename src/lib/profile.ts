@@ -4,9 +4,70 @@ const ALLERGENS: Allergen[] = ["gluten", "lactose", "eggs", "fish", "soy"];
 const APPLIANCES: Appliance[] = ["stove", "oven", "microwave", "blender", "airfryer"];
 const MEAT: MeatPref[] = ["any", "chicken", "beef", "pork", "fish"];
 const DIETS: DietNeed[] = ["none", "vegetarian", "vegan", "pescatarian"];
-const STYLES: DietStyle[] = ["healthy", "sport", "balanced", "comfort"];
+const STYLES: DietStyle[] = [
+  "healthy-comfort",
+  "protein-packed",
+  "speedy-meals",
+  "low-calories",
+  "family-favs",
+  "fakeway",
+  "gut-friendly",
+  "home-style",
+];
+
+const LEGACY_STYLE: Record<string, DietStyle> = {
+  healthy: "healthy-comfort",
+  sport: "protein-packed",
+  balanced: "family-favs",
+  comfort: "home-style",
+};
+
+export function vibeOf(value: string | null | undefined): DietStyle {
+  if (value && STYLES.includes(value as DietStyle)) return value as DietStyle;
+  if (value && LEGACY_STYLE[value]) return LEGACY_STYLE[value];
+  return "family-favs";
+}
 
 export const ALL_COOK_DAYS = [0, 1, 2, 3, 4, 5, 6];
+
+export const BUDGET_MIN = 50;
+export const BUDGET_MAX = 800;
+export const BUDGET_STEP = 10;
+
+export const MENU_LEVELS = [
+  {
+    value: 1,
+    label: "Simple",
+    minutes: "15–25 мин",
+    hint: "Простые техники, минимум посуды, 5–8 основных ингредиентов. Например, тёплая миска с курицей, рисом и овощами в лимонно-йогуртовом соусе.",
+  },
+  {
+    value: 3,
+    label: "Balanced",
+    minutes: "25–40 мин",
+    hint: "Интересные сочетания вкусов, маринады, домашние соусы, запекание и обжаривание. Например, средиземноморская курица с нутом, запечёнными овощами и травяным соусом.",
+  },
+  {
+    value: 5,
+    label: "Gourmet",
+    minutes: "35–50 мин",
+    hint: "Более сложные вкусовые сочетания, несколько компонентов, интересная подача и техники. Например, лосось с мисо-глазурью, гречкой и шпинатом. Только если стоимость вписывается в бюджет.",
+  },
+] as const;
+
+export function sliderBudget(value: number): number {
+  const stepped = Math.round(value / BUDGET_STEP) * BUDGET_STEP;
+  return Math.min(BUDGET_MAX, Math.max(BUDGET_MIN, stepped));
+}
+
+export function menuLevelOf(value: unknown): number {
+  const level = typeof value === "number" ? value : Number(value);
+  if (!Number.isInteger(level)) return 3;
+  if (level <= 2) return 1;
+  if (level === 3) return 3;
+  if (level <= 5) return 5;
+  return 3;
+}
 
 export function cookDaysOrAll(value: number[] | undefined): number[] {
   if (!value?.length) return [...ALL_COOK_DAYS];
@@ -52,7 +113,8 @@ export function isProfileComplete(profile: Profile | null): profile is Profile {
     profile.weeklyBudgetPln >= 20 &&
     profile.weeklyBudgetPln <= 10000 &&
     profile.dailyKcal >= 1200 &&
-    profile.dailyKcal <= 4000
+    profile.dailyKcal <= 4000 &&
+    (profile.menuLevel === 1 || profile.menuLevel === 3 || profile.menuLevel === 5)
   );
 }
 
@@ -100,6 +162,8 @@ export function parseProfile(userId: string, body: unknown): Profile {
     throw new Error("Калории в день: от 1200 до 4000, шаг 100");
   }
 
+  const rawLevel = menuLevelOf(input.menuLevel == null || input.menuLevel === "" ? 3 : input.menuLevel);
+
   const allergies = Array.isArray(input.allergies) ? input.allergies : [];
   if (!allergies.every((item) => typeof item === "string" && ALLERGENS.includes(item as Allergen))) {
     throw new Error("Неизвестная аллергия");
@@ -125,5 +189,6 @@ export function parseProfile(userId: string, body: unknown): Profile {
     cookDays,
     weeklyBudgetPln: Math.round(weeklyBudgetPln * 100) / 100,
     dailyKcal: rawKcal,
+    menuLevel: rawLevel,
   };
 }

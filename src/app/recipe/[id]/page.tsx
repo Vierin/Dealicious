@@ -8,13 +8,23 @@ import { formatQty, roundQty } from "@/lib/money";
 import { pantryUseLabel } from "@/lib/pantry";
 import { recipePhoto } from "@/lib/recipes";
 import { isProfileComplete } from "@/lib/profile";
-import { getLatestPlan, getProfile, getSessionUser } from "@/lib/store";
+import { getCookedDays, getLatestPlan, getProfile, getRatings, getSessionUser } from "@/lib/store";
+import { MarkCooked } from "@/components/mark-cooked";
+import { RateMeal } from "@/components/rate-meal";
+import type { DietNeed } from "@/lib/types";
 import { FavoriteButton } from "@/components/favorite-button";
 import { RememberView } from "@/components/recent-view";
 import { SwapMeal } from "./swap-meal";
 import { RecipeTabs } from "./tabs";
 
 export const dynamic = "force-dynamic";
+
+function dietLine(diets: DietNeed[]): string {
+  const names = diets.map((diet) =>
+    diet === "vegan" ? "веганам" : diet === "vegetarian" ? "вегетарианцам" : diet === "pescatarian" ? "пескетарианцам" : "",
+  ).filter(Boolean);
+  return names.length === 0 ? "Только без диетических ограничений" : `Подходит ${names.join(", ")}`;
+}
 
 export default async function RecipePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -28,7 +38,15 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
   if (!recipe || !cooking) notFound();
 
   const plan = await getLatestPlan(user.id, profile.householdSize);
+  const ratings = await getRatings(user.id);
+  const cookedDays = plan ? await getCookedDays(user.id, plan.id) : [];
   const inWeek = plan?.meals.some((meal) => meal.recipeId === recipe.id) ?? false;
+  const cookedSlots =
+    plan?.meals.filter((meal) => meal.recipeId === recipe.id).map((meal) => ({
+      dayIndex: meal.dayIndex,
+      weekday: formatRuDate(meal.date).weekday,
+      cooked: cookedDays.includes(meal.dayIndex),
+    })) ?? [];
   const portions = profile.householdSize;
   const photo = recipe.image ?? recipePhoto(recipe.id);
   const pantry = PANTRY.filter((item) => item.recipeId === recipe.id).map((item) => item.name);
@@ -56,14 +74,27 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
         )}
         <FavoriteButton recipeId={recipe.id} />
       </div>
-      <p className="mt-4 text-xs tracking-wide text-muted uppercase">{cuisineLabel(recipe.cuisine)}</p>
+      <p className="mt-4 text-xs tracking-wide text-muted uppercase">{recipe.cuisines.map(cuisineLabel).join(" · ")}</p>
       <h1 className="mt-1 font-serif text-4xl">{recipe.title}</h1>
       <div className="mt-3">
-        <VibePills styles={recipe.dietStyles} />
+        <VibePills styles={recipe.vibes} />
       </div>
+      <p className="mt-3 text-sm text-muted">{dietLine(recipe.diets)}</p>
       <p className="mt-3 text-muted">
         {portions} {portions === 1 ? "порция" : portions < 5 ? "порции" : "порций"} · {cooking.minutes} мин
       </p>
+      <div className="mt-5 flex flex-col gap-3">
+        <RateMeal recipeId={recipe.id} score={ratings[recipe.id] ?? null} />
+        {cookedSlots.map((slot) => (
+          <MarkCooked
+            key={slot.dayIndex}
+            planId={plan?.id ?? ""}
+            dayIndex={slot.dayIndex}
+            cooked={slot.cooked}
+            weekday={cookedSlots.length > 1 ? slot.weekday : undefined}
+          />
+        ))}
+      </div>
 
       <section className="mt-6 rounded-3xl bg-ink p-5 text-cream">
         <p className="text-center text-xs tracking-wide text-cream/70 uppercase">На 1 порцию</p>

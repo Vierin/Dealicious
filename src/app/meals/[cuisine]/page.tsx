@@ -23,11 +23,11 @@ export default async function CuisinePage({ params }: { params: Promise<{ cuisin
   const profile = await getProfile(user.id);
   if (!isProfileComplete(profile)) redirect("/onboarding");
 
-  const meals = RECIPES.filter((recipe) => recipe.cuisine === cuisine).map((recipe) => ({
+  const meals = RECIPES.filter((recipe) => recipe.cuisines.includes(cuisine)).map((recipe) => ({
     id: recipe.id,
     title: recipe.title,
-    cuisine: recipe.cuisine,
-    dietStyles: recipe.dietStyles,
+    cuisine,
+    vibes: recipe.vibes,
     minutes: COOKING[recipe.id]?.minutes ?? 0,
     photo: recipe.image ?? recipePhoto(recipe.id),
   }));
