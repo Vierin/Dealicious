@@ -49,6 +49,32 @@ function profileMeta(value: unknown): ProfileMeta {
   return value as ProfileMeta;
 }
 
+function planRecipes(value: unknown): Record<string, string[]> {
+  if (!value || typeof value !== "object") return {};
+  const raw = (value as { planRecipes?: unknown }).planRecipes;
+  if (!raw || typeof raw !== "object") return {};
+  return raw as Record<string, string[]>;
+}
+
+async function userMeta(): Promise<Record<string, unknown>> {
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  const meta = data.user?.user_metadata;
+  return meta && typeof meta === "object" ? (meta as Record<string, unknown>) : {};
+}
+
+async function rememberPlan(planId: string, recipeIds: string[]): Promise<void> {
+  const supabase = await createClient();
+  const current = await userMeta();
+  const { error } = await supabase.auth.updateUser({
+    data: {
+      ...current,
+      planRecipes: { ...planRecipes(current), [planId]: recipeIds },
+    },
+  });
+  if (error) throw new Error(error.message);
+}
+
 function mapProfile(row: ProfileRow, meta: ProfileMeta): Profile {
   const appliances = row.appliances ?? (Array.isArray(meta.appliances) ? meta.appliances : []);
   return {
@@ -263,7 +289,7 @@ async function insertPlan(userId: string, shopDate: string, recipeIds: string[])
   return { id: plain.data.id, storedIds: false };
 }
 
-async function writeItems(planId: string, recipeIds: string[], storedIds: boolean): Promise<void> {
+async function writeItems(planId: string, recipeIds: string[]): Promise<void> {
   const supabase = await createClient();
   const wiped = await supabase.from("meal_plan_items").delete().eq("meal_plan_id", planId);
   if (wiped.error) throw new Error(wiped.error.message);
@@ -273,7 +299,10 @@ async function writeItems(planId: string, recipeIds: string[], storedIds: boolea
   if (rows.length === 0) return;
   const inserted = await supabase.from("meal_plan_items").insert(rows);
   if (!inserted.error) return;
-  if (storedIds && foreignRecipe(inserted.error.message)) return;
+  if (foreignRecipe(inserted.error.message)) {
+    await rememberPlan(planId, recipeIds);
+    return;
+  }
   throw new Error(inserted.error.message);
 }
 
@@ -297,7 +326,7 @@ export async function savePlan(userId: string, profile: Profile, keep?: number[]
   const wiped = await supabase.from("meal_plans").delete().eq("user_id", userId).eq("shop_date", picked.shopDate);
   if (wiped.error) throw new Error(wiped.error.message);
   const plan = await insertPlan(userId, picked.shopDate, picked.recipeIds);
-  await writeItems(plan.id, picked.recipeIds, plan.storedIds);
+  await writeItems(plan.id, picked.recipeIds);
 
   return presentPlan({
     id: plan.id,
@@ -325,7 +354,7 @@ export async function replaceMeal(
   const supabase = await createClient();
   const updated = await supabase.from("meal_plans").update({ recipe_ids: recipeIds }).eq("id", current.id);
   if (updated.error && !missingColumn(updated.error.message)) throw new Error(updated.error.message);
-  await writeItems(current.id, recipeIds, !updated.error);
+  await writeItems(current.id, recipeIds);
   return presentPlan({
     id: current.id,
     shopDate: current.shopDate,
@@ -360,29 +389,35 @@ async function loadPlans(userId: string): Promise<PlanRow[]> {
   return (legacy.data ?? []) as PlanRow[];
 }
 
-function viewFromRow(row: PlanRow, householdSize: number, catalog: Catalog): PlanView {
+function viewFromRow(
+  row: PlanRow,
+  householdSize: number,
+  catalog: Catalog,
+  saved: Record<string, string[]>,
+): PlanView {
   const items = [...(row.meal_plan_items ?? [])].sort((a, b) => a.day_index - b.day_index);
+  const fromColumn = row.recipe_ids && row.recipe_ids.length === 7 ? row.recipe_ids : null;
   return presentPlan({
     id: row.id,
     shopDate: String(row.shop_date).slice(0, 10),
     householdSize,
-    recipeIds: recipeIdsFrom(items, row.recipe_ids),
+    recipeIds: recipeIdsFrom(items, fromColumn ?? saved[row.id]),
     catalog,
   });
 }
 
 export async function getLatestPlan(userId: string, householdSize: number): Promise<PlanView | null> {
-  const rows = await loadPlans(userId);
+  const [rows, saved] = await Promise.all([loadPlans(userId), userMeta().then(planRecipes)]);
   const row = rows[rows.length - 1];
   if (!row) return null;
-  return viewFromRow(row, householdSize, await getCatalog());
+  return viewFromRow(row, householdSize, await getCatalog(), saved);
 }
 
 export async function listPlans(userId: string, householdSize: number): Promise<TrialWeek[]> {
-  const rows = await loadPlans(userId);
+  const [rows, saved] = await Promise.all([loadPlans(userId), userMeta().then(planRecipes)]);
   const catalog = await getCatalog();
   return rows.map((row) => {
-    const view = viewFromRow(row, householdSize, catalog);
+    const view = viewFromRow(row, householdSize, catalog, saved);
     return {
       shopDate: view.shopDate,
       createdAt: row.created_at ?? view.shopDate,
