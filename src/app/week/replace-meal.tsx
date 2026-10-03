@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeftRight } from "lucide-react";
+import { postJson } from "@/lib/http";
 
 export function ReplaceMeal({ recipeId }: { recipeId: string }) {
   const router = useRouter();
@@ -13,13 +14,7 @@ export function ReplaceMeal({ recipeId }: { recipeId: string }) {
     setError("");
     setPending(true);
     try {
-      const response = await fetch("/api/plan/swap", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ recipeId }),
-      });
-      const data = (await response.json()) as { error?: string };
-      if (!response.ok) throw new Error(data.error ?? "Не заменил");
+      await postJson("/api/plan/swap", { body: { recipeId }, fallback: "Не заменил" });
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Не заменил");

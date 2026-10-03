@@ -12,7 +12,26 @@ function Mark() {
   );
 }
 
-export function BackLink({ href, label }: { href: string; label: string }) {
+export function BackLink({
+  href,
+  label,
+  overlay = false,
+}: {
+  href: string;
+  label?: string;
+  overlay?: boolean;
+}) {
+  if (overlay) {
+    return (
+      <Link
+        href={href}
+        aria-label="Назад"
+        className="absolute top-3 left-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-paper/90 text-ink"
+      >
+        <ChevronLeft size={22} strokeWidth={1.75} />
+      </Link>
+    );
+  }
   return (
     <Link href={href} className={row}>
       <Mark />

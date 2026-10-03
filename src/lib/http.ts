@@ -1,19 +1,25 @@
-import { NextResponse } from "next/server";
+import type { Profile } from "./types";
 
-export function errorResponse(error: unknown) {
-  const message = error instanceof Error ? error.message : "Ошибка";
-  const status = message.includes("Триал кончился")
-    ? 402
-    : message.includes("Неверная почта")
-      ? 401
-      : message.includes("уже есть")
-        ? 409
-        : 400;
-  return NextResponse.json({ error: message }, { status });
+export type ProfileInput = Omit<Profile, "userId" | "store">;
+
+export async function postJson<T = Record<string, unknown>>(
+  path: string,
+  init: { method?: string; body?: unknown; fallback: string },
+): Promise<T> {
+  const response = await fetch(path, {
+    method: init.method ?? "POST",
+    headers: init.body === undefined ? undefined : { "content-type": "application/json" },
+    body: init.body === undefined ? undefined : JSON.stringify(init.body),
+  });
+  const data = (await response.json().catch(() => ({}))) as T & { error?: string };
+  if (!response.ok) throw new Error(data.error ?? init.fallback);
+  return data;
 }
 
-export async function readJson(request: Request): Promise<Record<string, unknown>> {
-  const body = await request.json().catch(() => null);
-  if (!body || typeof body !== "object") throw new Error("Пустой запрос");
-  return body as Record<string, unknown>;
+export async function saveProfileAndPlan(
+  body: ProfileInput,
+  errors: { profile: string; plan: string },
+): Promise<void> {
+  await postJson("/api/profile", { method: "PUT", body, fallback: errors.profile });
+  await postJson("/api/plan", { fallback: errors.plan });
 }

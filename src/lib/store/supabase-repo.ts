@@ -82,34 +82,6 @@ export async function getSessionUser() {
   return user;
 }
 
-export async function signUp(email: string, password: string) {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.signUp({
-    email: email.trim().toLowerCase(),
-    password,
-  });
-  if (error) throw new Error(error.message);
-  if (!data.user || !data.session || !data.user.email) {
-    throw new Error("Подтверди почту. Для локальной разработки выключи Confirm email в Supabase.");
-  }
-  return { id: data.user.id, email: data.user.email };
-}
-
-export async function signIn(email: string, password: string) {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: email.trim().toLowerCase(),
-    password,
-  });
-  if (error || !data.user?.email) throw new Error("Неверная почта или пароль");
-  return { id: data.user.id, email: data.user.email };
-}
-
-export async function signOut() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
-}
-
 export async function getProfile(userId: string): Promise<Profile | null> {
   const supabase = await createClient();
   const { data, error } = await supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle();

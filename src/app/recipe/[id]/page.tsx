@@ -9,12 +9,13 @@ import { pantryUseLabel } from "@/lib/pantry";
 import { recipePhoto } from "@/lib/recipes";
 import { isProfileComplete } from "@/lib/profile";
 import { getCookedDays, getLatestPlan, getProfile, getRatings, getSessionUser } from "@/lib/store";
-import { MarkCooked } from "@/components/mark-cooked";
-import { RateMeal } from "@/components/rate-meal";
+import { RecipeBar } from "@/components/recipe-bar";
 import type { DietNeed } from "@/lib/types";
 import { FavoriteButton } from "@/components/favorite-button";
+import { MealPhoto } from "@/components/meal-photo";
 import { RememberView } from "@/components/recent-view";
 import { SwapMeal } from "./swap-meal";
+import { Page } from "@/components/page";
 import { RecipeTabs } from "./tabs";
 
 export const dynamic = "force-dynamic";
@@ -62,16 +63,11 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
   });
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-5 py-8">
+    <Page>
       <RememberView recipeId={recipe.id} />
-      <BackLink href="/week" label="Неделя" />
-      <div className="relative mt-4">
-        {photo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={photo} alt="" className="aspect-[4/3] w-full rounded-3xl object-cover" />
-        ) : (
-          <div className="aspect-[4/3] w-full rounded-3xl bg-paper" />
-        )}
+      <div className="relative -mt-3">
+        <MealPhoto src={photo} className="aspect-[4/3] w-full rounded-3xl" />
+        <BackLink href="/week" overlay />
         <FavoriteButton recipeId={recipe.id} />
       </div>
       <p className="mt-4 text-xs tracking-wide text-muted uppercase">{recipe.cuisines.map(cuisineLabel).join(" · ")}</p>
@@ -80,21 +76,18 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
         <VibePills styles={recipe.vibes} />
       </div>
       <p className="mt-3 text-sm text-muted">{dietLine(recipe.diets)}</p>
-      <p className="mt-3 text-muted">
-        {portions} {portions === 1 ? "порция" : portions < 5 ? "порции" : "порций"} · {cooking.minutes} мин
-      </p>
-      <div className="mt-5 flex flex-col gap-3">
-        <RateMeal recipeId={recipe.id} score={ratings[recipe.id] ?? null} />
-        {cookedSlots.map((slot) => (
-          <MarkCooked
-            key={slot.dayIndex}
-            planId={plan?.id ?? ""}
-            dayIndex={slot.dayIndex}
-            cooked={slot.cooked}
-            weekday={cookedSlots.length > 1 ? slot.weekday : undefined}
-          />
-        ))}
-      </div>
+      <RecipeBar
+        minutes={cooking.minutes}
+        portions={portions}
+        recipeId={recipe.id}
+        score={ratings[recipe.id] ?? null}
+        cooked={cookedSlots.map((slot) => ({
+          planId: plan?.id ?? "",
+          dayIndex: slot.dayIndex,
+          cooked: slot.cooked,
+          weekday: cookedSlots.length > 1 ? slot.weekday : undefined,
+        }))}
+      />
 
       <section className="mt-6 rounded-3xl bg-ink p-5 text-cream">
         <p className="text-center text-xs tracking-wide text-cream/70 uppercase">На 1 порцию</p>
@@ -118,7 +111,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
           })) ?? []
         }
       />
-    </main>
+    </Page>
   );
 }
 

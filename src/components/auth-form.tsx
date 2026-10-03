@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Field } from "@/components/field";
 import { createClient } from "@/lib/supabase/client";
 
 function authMessage(message: string): string {
@@ -94,25 +95,23 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       <form onSubmit={submit} className="mt-10 flex flex-col gap-3">
         <label className="flex flex-col gap-2 text-sm text-muted">
           Почта
-          <input
+          <Field
             type="email"
             autoComplete="email"
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="h-12 rounded-2xl border border-line bg-paper px-4 text-base text-ink outline-none focus:border-olive"
           />
         </label>
         <label className="flex flex-col gap-2 text-sm text-muted">
           Пароль
-          <input
+          <Field
             type="password"
             autoComplete={mode === "signup" ? "new-password" : "current-password"}
             required
             minLength={6}
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="h-12 rounded-2xl border border-line bg-paper px-4 text-base text-ink outline-none focus:border-olive"
           />
         </label>
         {notice ? <p className="text-sm text-olive">{notice}</p> : null}

@@ -5,6 +5,7 @@ import { COOKING } from "@/lib/cooking";
 import { recipePhoto } from "@/lib/recipes";
 import { isProfileComplete } from "@/lib/profile";
 import { getProfile, getSessionUser } from "@/lib/store";
+import { Page } from "@/components/page";
 import { MealBrowser } from "./meal-browser";
 
 export const dynamic = "force-dynamic";
@@ -30,9 +31,9 @@ export default async function MealsPage({
   }));
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-5 py-8">
+    <Page>
       <BackLink href="/week" label="Неделя" />
       <MealBrowser meals={meals} favoritesOnly={favoritesOnly} />
-    </main>
+    </Page>
   );
 }

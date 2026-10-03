@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { RefreshCw } from "lucide-react";
+import { postJson } from "@/lib/http";
 
 type WeekSlot = { dayIndex: number; title: string; weekday: string };
 
@@ -24,13 +25,7 @@ export function SwapMeal({
     setError("");
     setPending(true);
     try {
-      const response = await fetch("/api/plan/swap", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ recipeId, dayIndex }),
-      });
-      const data = (await response.json()) as { error?: string };
-      if (!response.ok) throw new Error(data.error ?? "Не заменил");
+      await postJson("/api/plan/swap", { body: { recipeId, dayIndex }, fallback: "Не заменил" });
       router.push("/week");
       router.refresh();
     } catch (err) {

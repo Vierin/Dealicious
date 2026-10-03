@@ -8,10 +8,10 @@ import { recipePhoto } from "@/lib/recipes";
 import { formatRuDate } from "@/lib/dates";
 import { formatPln, money } from "@/lib/money";
 import { isProfileComplete } from "@/lib/profile";
-import { MarkCooked } from "@/components/mark-cooked";
-import { getCookedDays, getLatestPlan, getProfile, getSessionUser, getTrial } from "@/lib/store";
+import { getLatestPlan, getProfile, getSessionUser, getTrial } from "@/lib/store";
 import { ReplaceMeal } from "./replace-meal";
 import { WeekActions } from "./week-actions";
+import { Page } from "@/components/page";
 import { ShopCard } from "./shop-card";
 
 export const dynamic = "force-dynamic";
@@ -22,14 +22,13 @@ export default async function WeekPage() {
   const profile = await getProfile(user.id);
   if (!isProfileComplete(profile)) redirect("/onboarding");
   const plan = await getLatestPlan(user.id, profile.householdSize);
-  const cookedDays = plan ? await getCookedDays(user.id, plan.id) : [];
   const trial = await getTrial(user.id, profile.householdSize);
   const stale = plan?.meals.some((meal) => !RECIPES.some((recipe) => recipe.id === meal.recipeId)) ?? false;
   const noLeaflet = plan != null && plan.saved === 0 && leafletsOn(plan.shopDate).length === 0;
   const approx = plan?.lines.some((line) => line.approx) ?? false;
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-5 py-8">
+    <Page width="wide">
       <header className="flex items-start justify-between gap-4">
         <p className="font-serif text-3xl">Dealicious</p>
         <WeekActions trialOpen={trial.open} />
@@ -59,7 +58,20 @@ export default async function WeekPage() {
               </section>
               <BudgetSpend spent={plan.total} budget={profile.weeklyBudgetPln} />
             </div>
-            <ShopCard planId={plan.id} productIds={plan.lines.map((line) => line.productId)} />
+            <div className="flex h-full flex-col gap-4">
+              <div className="min-h-0 flex-1">
+                <ShopCard planId={plan.id} productIds={plan.lines.map((line) => line.productId)} />
+              </div>
+              <Link
+                href="/deals"
+                className="flex shrink-0 items-center justify-between gap-4 rounded-3xl border border-line bg-paper px-5 py-5"
+              >
+                <span>
+                  <span className="block font-serif text-2xl">Скидки</span>
+                  <span className="mt-1 block text-sm text-muted">На день закупки</span>
+                </span>
+              </Link>
+            </div>
           </div>
 
           {noLeaflet ? (
@@ -127,13 +139,6 @@ export default async function WeekPage() {
                       card
                     )}
                     <ReplaceMeal recipeId={meal.recipeId} />
-                    <div className="mt-2 px-1">
-                      <MarkCooked
-                        planId={plan.id}
-                        dayIndex={meal.dayIndex}
-                        cooked={cookedDays.includes(meal.dayIndex)}
-                      />
-                    </div>
                   </li>
                 );
               })}
@@ -143,7 +148,7 @@ export default async function WeekPage() {
       ) : (
         <p className="mt-10 text-muted">Неделя ещё не собрана. Открой анкету и дойди до конца.</p>
       )}
-    </main>
+    </Page>
   );
 }
 

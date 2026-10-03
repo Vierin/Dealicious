@@ -37,6 +37,17 @@ export function nextShopDate(weekday: number, from = new Date()): string {
   return formatISODate(date);
 }
 
+/** Ближайший понедельник или четверг, включая сегодня. Газетки Biedronka выходят в эти дни. */
+export function nextLeafletDate(from = new Date()): string {
+  const date = startOfDay(from);
+  for (let i = 0; i < 7; i += 1) {
+    const day = date.getDay();
+    if (day === 1 || day === 4) return formatISODate(date);
+    date.setDate(date.getDate() + 1);
+  }
+  return formatISODate(date);
+}
+
 export function addISODays(iso: string, days: number): string {
   return formatISODate(addDays(parseISODate(iso), days));
 }

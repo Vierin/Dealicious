@@ -7,6 +7,7 @@ import { recipePhoto } from "@/lib/recipes";
 import { isProfileComplete } from "@/lib/profile";
 import { getProfile, getSessionUser } from "@/lib/store";
 import type { Cuisine } from "@/lib/types";
+import { Page } from "@/components/page";
 import { CuisineMeals } from "./cuisine-meals";
 
 export const dynamic = "force-dynamic";
@@ -34,9 +35,9 @@ export default async function CuisinePage({ params }: { params: Promise<{ cuisin
   const title = CUISINE_OPTIONS.find((item) => item.id === cuisine)?.label ?? cuisine;
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-5 py-8">
+    <Page>
       <BackLink href="/meals" label="Блюда" />
       <CuisineMeals title={title} meals={meals} />
-    </main>
+    </Page>
   );
 }

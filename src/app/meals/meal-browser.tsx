@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HeartIcon, readFavorites } from "@/components/favorite-button";
 import { readRecent } from "@/components/recent-view";
-import { VIBE_COLOR, VibePills, cuisineLabel } from "@/components/pills";
+import { Field } from "@/components/field";
+import { MealPhoto } from "@/components/meal-photo";
+import { MealCard as MealTile } from "@/components/meal-card";
+import { VIBE_COLOR } from "@/components/pills";
 import { CUISINE_OPTIONS, STYLE_OPTIONS } from "@/lib/options";
 import type { Cuisine, DietStyle } from "@/lib/types";
 
@@ -77,12 +80,7 @@ export function MealBrowser({ meals, favoritesOnly = false }: { meals: MealCard[
           </Link>
         </div>
       </div>
-      <input
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder="Поиск блюда"
-        className="mt-5 h-12 w-full rounded-2xl border border-line bg-paper px-4 text-base outline-none focus:border-olive"
-      />
+      <Field className="mt-5" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Поиск блюда" />
 
       {favoritesOnly ? null : (
         <>
@@ -110,12 +108,7 @@ export function MealBrowser({ meals, favoritesOnly = false }: { meals: MealCard[
                 return (
                   <li key={item.id}>
                     <Link href={`/meals/${item.id}`} className="block w-full overflow-hidden rounded-3xl border border-line bg-paper text-left">
-                      {photo ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={photo} alt="" className="aspect-[16/7] w-full object-cover" />
-                      ) : (
-                        <div className="aspect-[16/7] w-full bg-cream" />
-                      )}
+                      <MealPhoto src={photo} className="aspect-[16/7] w-full" />
                       <div className="px-4 py-4">
                         <p className="font-serif text-2xl">{item.label}</p>
                         <p className="mt-1 text-sm text-muted">{CUISINE_TAGS[item.id].join(" · ")}</p>
@@ -134,12 +127,7 @@ export function MealBrowser({ meals, favoritesOnly = false }: { meals: MealCard[
                 {recentMeals.map((meal) => (
                   <li key={meal.id} className="w-40 shrink-0">
                     <Link href={`/recipe/${meal.id}`} className="block overflow-hidden rounded-3xl border border-line bg-paper">
-                      {meal.photo ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={meal.photo} alt="" className="aspect-[4/3] w-full object-cover" />
-                      ) : (
-                        <div className="aspect-[4/3] w-full bg-cream" />
-                      )}
+                      <MealPhoto src={meal.photo} className="aspect-[4/3] w-full" />
                       <div className="px-3 py-3">
                         <h3 className="font-serif text-lg leading-tight">{meal.title}</h3>
                         <p className="mt-1 text-xs text-muted">{meal.minutes} мин</p>
@@ -161,22 +149,7 @@ export function MealBrowser({ meals, favoritesOnly = false }: { meals: MealCard[
           <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {shown.map((meal) => (
               <li key={meal.id}>
-                <Link href={`/recipe/${meal.id}`} className="block overflow-hidden rounded-3xl border border-line bg-paper">
-                  {meal.photo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={meal.photo} alt="" className="aspect-[4/3] w-full object-cover" />
-                  ) : (
-                    <div className="aspect-[4/3] w-full bg-cream" />
-                  )}
-                  <div className="px-4 py-4">
-                    <p className="text-xs tracking-wide text-muted uppercase">{cuisineLabel(meal.cuisine)}</p>
-                    <h2 className="mt-1 font-serif text-2xl">{meal.title}</h2>
-                    <div className="mt-3">
-                      <VibePills styles={meal.vibes} />
-                    </div>
-                    <p className="mt-3 text-sm text-muted">{meal.minutes} мин</p>
-                  </div>
-                </Link>
+                <MealTile meal={meal} />
               </li>
             ))}
           </ul>

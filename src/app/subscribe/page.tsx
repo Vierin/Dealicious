@@ -4,6 +4,7 @@ import { SUBSCRIPTION_PLN } from "@/lib/billing";
 import { formatRuDate } from "@/lib/dates";
 import { formatPln } from "@/lib/money";
 import { isProfileComplete } from "@/lib/profile";
+import { Page } from "@/components/page";
 import { getProfile, getSessionUser, getTrial } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +19,7 @@ export default async function SubscribePage() {
   const times = Math.round((trial.saved / SUBSCRIPTION_PLN) * 10) / 10;
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-5 py-8">
+    <Page>
       <BackLink href="/week" label="Неделя" />
       <h1 className="mt-3 font-serif text-4xl">Уже сэкономлено</h1>
       <p className="mt-3 font-serif text-5xl">{formatPln(trial.saved)}</p>
@@ -89,7 +90,7 @@ export default async function SubscribePage() {
       {!trial.open ? (
         <p className="mt-6 text-sm text-muted">Следующую корзину без подписки не соберём.</p>
       ) : null}
-    </main>
+    </Page>
   );
 }
 

@@ -25,6 +25,36 @@ export function isDiscount(promo: Promotion, product: Product): boolean {
   return regular != null && regular > promo.promoPricePln;
 }
 
+export type ShopDeal = {
+  id: string;
+  namePl: string;
+  pack: string;
+  regularPricePln: number;
+  promoPricePln: number;
+  /** Обычная цена не снята с полки и не указана в газетке. */
+  approx: boolean;
+};
+
+export function dealsOn(catalog: Catalog, shopDate: string): ShopDeal[] {
+  const rows: ShopDeal[] = [];
+  for (const product of catalog.products) {
+    const promo = activePromo(product.id, catalog.promotions, shopDate);
+    if (!promo) continue;
+    const known = knownRegular(promo, product);
+    const regular = known ?? product.regularPricePln;
+    if (!(regular > promo.promoPricePln)) continue;
+    rows.push({
+      id: product.id,
+      namePl: product.namePl,
+      pack: product.pack,
+      regularPricePln: regular,
+      promoPricePln: promo.promoPricePln,
+      approx: known == null,
+    });
+  }
+  return rows.sort((a, b) => a.namePl.localeCompare(b.namePl, "pl"));
+}
+
 function priced(promo: Promotion | undefined, product: Product): {
   unitPrice: number;
   regularUnit: number;

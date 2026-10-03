@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { BackButton } from "@/components/back-link";
+import { Choice, choiceClass } from "@/components/choice";
+import { Field } from "@/components/field";
 import { useRouter } from "next/navigation";
 import { DayPills } from "@/components/day-pills";
 import { MenuLevelCards } from "@/components/menu-level";
 import { RangeSlider } from "@/components/range-slider";
+import { saveProfileAndPlan } from "@/lib/http";
 import { BUDGET_MAX, BUDGET_MIN, BUDGET_STEP, isWarsaw, menuLevelOf, sliderBudget } from "@/lib/profile";
 import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
 import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "@/lib/types";
@@ -130,31 +133,24 @@ export function OnboardingForm() {
 
     setPending(true);
     try {
-      const profileResponse = await fetch("/api/profile", {
-        method: "PUT",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
+      await saveProfileAndPlan(
+        {
           name: draft.name,
           city: draft.city,
-          diet: draft.diet,
-          meatPref: draft.diet === "none" ? draft.meatPref : "any",
+          diet: draft.diet ?? "none",
+          meatPref: draft.diet === "none" ? (draft.meatPref ?? "any") : "any",
           allergies: draft.allergies,
           appliances: draft.appliances,
-          dietStyle: draft.dietStyle,
+          dietStyle: draft.dietStyle ?? "family-favs",
           householdSize: draft.householdSize,
           dailyKcal: draft.dailyKcal,
           weeklyBudgetPln: draft.weeklyBudget,
           menuLevel: draft.menuLevel,
-          shopWeekday: draft.shopWeekday,
+          shopWeekday: draft.shopWeekday ?? 1,
           cookDays: draft.cookDays,
-        }),
-      });
-      const profileData = (await profileResponse.json()) as { error?: string };
-      if (!profileResponse.ok) throw new Error(profileData.error ?? "Анкета не сохранилась");
-
-      const planResponse = await fetch("/api/plan", { method: "POST" });
-      const planData = (await planResponse.json()) as { error?: string };
-      if (!planResponse.ok) throw new Error(planData.error ?? "Не собрал неделю");
+        },
+        { profile: "Анкета не сохранилась", plan: "Не собрал неделю" },
+      );
       router.push("/week");
       router.refresh();
     } catch (err) {
@@ -180,11 +176,11 @@ export function OnboardingForm() {
       <div className="flex-1">
         {step === "name" ? (
           <Step title="Как тебя зовут?">
-            <input
+            <Field
+              size="lg"
               autoFocus
               value={draft.name}
               onChange={(event) => setDraft({ ...draft, name: event.target.value })}
-              className="h-14 w-full rounded-2xl border border-line bg-paper px-4 text-lg outline-none focus:border-olive"
               placeholder="Имя"
             />
           </Step>
@@ -192,11 +188,11 @@ export function OnboardingForm() {
 
         {step === "city" ? (
           <Step title="Где ты закупаешься?" hint="Город или адрес. Сейчас работает Варшава.">
-            <input
+            <Field
+              size="lg"
               autoFocus
               value={draft.city}
               onChange={(event) => setDraft({ ...draft, city: event.target.value })}
-              className="h-14 w-full rounded-2xl border border-line bg-paper px-4 text-lg outline-none focus:border-olive"
               placeholder="Варшава"
             />
             <button
@@ -211,7 +207,7 @@ export function OnboardingForm() {
 
         {step === "store" ? (
           <Step title="Какой магазин?" hint="Акции Biedronka общие по всей сети.">
-            <div className="rounded-2xl border border-olive bg-paper px-4 py-4">
+            <div className={choiceClass(true, "px-4 py-4")}>
               <div className="text-lg">Biedronka</div>
               <div className="mt-1 text-sm text-muted">Варшава</div>
             </div>
@@ -222,15 +218,15 @@ export function OnboardingForm() {
           <Step title="Dietary needs">
             <div className="flex flex-col gap-2">
               {DIET_OPTIONS.map((option) => (
-                <button
+                <Choice
                   key={option.id}
-                  type="button"
+                  pad="px-4 py-4"
+                  on={draft.diet === option.id}
                   onClick={() => setDraft({ ...draft, diet: option.id })}
-                  className={`rounded-2xl border px-4 py-4 text-left ${draft.diet === option.id ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
                 >
                   <div>{option.label}</div>
                   <div className="mt-1 text-sm text-muted">{option.hint}</div>
-                </button>
+                </Choice>
               ))}
             </div>
           </Step>
@@ -249,19 +245,20 @@ export function OnboardingForm() {
         {step === "allergies" ? (
           <Step title="Есть аллергии?">
             <div className="flex flex-col gap-2">
-              <button
-                type="button"
+              <Choice
+                pad="px-4 py-4"
+                on={draft.allergies.length === 0}
                 onClick={() => setDraft({ ...draft, allergies: [] })}
-                className={`rounded-2xl border px-4 py-4 text-left ${draft.allergies.length === 0 ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
               >
                 Нет аллергии
-              </button>
+              </Choice>
               {ALLERGEN_OPTIONS.map((option) => {
                 const active = draft.allergies.includes(option.id);
                 return (
-                  <button
+                  <Choice
                     key={option.id}
-                    type="button"
+                    pad="px-4 py-4"
+                    on={active}
                     onClick={() =>
                       setDraft({
                         ...draft,
@@ -270,10 +267,9 @@ export function OnboardingForm() {
                           : [...draft.allergies, option.id],
                       })
                     }
-                    className={`rounded-2xl border px-4 py-4 text-left ${active ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
                   >
                     {option.label}
-                  </button>
+                  </Choice>
                 );
               })}
             </div>
@@ -284,15 +280,15 @@ export function OnboardingForm() {
           <Step title="Какой стиль питания?">
             <div className="flex flex-col gap-2">
               {STYLE_OPTIONS.map((option) => (
-                <button
+                <Choice
                   key={option.id}
-                  type="button"
+                  pad="px-4 py-4"
+                  on={draft.dietStyle === option.id}
                   onClick={() => setDraft({ ...draft, dietStyle: option.id })}
-                  className={`rounded-2xl border px-4 py-4 text-left ${draft.dietStyle === option.id ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
                 >
                   <div>{option.label}</div>
                   <div className="mt-1 text-sm text-muted">{option.hint}</div>
-                </button>
+                </Choice>
               ))}
             </div>
           </Step>
@@ -304,9 +300,10 @@ export function OnboardingForm() {
               {APPLIANCE_OPTIONS.map((option) => {
                 const active = draft.appliances.includes(option.id);
                 return (
-                  <button
+                  <Choice
                     key={option.id}
-                    type="button"
+                    pad="px-4 py-4"
+                    on={active}
                     onClick={() =>
                       setDraft({
                         ...draft,
@@ -315,11 +312,10 @@ export function OnboardingForm() {
                           : [...draft.appliances, option.id],
                       })
                     }
-                    className={`rounded-2xl border px-4 py-4 text-left ${active ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
                   >
                     <div>{option.label}</div>
                     <div className="mt-1 text-sm text-muted">{option.hint}</div>
-                  </button>
+                  </Choice>
                 );
               })}
             </div>
@@ -460,14 +456,9 @@ function Choices({
   return (
     <div className="flex flex-col gap-2">
       {options.map((option) => (
-        <button
-          key={option.id}
-          type="button"
-          onClick={() => onChange(option.id)}
-          className={`rounded-2xl border px-4 py-4 text-left ${value === option.id ? "border-olive bg-paper" : "border-line bg-paper/60"}`}
-        >
+        <Choice key={option.id} pad="px-4 py-4" on={value === option.id} onClick={() => onChange(option.id)}>
           {option.label}
-        </button>
+        </Choice>
       ))}
     </div>
   );

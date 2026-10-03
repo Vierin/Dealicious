@@ -9,6 +9,7 @@ import { isProfileComplete } from "@/lib/profile";
 import { getLatestPlan, getProfile, getSessionUser } from "@/lib/store";
 import type { BasketLine } from "@/lib/types";
 import { PantryStock } from "./pantry-stock";
+import { Page } from "@/components/page";
 import { ShoppingList } from "./shopping-list";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +30,7 @@ export default async function ShopPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-5 py-8">
+    <Page>
       <div className="flex items-center justify-between gap-4">
         <BackLink href="/week" label="Неделя" />
         <Link href="/pantry" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-3 py-1.5 text-sm">
@@ -41,7 +42,7 @@ export default async function ShopPage() {
       <p className="mt-2 text-muted">Biedronka · на {profile.householdSize} чел.</p>
       <ShoppingList planId={plan.id} groups={groups} />
       <PantryStock planId={plan.id} needs={needsFor(plan.meals.map((meal) => meal.recipeId), profile.householdSize, plan.shopDate)} />
-    </main>
+    </Page>
   );
 }
 

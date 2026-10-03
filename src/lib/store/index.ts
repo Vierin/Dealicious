@@ -18,18 +18,6 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   return remote.getSessionUser();
 }
 
-export async function signUp(email: string, password: string): Promise<SessionUser> {
-  return remote.signUp(email, password);
-}
-
-export async function signIn(email: string, password: string): Promise<SessionUser> {
-  return remote.signIn(email, password);
-}
-
-export async function signOut(): Promise<void> {
-  return remote.signOut();
-}
-
 export async function getProfile(userId: string): Promise<Profile | null> {
   return remote.getProfile(userId);
 }

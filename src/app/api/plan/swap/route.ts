@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { errorResponse, readJson } from "@/lib/http";
+import { errorResponse, readJson } from "@/lib/server-http";
 import { isProfileComplete } from "@/lib/profile";
 import { getProfile, getSessionUser, replaceMeal } from "@/lib/store";
 

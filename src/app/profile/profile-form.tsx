@@ -4,16 +4,17 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { BackLink } from "@/components/back-link";
+import { Choice, choiceClass } from "@/components/choice";
+import { Field } from "@/components/field";
+import { Page } from "@/components/page";
 import { createClient } from "@/lib/supabase/client";
 import { DayPills } from "@/components/day-pills";
 import { MenuLevelCards } from "@/components/menu-level";
 import { RangeSlider } from "@/components/range-slider";
+import { saveProfileAndPlan } from "@/lib/http";
 import { BUDGET_MAX, BUDGET_MIN, BUDGET_STEP, isWarsaw, menuLevelOf, sliderBudget } from "@/lib/profile";
 import { ALLERGEN_OPTIONS, APPLIANCE_OPTIONS, DIET_OPTIONS, MEAT_OPTIONS, SHOP_DAYS, STYLE_OPTIONS } from "@/lib/options";
 import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from "@/lib/types";
-
-const on = "rounded-2xl border border-olive bg-paper px-4 py-3 text-left";
-const off = "rounded-2xl border border-line bg-paper/60 px-4 py-3 text-left";
 
 export function ProfileForm({ profile, email }: { profile: Profile; email: string }) {
   const router = useRouter();
@@ -64,10 +65,8 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
 
     setPending(true);
     try {
-      const profileResponse = await fetch("/api/profile", {
-        method: "PUT",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
+      await saveProfileAndPlan(
+        {
           name,
           city,
           diet,
@@ -81,14 +80,9 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
           menuLevel,
           shopWeekday,
           cookDays,
-        }),
-      });
-      const profileData = (await profileResponse.json()) as { error?: string };
-      if (!profileResponse.ok) throw new Error(profileData.error ?? "Не сохранилось");
-
-      const planResponse = await fetch("/api/plan", { method: "POST" });
-      const planData = (await planResponse.json()) as { error?: string };
-      if (!planResponse.ok) throw new Error(planData.error ?? "Не пересчитал неделю");
+        },
+        { profile: "Не сохранилось", plan: "Не пересчитал неделю" },
+      );
       router.push("/week");
       router.refresh();
     } catch (err) {
@@ -109,7 +103,7 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
   }
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-5 py-8">
+    <Page>
       <div className="flex items-center justify-between gap-4">
         <BackLink href="/week" label="Неделя" />
         <button
@@ -125,26 +119,18 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
       <p className="mt-2 text-muted">{email}</p>
 
       <Section title="Имя">
-        <input
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          className="h-14 w-full rounded-2xl border border-line bg-paper px-4 text-lg outline-none focus:border-olive"
-        />
+        <Field size="lg" value={name} onChange={(event) => setName(event.target.value)} />
       </Section>
 
       <Section title="Город">
-        <input
-          value={city}
-          onChange={(event) => setCity(event.target.value)}
-          className="h-14 w-full rounded-2xl border border-line bg-paper px-4 text-lg outline-none focus:border-olive"
-        />
+        <Field size="lg" value={city} onChange={(event) => setCity(event.target.value)} />
         <button type="button" onClick={() => setCity("Warszawa")} className="mt-3 rounded-full border border-olive px-4 py-2 text-sm text-olive">
           Варшава
         </button>
       </Section>
 
       <Section title="Магазин">
-        <div className={on}>
+        <div className={choiceClass(true)}>
           <div>Biedronka</div>
           <div className="mt-1 text-sm text-muted">Варшава</div>
         </div>
@@ -153,10 +139,10 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
       <Section title="Dietary needs">
         <div className="flex flex-col gap-2">
           {DIET_OPTIONS.map((option) => (
-            <button key={option.id} type="button" onClick={() => setDiet(option.id)} className={diet === option.id ? on : off}>
+            <Choice key={option.id} on={diet === option.id} onClick={() => setDiet(option.id)}>
               <div>{option.label}</div>
               <div className="mt-1 text-sm text-muted">{option.hint}</div>
-            </button>
+            </Choice>
           ))}
         </div>
       </Section>
@@ -165,9 +151,9 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
         <Section title="Мясо">
           <div className="flex flex-col gap-2">
             {MEAT_OPTIONS.map((option) => (
-              <button key={option.id} type="button" onClick={() => setMeatPref(option.id)} className={meatPref === option.id ? on : off}>
+              <Choice key={option.id} on={meatPref === option.id} onClick={() => setMeatPref(option.id)}>
                 {option.label}
-              </button>
+              </Choice>
             ))}
           </div>
         </Section>
@@ -175,13 +161,13 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
 
       <Section title="Аллергии">
         <div className="flex flex-col gap-2">
-          <button type="button" onClick={() => setAllergies([])} className={allergies.length === 0 ? on : off}>
+          <Choice on={allergies.length === 0} onClick={() => setAllergies([])}>
             Нет аллергии
-          </button>
+          </Choice>
           {ALLERGEN_OPTIONS.map((option) => (
-            <button key={option.id} type="button" onClick={() => toggleAllergy(option.id)} className={allergies.includes(option.id) ? on : off}>
+            <Choice key={option.id} on={allergies.includes(option.id)} onClick={() => toggleAllergy(option.id)}>
               {option.label}
-            </button>
+            </Choice>
           ))}
         </div>
       </Section>
@@ -189,10 +175,10 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
       <Section title="Стиль">
         <div className="flex flex-col gap-2">
           {STYLE_OPTIONS.map((option) => (
-            <button key={option.id} type="button" onClick={() => setDietStyle(option.id)} className={dietStyle === option.id ? on : off}>
+            <Choice key={option.id} on={dietStyle === option.id} onClick={() => setDietStyle(option.id)}>
               <div>{option.label}</div>
               <div className="mt-1 text-sm text-muted">{option.hint}</div>
-            </button>
+            </Choice>
           ))}
         </div>
       </Section>
@@ -200,10 +186,10 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
       <Section title="Техника" hint="Рецепт попадает в неделю, только если вся нужная техника есть.">
         <div className="flex flex-col gap-2">
           {APPLIANCE_OPTIONS.map((option) => (
-            <button key={option.id} type="button" onClick={() => toggleAppliance(option.id)} className={appliances.includes(option.id) ? on : off}>
+            <Choice key={option.id} on={appliances.includes(option.id)} onClick={() => toggleAppliance(option.id)}>
               <div>{option.label}</div>
               <div className="mt-1 text-sm text-muted">{option.hint}</div>
-            </button>
+            </Choice>
           ))}
         </div>
       </Section>
@@ -264,14 +250,16 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
 
       {error ? <p className="mt-6 text-sm text-[#8a3d32]">{error}</p> : null}
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-line bg-cream/95 px-5 py-4">
+      <div className="h-28" aria-hidden />
+
+      <div className="fixed inset-x-0 bottom-16 z-30 border-t border-line bg-cream/95 px-5 py-4 md:bottom-0">
         <div className="mx-auto flex max-w-2xl justify-end">
           <button type="button" disabled={pending} onClick={save} className="h-12 rounded-full bg-olive px-6 text-paper disabled:opacity-60">
             {pending ? "Считаю…" : "Сохранить"}
           </button>
         </div>
       </div>
-    </main>
+    </Page>
   );
 }
 
