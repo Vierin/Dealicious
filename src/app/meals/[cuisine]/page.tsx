@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { BackLink } from "@/components/back-link";
 import { RECIPES } from "@/lib/catalog";
 import { COOKING } from "@/lib/cooking";
@@ -32,11 +33,11 @@ export default async function CuisinePage({ params }: { params: Promise<{ cuisin
     minutes: COOKING[recipe.id]?.minutes ?? 0,
     photo: recipe.image ?? recipePhoto(recipe.id),
   }));
-  const title = CUISINE_OPTIONS.find((item) => item.id === cuisine)?.label ?? cuisine;
+  const title = (await getTranslations("cuisine"))(cuisine);
 
   return (
     <Page>
-      <BackLink href="/meals" label="Блюда" />
+      <BackLink href="/meals" />
       <CuisineMeals title={title} meals={meals} />
     </Page>
   );

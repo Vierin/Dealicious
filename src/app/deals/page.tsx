@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { BackLink } from "@/components/back-link";
 import { Page } from "@/components/page";
 import { buildCatalog } from "@/lib/catalog";
@@ -20,27 +21,26 @@ export default async function DealsPage() {
   const date = formatRuDate(shopDate);
   const leaflet = formatRuDate(nextLeafletDate());
   const deals = dealsOn(buildCatalog(), shopDate);
+  const t = await getTranslations("deals");
 
   return (
     <Page>
-      <BackLink href="/week" label="Неделя" />
-      <p className="mt-6 text-sm tracking-wide text-muted uppercase">День закупки</p>
+      <BackLink href="/week" />
+      <p className="mt-6 text-sm tracking-wide text-muted uppercase">{t("label")}</p>
       <h1 className="mt-1 font-serif text-4xl capitalize">
         {date.weekday}, {date.dayMonth}
       </h1>
       {deals.length === 0 ? (
         <div className="mt-8 max-w-md text-muted">
-          <p>На эту закупку новых акций ещё нет.</p>
-          <p className="mt-2">
-            Газетки Biedronka выходят в понедельник и в четверг. Ближайшая — {leaflet.weekday}, {leaflet.dayMonth}.
-          </p>
+          <p>{t("empty")}</p>
+          <p className="mt-2">{t("leaflet", { weekday: leaflet.weekday, dayMonth: leaflet.dayMonth })}</p>
         </div>
       ) : (
         <ul className="mt-8">
           <li className="grid grid-cols-[minmax(0,1fr)_5.5rem_5.5rem] gap-3 pb-2 text-xs tracking-wide text-muted uppercase">
-            <span>Продукт</span>
-            <span className="text-right">Обычная</span>
-            <span className="text-right">Со скидкой</span>
+            <span>{t("product")}</span>
+            <span className="text-right">{t("regular")}</span>
+            <span className="text-right">{t("promo")}</span>
           </li>
           {deals.map((deal) => (
             <li key={deal.id} className="grid grid-cols-[minmax(0,1fr)_5.5rem_5.5rem] items-baseline gap-3 border-t border-line py-4">

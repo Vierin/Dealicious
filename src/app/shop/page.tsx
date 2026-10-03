@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Refrigerator } from "lucide-react";
 import { BackLink } from "@/components/back-link";
 import { buildCatalog, INGREDIENTS, PANTRY } from "@/lib/catalog";
@@ -29,17 +30,19 @@ export default async function ShopPage() {
     else groups.push({ category: line.category, lines: [line] });
   }
 
+  const t = await getTranslations("shop");
+
   return (
     <Page>
       <div className="flex items-center justify-between gap-4">
-        <BackLink href="/week" label="Неделя" />
+        <BackLink href="/week" />
         <Link href="/pantry" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-3 py-1.5 text-sm">
           <Refrigerator size={16} strokeWidth={1.75} />
-          Кладовая
+          {t("pantry")}
         </Link>
       </div>
-      <h1 className="mt-3 font-serif text-4xl">Список продуктов</h1>
-      <p className="mt-2 text-muted">Biedronka · на {profile.householdSize} чел.</p>
+      <h1 className="mt-3 font-serif text-4xl">{t("title")}</h1>
+      <p className="mt-2 text-muted">{t("forPeople", { count: profile.householdSize })}</p>
       <ShoppingList planId={plan.id} groups={groups} />
       <PantryStock planId={plan.id} needs={needsFor(plan.meals.map((meal) => meal.recipeId), profile.householdSize, plan.shopDate)} />
     </Page>

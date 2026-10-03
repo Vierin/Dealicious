@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ArrowLeftRight } from "lucide-react";
 import { postJson } from "@/lib/http";
 
 export function ReplaceMeal({ recipeId }: { recipeId: string }) {
   const router = useRouter();
+  const t = useTranslations("week");
+  const recipe = useTranslations("recipe");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
 
@@ -14,10 +17,10 @@ export function ReplaceMeal({ recipeId }: { recipeId: string }) {
     setError("");
     setPending(true);
     try {
-      await postJson("/api/plan/swap", { body: { recipeId }, fallback: "Не заменил" });
+      await postJson("/api/plan/swap", { body: { recipeId }, fallback: recipe("swapError") });
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Не заменил");
+      setError(err instanceof Error ? err.message : recipe("swapError"));
     } finally {
       setPending(false);
     }
@@ -29,7 +32,7 @@ export function ReplaceMeal({ recipeId }: { recipeId: string }) {
         type="button"
         onClick={replace}
         disabled={pending}
-        aria-label="Заменить блюдо"
+        aria-label={t("replace")}
         className="absolute top-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-line bg-paper/95 text-ink shadow-sm disabled:opacity-60"
       >
         <ArrowLeftRight size={16} strokeWidth={1.75} />

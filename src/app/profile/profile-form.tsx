@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { LogOut } from "lucide-react";
 import { BackLink } from "@/components/back-link";
 import { Choice, choiceClass } from "@/components/choice";
@@ -18,6 +19,14 @@ import type { Allergen, Appliance, DietNeed, DietStyle, MeatPref, Profile } from
 
 export function ProfileForm({ profile, email }: { profile: Profile; email: string }) {
   const router = useRouter();
+  const t = useTranslations("profile");
+  const dietT = useTranslations("diet");
+  const meatT = useTranslations("meat");
+  const allergenT = useTranslations("allergen");
+  const styleT = useTranslations("vibe");
+  const applianceT = useTranslations("appliance");
+  const errors = useTranslations("errors");
+  const auth = useTranslations("auth");
   const [name, setName] = useState(profile.name);
   const [city, setCity] = useState(profile.city);
   const [diet, setDiet] = useState<DietNeed>(profile.diet);
@@ -47,19 +56,19 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
   async function save() {
     setError("");
     if (name.trim().length < 1) {
-      setError("Введи имя");
+      setError(errors("name"));
       return;
     }
     if (!isWarsaw(city)) {
-      setError("Пока считаем только Варшаву");
+      setError(errors("warsaw"));
       return;
     }
     if (cookDays.length < 1) {
-      setError("Выбери хотя бы один день готовки");
+      setError(errors("pickCookDay"));
       return;
     }
     if (appliances.length < 1) {
-      setError("Выбери технику");
+      setError(errors("appliance"));
       return;
     }
 
@@ -81,12 +90,12 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
           shopWeekday,
           cookDays,
         },
-        { profile: "Не сохранилось", plan: "Не пересчитал неделю" },
+        { profile: t("profileError"), plan: t("planError") },
       );
       router.push("/week");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Не вышло");
+      setError(err instanceof Error ? err.message : auth("failed"));
     } finally {
       setPending(false);
     }
@@ -105,96 +114,96 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
   return (
     <Page>
       <div className="flex items-center justify-between gap-4">
-        <BackLink href="/week" label="Неделя" />
+        <BackLink href="/week" />
         <button
           type="button"
           onClick={logout}
           className="inline-flex items-center gap-1.5 rounded-2xl border border-ink px-3 py-2 text-sm"
         >
           <LogOut size={16} strokeWidth={1.75} />
-          Выйти
+          {t("logout")}
         </button>
       </div>
-      <h1 className="mt-3 font-serif text-4xl">Профиль</h1>
+      <h1 className="mt-3 font-serif text-4xl">{t("title")}</h1>
       <p className="mt-2 text-muted">{email}</p>
 
-      <Section title="Имя">
+      <Section title={t("name")}>
         <Field size="lg" value={name} onChange={(event) => setName(event.target.value)} />
       </Section>
 
-      <Section title="Город">
+      <Section title={t("city")}>
         <Field size="lg" value={city} onChange={(event) => setCity(event.target.value)} />
         <button type="button" onClick={() => setCity("Warszawa")} className="mt-3 rounded-full border border-olive px-4 py-2 text-sm text-olive">
-          Варшава
+          {t("warsaw")}
         </button>
       </Section>
 
-      <Section title="Магазин">
+      <Section title={t("store")}>
         <div className={choiceClass(true)}>
           <div>Biedronka</div>
-          <div className="mt-1 text-sm text-muted">Варшава</div>
+          <div className="mt-1 text-sm text-muted">{t("warsaw")}</div>
         </div>
       </Section>
 
-      <Section title="Dietary needs">
+      <Section title={t("diet")}>
         <div className="flex flex-col gap-2">
           {DIET_OPTIONS.map((option) => (
             <Choice key={option.id} on={diet === option.id} onClick={() => setDiet(option.id)}>
-              <div>{option.label}</div>
-              <div className="mt-1 text-sm text-muted">{option.hint}</div>
+              <div>{dietT(option.id)}</div>
+              <div className="mt-1 text-sm text-muted">{dietT(`${option.id}Hint`)}</div>
             </Choice>
           ))}
         </div>
       </Section>
 
       {diet === "none" ? (
-        <Section title="Мясо">
+        <Section title={t("meat")}>
           <div className="flex flex-col gap-2">
             {MEAT_OPTIONS.map((option) => (
               <Choice key={option.id} on={meatPref === option.id} onClick={() => setMeatPref(option.id)}>
-                {option.label}
+                {meatT(option.id)}
               </Choice>
             ))}
           </div>
         </Section>
       ) : null}
 
-      <Section title="Аллергии">
+      <Section title={t("allergies")}>
         <div className="flex flex-col gap-2">
           <Choice on={allergies.length === 0} onClick={() => setAllergies([])}>
-            Нет аллергии
+            {t("noAllergy")}
           </Choice>
           {ALLERGEN_OPTIONS.map((option) => (
             <Choice key={option.id} on={allergies.includes(option.id)} onClick={() => toggleAllergy(option.id)}>
-              {option.label}
+              {allergenT(option.id)}
             </Choice>
           ))}
         </div>
       </Section>
 
-      <Section title="Стиль">
+      <Section title={t("style")}>
         <div className="flex flex-col gap-2">
           {STYLE_OPTIONS.map((option) => (
             <Choice key={option.id} on={dietStyle === option.id} onClick={() => setDietStyle(option.id)}>
-              <div>{option.label}</div>
-              <div className="mt-1 text-sm text-muted">{option.hint}</div>
+              <div>{styleT(option.id)}</div>
+              <div className="mt-1 text-sm text-muted">{styleT(`${option.id}Hint`)}</div>
             </Choice>
           ))}
         </div>
       </Section>
 
-      <Section title="Техника" hint="Рецепт попадает в неделю, только если вся нужная техника есть.">
+      <Section title={t("appliances")} hint={t("appliancesHint")}>
         <div className="flex flex-col gap-2">
           {APPLIANCE_OPTIONS.map((option) => (
             <Choice key={option.id} on={appliances.includes(option.id)} onClick={() => toggleAppliance(option.id)}>
-              <div>{option.label}</div>
-              <div className="mt-1 text-sm text-muted">{option.hint}</div>
+              <div>{applianceT(option.id)}</div>
+              <div className="mt-1 text-sm text-muted">{applianceT(`${option.id}Hint`)}</div>
             </Choice>
           ))}
         </div>
       </Section>
 
-      <Section title="Человек">
+      <Section title={t("people")}>
         <div className="flex items-center gap-6">
           <button type="button" className="h-12 w-12 rounded-full border border-line text-2xl" onClick={() => setHouseholdSize((value) => Math.max(1, value - 1))}>
             −
@@ -206,7 +215,7 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
         </div>
       </Section>
 
-      <Section title="Калории в день" hint="Обед около трети этой нормы.">
+      <Section title={t("kcal")} hint={t("kcalHint")}>
         <div className="flex items-center gap-6">
           <button type="button" className="h-12 w-12 rounded-full border border-line text-2xl" onClick={() => setDailyKcal((value) => Math.max(1200, value - 100))}>
             −
@@ -218,7 +227,7 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
         </div>
       </Section>
 
-      <Section title="Бюджет на неделю" hint="Только обеды. План будет держаться этой суммы.">
+      <Section title={t("budget")} hint={t("budgetHint")}>
         <RangeSlider
           min={BUDGET_MIN}
           max={BUDGET_MAX}
@@ -231,11 +240,11 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
         />
       </Section>
 
-      <Section title="Уровень меню">
+      <Section title={t("menu")}>
         <MenuLevelCards value={menuLevel} onChange={setMenuLevel} />
       </Section>
 
-      <Section title="Дни готовки" hint="Меню соберётся только на отмеченные дни.">
+      <Section title={t("cookDays")} hint={t("cookDaysHint")}>
         <DayPills
           selected={cookDays}
           onPick={(day) =>
@@ -244,7 +253,7 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
         />
       </Section>
 
-      <Section title="День закупки">
+      <Section title={t("shopDay")}>
         <DayPills selected={[shopWeekday]} onPick={setShopWeekday} />
       </Section>
 
@@ -255,7 +264,7 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
       <div className="fixed inset-x-0 bottom-16 z-30 border-t border-line bg-cream/95 px-5 py-4 md:bottom-0">
         <div className="mx-auto flex max-w-2xl justify-end">
           <button type="button" disabled={pending} onClick={save} className="h-12 rounded-full bg-olive px-6 text-paper disabled:opacity-60">
-            {pending ? "Считаю…" : "Сохранить"}
+            {pending ? t("saving") : t("save")}
           </button>
         </div>
       </div>

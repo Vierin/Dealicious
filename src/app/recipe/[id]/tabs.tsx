@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export function RecipeTabs({
   ingredients,
@@ -11,6 +12,7 @@ export function RecipeTabs({
   pantry: string[];
   steps: string[];
 }) {
+  const t = useTranslations("recipe");
   const [tab, setTab] = useState<"ingredients" | "method">("ingredients");
 
   return (
@@ -21,14 +23,14 @@ export function RecipeTabs({
           onClick={() => setTab("ingredients")}
           className={`rounded-xl px-3 py-2 text-sm ${tab === "ingredients" ? "bg-ink text-cream" : "text-muted"}`}
         >
-          Ингредиенты
+          {t("ingredients")}
         </button>
         <button
           type="button"
           onClick={() => setTab("method")}
           className={`rounded-xl px-3 py-2 text-sm ${tab === "method" ? "bg-ink text-cream" : "text-muted"}`}
         >
-          Приготовление
+          {t("method")}
         </button>
       </div>
 
@@ -44,7 +46,7 @@ export function RecipeTabs({
         </ul>
         {pantry.length > 0 ? (
           <div className="mt-6">
-            <p className="text-sm text-muted">Из кладовой, в чек не входит</p>
+            <p className="text-sm text-muted">{t("pantryNote")}</p>
             <ul className="mt-2">
               {pantry.map((name) => (
                 <li key={name} className="border-b border-line py-3">

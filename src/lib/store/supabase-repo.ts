@@ -162,7 +162,7 @@ async function insertPlan(userId: string, shopDate: string, recipeIds: string[])
     .insert({ user_id: userId, shop_date: shopDate, recipe_ids: recipeIds })
     .select("id")
     .single();
-  if (inserted.error || !inserted.data) throw new Error(inserted.error?.message ?? "Не удалось сохранить план");
+  if (inserted.error || !inserted.data) throw new Error(inserted.error?.message ?? "errors.planSave");
   return inserted.data.id;
 }
 
@@ -210,7 +210,7 @@ export async function setRating(userId: string, recipeId: string, score: number)
     updated_at: new Date().toISOString(),
   });
   if (error) {
-    if (ratingsMissing(error.message)) throw new Error("Оценки ещё не включены. Примени миграцию recipe_ratings.");
+    if (ratingsMissing(error.message)) throw new Error("errors.ratingsMigration");
     throw new Error(error.message);
   }
 }
@@ -233,15 +233,15 @@ export async function getCookedDays(userId: string, planId: string): Promise<num
 
 export async function setCooked(userId: string, planId: string, dayIndex: number, cooked: boolean): Promise<void> {
   const current = await getLatestPlan(userId, 1);
-  if (!current || current.id !== planId) throw new Error("Нет такой недели");
-  if (!current.meals.some((meal) => meal.dayIndex === dayIndex)) throw new Error("Нет такого дня");
+  if (!current || current.id !== planId) throw new Error("errors.noWeek");
+  if (!current.meals.some((meal) => meal.dayIndex === dayIndex)) throw new Error("errors.noSuchDay");
   const supabase = await createClient();
   const query = cooked
     ? supabase.from("cooked_meals").upsert({ user_id: userId, meal_plan_id: planId, day_index: dayIndex })
     : supabase.from("cooked_meals").delete().eq("user_id", userId).eq("meal_plan_id", planId).eq("day_index", dayIndex);
   const { error } = await query;
   if (error) {
-    if (cookedMissing(error.message)) throw new Error("Отметка готовки ещё не включена. Примени миграцию cooked_meals.");
+    if (cookedMissing(error.message)) throw new Error("errors.cookedMigration");
     throw new Error(error.message);
   }
 }
@@ -249,7 +249,7 @@ export async function setCooked(userId: string, planId: string, dayIndex: number
 export async function savePlan(userId: string, profile: Profile, keep?: number[]): Promise<PlanView> {
   const startedAt = await trialStartedAt(userId);
   if (!trialOpen(startedAt)) {
-    throw new Error("Триал кончился. Следующую неделю соберём после подписки.");
+    throw new Error("errors.trial");
   }
 
   const catalog = await getCatalog();
@@ -285,7 +285,7 @@ export async function replaceMeal(
   dayIndex?: number,
 ): Promise<PlanView> {
   const current = await getLatestPlan(userId, profile.householdSize);
-  if (!current) throw new Error("Нет недели");
+  if (!current) throw new Error("errors.noWeek");
   const catalog = await getCatalog();
   const ratings = await getRatings(userId);
   const currentIds = slotsFromMeals(current.meals);

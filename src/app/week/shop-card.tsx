@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export function ShopCard({
   planId,
@@ -10,6 +11,7 @@ export function ShopCard({
   planId: string;
   productIds: string[];
 }) {
+  const t = useTranslations("shop");
   const [done, setDone] = useState(0);
 
   useEffect(() => {
@@ -34,8 +36,8 @@ export function ShopCard({
       className="flex h-full items-center justify-between gap-4 rounded-3xl border border-line bg-paper px-5 py-5"
     >
       <span>
-        <span className="block font-serif text-2xl">Список продуктов</span>
-        <span className="mt-1 block text-sm text-muted">Открыть</span>
+        <span className="block font-serif text-2xl">{t("title")}</span>
+        <span className="mt-1 block text-sm text-muted">{t("open")}</span>
       </span>
       <span className="font-serif text-3xl">
         {done}/{productIds.length}

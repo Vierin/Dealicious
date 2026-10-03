@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Heart } from "lucide-react";
 
 const storageKey = "dealicious-favorites";
@@ -18,6 +19,7 @@ export function readFavorites(): string[] {
 }
 
 export function FavoriteButton({ recipeId }: { recipeId: string }) {
+  const t = useTranslations("recipe");
   const [on, setOn] = useState(false);
 
   useEffect(() => {
@@ -37,7 +39,7 @@ export function FavoriteButton({ recipeId }: { recipeId: string }) {
     <button
       type="button"
       onClick={toggle}
-      aria-label={on ? "Убрать из избранного" : "В избранное"}
+      aria-label={on ? t("favoriteRemove") : t("favoriteAdd")}
       className={`absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-paper/90 ${on ? "text-[#8a3d32]" : "text-ink"}`}
     >
       <HeartIcon filled={on} />

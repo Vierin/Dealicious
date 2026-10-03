@@ -32,7 +32,7 @@ export default async function MealsPage({
 
   return (
     <Page>
-      <BackLink href="/week" label="Неделя" />
+      <BackLink href="/week" />
       <MealBrowser meals={meals} favoritesOnly={favoritesOnly} />
     </Page>
   );

@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { BackLink } from "@/components/back-link";
-import { VibePills, cuisineLabel } from "@/components/pills";
+import { VibePills } from "@/components/pills";
 import { INGREDIENTS, PANTRY, PRODUCTS, RECIPES } from "@/lib/catalog";
 import { COOKING, kcal } from "@/lib/cooking";
 import { formatRuDate } from "@/lib/dates";
@@ -20,11 +21,13 @@ import { RecipeTabs } from "./tabs";
 
 export const dynamic = "force-dynamic";
 
-function dietLine(diets: DietNeed[]): string {
-  const names = diets.map((diet) =>
-    diet === "vegan" ? "веганам" : diet === "vegetarian" ? "вегетарианцам" : diet === "pescatarian" ? "пескетарианцам" : "",
-  ).filter(Boolean);
-  return names.length === 0 ? "Только без диетических ограничений" : `Подходит ${names.join(", ")}`;
+function dietLine(diets: DietNeed[], t: Awaited<ReturnType<typeof getTranslations<"recipe">>>): string {
+  const names = diets
+    .map((diet) =>
+      diet === "vegan" ? t("dietVegan") : diet === "vegetarian" ? t("dietVegetarian") : diet === "pescatarian" ? t("dietPescatarian") : "",
+    )
+    .filter(Boolean);
+  return names.length === 0 ? t("onlyUnrestricted") : t("suits", { diets: names.join(", ") });
 }
 
 export default async function RecipePage({ params }: { params: Promise<{ id: string }> }) {
@@ -53,7 +56,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
   const pantry = PANTRY.filter((item) => item.recipeId === recipe.id).map((item) => item.name);
   const ingredients = INGREDIENTS.filter((item) => item.recipeId === recipe.id).map((item) => {
     const product = PRODUCTS.find((entry) => entry.id === item.productId);
-    if (!product) throw new Error(`Нет продукта ${item.productId}`);
+    if (!product) throw new Error("errors.missingProduct");
     return {
       name: product.namePl,
       qty:
@@ -61,6 +64,9 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
         formatQty(roundQty(item.qtyPerPerson * portions, product.unit), product.unit),
     };
   });
+
+  const t = await getTranslations("recipe");
+  const cuisine = await getTranslations("cuisine");
 
   return (
     <Page>
@@ -70,12 +76,12 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
         <BackLink href="/week" overlay />
         <FavoriteButton recipeId={recipe.id} />
       </div>
-      <p className="mt-4 text-xs tracking-wide text-muted uppercase">{recipe.cuisines.map(cuisineLabel).join(" · ")}</p>
+      <p className="mt-4 text-xs tracking-wide text-muted uppercase">{recipe.cuisines.map((id) => cuisine(id)).join(" · ")}</p>
       <h1 className="mt-1 font-serif text-4xl">{recipe.title}</h1>
       <div className="mt-3">
         <VibePills styles={recipe.vibes} />
       </div>
-      <p className="mt-3 text-sm text-muted">{dietLine(recipe.diets)}</p>
+      <p className="mt-3 text-sm text-muted">{dietLine(recipe.diets, t)}</p>
       <RecipeBar
         minutes={cooking.minutes}
         portions={portions}
@@ -90,12 +96,12 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
       />
 
       <section className="mt-6 rounded-3xl bg-ink p-5 text-cream">
-        <p className="text-center text-xs tracking-wide text-cream/70 uppercase">На 1 порцию</p>
+        <p className="text-center text-xs tracking-wide text-cream/70 uppercase">{t("perPortion")}</p>
         <div className="mt-3 grid grid-cols-4 gap-2">
-          <Macro label="ккал" value={String(kcal(cooking))} />
-          <Macro label="белки" value={`${cooking.protein} г`} />
-          <Macro label="жиры" value={`${cooking.fat} г`} />
-          <Macro label="углеводы" value={`${cooking.carbs} г`} />
+          <Macro label={t("kcal")} value={String(kcal(cooking))} />
+          <Macro label={t("protein")} value={t("grams", { count: cooking.protein })} />
+          <Macro label={t("fat")} value={t("grams", { count: cooking.fat })} />
+          <Macro label={t("carbs")} value={t("grams", { count: cooking.carbs })} />
         </div>
       </section>
 

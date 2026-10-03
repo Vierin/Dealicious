@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { RefreshCw } from "lucide-react";
 import { postJson } from "@/lib/http";
 
@@ -17,6 +18,7 @@ export function SwapMeal({
   week: WeekSlot[];
 }) {
   const router = useRouter();
+  const t = useTranslations("recipe");
   const [pending, setPending] = useState(false);
   const [picking, setPicking] = useState(false);
   const [error, setError] = useState("");
@@ -25,11 +27,11 @@ export function SwapMeal({
     setError("");
     setPending(true);
     try {
-      await postJson("/api/plan/swap", { body: { recipeId, dayIndex }, fallback: "Не заменил" });
+      await postJson("/api/plan/swap", { body: { recipeId, dayIndex }, fallback: t("swapError") });
       router.push("/week");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Не заменил");
+      setError(err instanceof Error ? err.message : t("swapError"));
       setPending(false);
     }
   }
@@ -46,7 +48,7 @@ export function SwapMeal({
           className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-ink text-cream disabled:opacity-60"
         >
           <RefreshCw size={18} strokeWidth={1.75} />
-          {pending ? "Меняю…" : "Swap this meal"}
+          {pending ? t("swapping") : t("swap")}
         </button>
       ) : (
         <button
@@ -55,12 +57,12 @@ export function SwapMeal({
           disabled={pending}
           className="h-12 w-full rounded-2xl bg-ink text-cream disabled:opacity-60"
         >
-          Add to this week&apos;s menu
+          {t("add")}
         </button>
       )}
       {!inWeek && picking ? (
         <>
-          <p className="mt-4 text-sm text-muted">Что убрать из недели</p>
+          <p className="mt-4 text-sm text-muted">{t("removeWhich")}</p>
           <ul className="mt-2 flex flex-col gap-2">
           {week.map((slot) => (
             <li key={slot.dayIndex}>

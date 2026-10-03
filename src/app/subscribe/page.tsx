@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { BackLink } from "@/components/back-link";
 import { SUBSCRIPTION_PLN } from "@/lib/billing";
 import { formatRuDate } from "@/lib/dates";
@@ -17,22 +18,31 @@ export default async function SubscribePage() {
   const trial = await getTrial(user.id, profile.householdSize);
   const until = formatRuDate(localDate(trial.endsAt));
   const times = Math.round((trial.saved / SUBSCRIPTION_PLN) * 10) / 10;
+  const t = await getTranslations("subscribe");
+  const price = formatPln(SUBSCRIPTION_PLN);
+  const timesText = timesLabel(times);
 
   return (
     <Page>
-      <BackLink href="/week" label="Неделя" />
-      <h1 className="mt-3 font-serif text-4xl">Уже сэкономлено</h1>
+      <BackLink href="/week" />
+      <h1 className="mt-3 font-serif text-4xl">{t("title")}</h1>
       <p className="mt-3 font-serif text-5xl">{formatPln(trial.saved)}</p>
-      <p className="mt-3 text-lg">{payoff(trial.saved, times)}</p>
+      <p className="mt-3 text-lg">
+        {trial.saved <= 0
+          ? t("payoffNone")
+          : times < 1
+            ? t("payoffNotYet", { price })
+            : t("payoffYes", { price, times: timesText })}
+      </p>
       <p className="mt-2 text-sm text-muted">
         {trial.open
-          ? `Триал ещё ${dayWord(trial.daysLeft)}, до ${until.dayMonth}.`
-          : `Триал кончился ${until.dayMonth}. Уже собранная неделя остаётся.`}
+          ? t("trialLeft", { days: trial.daysLeft, date: until.dayMonth })
+          : t("trialOver", { date: until.dayMonth })}
       </p>
 
       <section className="mt-8 flex flex-col gap-4">
         {trial.weeks.length === 0 ? (
-          <p className="text-sm text-muted">Собранных недель в триале ещё нет. Сравнивать с подпиской не из чего.</p>
+          <p className="text-sm text-muted">{t("noWeeks")}</p>
         ) : (
           trial.weeks.map((week, index) => {
             const date = formatRuDate(week.shopDate);
@@ -40,7 +50,7 @@ export default async function SubscribePage() {
               <article key={week.shopDate} className="rounded-3xl border border-line bg-paper p-5">
                 <div className="flex items-baseline justify-between gap-4">
                   <h2 className="font-serif text-2xl">
-                    Неделя {index + 1}
+                    {t("week", { count: index + 1 })}
                     <span className="mt-1 block text-sm font-sans text-muted">
                       {date.weekday}, {date.dayMonth}
                     </span>
@@ -57,30 +67,30 @@ export default async function SubscribePage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="mt-4 text-sm text-muted">На эту закупку акций, которые дешевле полки, нет.</p>
+                  <p className="mt-4 text-sm text-muted">{t("noDeals")}</p>
                 )}
               </article>
             );
           })
         )}
         {trial.open && trial.weeks.length === 1 ? (
-          <p className="text-sm text-muted">Вторая закупка в эти 14 дней ещё не собрана.</p>
+          <p className="text-sm text-muted">{t("secondMissing")}</p>
         ) : null}
       </section>
 
       {trial.weeks.length > 0 ? (
         <section className="mt-4 rounded-3xl bg-ink p-5 text-cream">
           <div className="flex items-baseline justify-between gap-4">
-            <span className="text-xs tracking-wide text-cream/70 uppercase">Вместе за триал</span>
+            <span className="text-xs tracking-wide text-cream/70 uppercase">{t("together")}</span>
             <span className="font-serif text-3xl">{formatPln(trial.saved)}</span>
           </div>
           <div className="mt-4 flex items-baseline justify-between gap-4">
-            <span className="text-xs tracking-wide text-cream/70 uppercase">Подписка</span>
-            <span className="font-serif text-3xl">{formatPln(SUBSCRIPTION_PLN)} / мес</span>
+            <span className="text-xs tracking-wide text-cream/70 uppercase">{t("plan")}</span>
+            <span className="font-serif text-3xl">{t("perMonth", { price })}</span>
           </div>
           {times >= 1 ? (
             <div className="mt-4 flex items-baseline justify-between gap-4">
-              <span className="text-xs tracking-wide text-cream/70 uppercase">Окупилась</span>
+              <span className="text-xs tracking-wide text-cream/70 uppercase">{t("paidOff")}</span>
               <span className="font-serif text-3xl">×{timesLabel(times)}</span>
             </div>
           ) : null}
@@ -88,7 +98,7 @@ export default async function SubscribePage() {
       ) : null}
 
       {!trial.open ? (
-        <p className="mt-6 text-sm text-muted">Следующую корзину без подписки не соберём.</p>
+        <p className="mt-6 text-sm text-muted">{t("closed")}</p>
       ) : null}
     </Page>
   );
@@ -105,26 +115,3 @@ function timesLabel(times: number): string {
   return Number.isInteger(times) ? String(times) : times.toFixed(1).replace(".", ",");
 }
 
-function timesWord(times: number): string {
-  if (!Number.isInteger(times)) return "раза";
-  const mod10 = times % 10;
-  const mod100 = times % 100;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "раза";
-  return "раз";
-}
-
-function payoff(saved: number, times: number): string {
-  if (saved <= 0) return "Пока скидки не дали разницы с полкой.";
-  if (times < 1) {
-    return `Подписка ${formatPln(SUBSCRIPTION_PLN)} в месяц. Эти недели её ещё не отбили.`;
-  }
-  return `Подписка ${formatPln(SUBSCRIPTION_PLN)} в месяц уже окупилась в ${timesLabel(times)} ${timesWord(times)}.`;
-}
-
-function dayWord(days: number): string {
-  const mod10 = days % 10;
-  const mod100 = days % 100;
-  if (mod10 === 1 && mod100 !== 11) return `${days} день`;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return `${days} дня`;
-  return `${days} дней`;
-}

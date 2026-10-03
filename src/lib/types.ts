@@ -12,7 +12,7 @@ export type DietStyle =
 export type Allergen = "gluten" | "lactose" | "eggs" | "fish" | "soy";
 export type Protein = "chicken" | "beef" | "pork" | "fish" | "veg";
 export type Appliance = "stove" | "oven" | "microwave" | "blender" | "airfryer";
-export type Cuisine = "mexican" | "italian" | "indian" | "asian" | "mediterranean" | "polish";
+export type Cuisine = "mexican" | "italian" | "indian" | "asian" | "mediterranean" | "polish" | "fusion";
 export type Unit = "kg" | "szt" | "l" | "opak";
 export type IngredientKind = "core" | "seasonal" | "specialty";
 
@@ -131,4 +131,4 @@ export type PlanView = {
   saved: number;
 };
 
-export const CATEGORY_ORDER = ["Овощи", "Мясо", "Рыба", "Молочка", "Бакалея"];
+export const CATEGORY_ORDER = ["vegetables", "meat", "fish", "dairy", "grocery"];

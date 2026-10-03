@@ -34,26 +34,7 @@ export const BUDGET_MIN = 50;
 export const BUDGET_MAX = 800;
 export const BUDGET_STEP = 10;
 
-export const MENU_LEVELS = [
-  {
-    value: 1,
-    label: "Simple",
-    minutes: "15–25 мин",
-    hint: "Простые техники, минимум посуды, 5–8 основных ингредиентов. Например, тёплая миска с курицей, рисом и овощами в лимонно-йогуртовом соусе.",
-  },
-  {
-    value: 3,
-    label: "Balanced",
-    minutes: "25–40 мин",
-    hint: "Интересные сочетания вкусов, маринады, домашние соусы, запекание и обжаривание. Например, средиземноморская курица с нутом, запечёнными овощами и травяным соусом.",
-  },
-  {
-    value: 5,
-    label: "Gourmet",
-    minutes: "35–50 мин",
-    hint: "Более сложные вкусовые сочетания, несколько компонентов, интересная подача и техники. Например, лосось с мисо-глазурью, гречкой и шпинатом. Только если стоимость вписывается в бюджет.",
-  },
-] as const;
+export const MENU_LEVELS = [1, 3, 5] as const;
 
 export function sliderBudget(value: number): number {
   const stepped = Math.round(value / BUDGET_STEP) * BUDGET_STEP;
@@ -77,13 +58,13 @@ export function cookDaysOrAll(value: number[] | undefined): number[] {
 
 export function parseCookDays(value: unknown): number[] {
   if (value == null) return [...ALL_COOK_DAYS];
-  if (!Array.isArray(value) || value.length < 1) throw new Error("Выбери хотя бы один день готовки");
+  if (!Array.isArray(value) || value.length < 1) throw new Error("errors.pickCookDay");
   const days = [...new Set(value)];
   if (
     days.length !== value.length ||
     days.some((day) => !Number.isInteger(day) || day < 0 || day > 6)
   ) {
-    throw new Error("Выбери дни готовки");
+    throw new Error("errors.cookDays");
   }
   return days as number[];
 }
@@ -119,59 +100,59 @@ export function isProfileComplete(profile: Profile | null): profile is Profile {
 }
 
 export function parseProfile(userId: string, body: unknown): Profile {
-  if (!body || typeof body !== "object") throw new Error("Пустая анкета");
+  if (!body || typeof body !== "object") throw new Error("errors.emptyProfile");
   const input = body as Record<string, unknown>;
   const name = typeof input.name === "string" ? input.name.trim() : "";
   const city = typeof input.city === "string" ? input.city.trim() : "";
-  if (name.length < 1 || name.length > 80) throw new Error("Введи имя");
-  if (!isWarsaw(city)) throw new Error("Пока считаем только Варшаву");
+  if (name.length < 1 || name.length > 80) throw new Error("errors.name");
+  if (!isWarsaw(city)) throw new Error("errors.warsaw");
 
   const diet = input.diet;
   if (typeof diet !== "string" || !DIETS.includes(diet as DietNeed)) {
-    throw new Error("Выбери dietary needs");
+    throw new Error("errors.diet");
   }
   const meatPref = input.meatPref;
   if (diet === "none" && (typeof meatPref !== "string" || !MEAT.includes(meatPref as MeatPref))) {
-    throw new Error("Выбери мясо");
+    throw new Error("errors.meat");
   }
 
   const dietStyle = input.dietStyle;
   if (typeof dietStyle !== "string" || !STYLES.includes(dietStyle as DietStyle)) {
-    throw new Error("Выбери стиль питания");
+    throw new Error("errors.style");
   }
 
   const householdSize = Number(input.householdSize);
   if (!Number.isInteger(householdSize) || householdSize < 1 || householdSize > 12) {
-    throw new Error("Укажи, на сколько человек закупка");
+    throw new Error("errors.people");
   }
 
   const shopWeekday = Number(input.shopWeekday);
   if (!Number.isInteger(shopWeekday) || shopWeekday < 0 || shopWeekday > 6) {
-    throw new Error("Выбери день закупки");
+    throw new Error("errors.shopDay");
   }
 
   const cookDays = parseCookDays(input.cookDays);
 
   const weeklyBudgetPln = Number(input.weeklyBudgetPln);
   if (!Number.isFinite(weeklyBudgetPln) || weeklyBudgetPln < 20 || weeklyBudgetPln > 10000) {
-    throw new Error("Укажи бюджет от 20 до 10 000 zł");
+    throw new Error("errors.budget");
   }
 
   const rawKcal = input.dailyKcal == null || input.dailyKcal === "" ? 2000 : Number(input.dailyKcal);
   if (!Number.isInteger(rawKcal) || rawKcal < 1200 || rawKcal > 4000 || rawKcal % 100 !== 0) {
-    throw new Error("Калории в день: от 1200 до 4000, шаг 100");
+    throw new Error("errors.kcal");
   }
 
   const rawLevel = menuLevelOf(input.menuLevel == null || input.menuLevel === "" ? 3 : input.menuLevel);
 
   const allergies = Array.isArray(input.allergies) ? input.allergies : [];
   if (!allergies.every((item) => typeof item === "string" && ALLERGENS.includes(item as Allergen))) {
-    throw new Error("Неизвестная аллергия");
+    throw new Error("errors.allergy");
   }
 
   const appliances = Array.isArray(input.appliances) ? input.appliances : [];
   if (appliances.length < 1 || !appliances.every((item) => typeof item === "string" && APPLIANCES.includes(item as Appliance))) {
-    throw new Error(appliances.length < 1 ? "Выбери технику" : "Неизвестная техника");
+    throw new Error(appliances.length < 1 ? "errors.appliance" : "errors.unknownAppliance");
   }
 
   return {

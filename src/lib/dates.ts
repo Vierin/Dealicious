@@ -61,21 +61,16 @@ export function cookOffsets(shopDate: string, cookDays: number[]): number[] {
   return offsets;
 }
 
-const WEEKDAY_LONG = [
-  "воскресенье",
-  "понедельник",
-  "вторник",
-  "среда",
-  "четверг",
-  "пятница",
-  "суббота",
-];
+const WEEKDAY_LONG: Record<string, string[]> = {
+  pl: ["niedziela", "poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota"],
+};
 
-export function formatRuDate(iso: string): { weekday: string; dayMonth: string } {
+export function formatRuDate(iso: string, locale = "pl"): { weekday: string; dayMonth: string } {
   const date = parseISODate(iso);
-  const dayMonth = new Intl.DateTimeFormat("ru-RU", {
+  const dayMonth = new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
   }).format(date);
-  return { weekday: WEEKDAY_LONG[date.getDay()], dayMonth };
+  const names = WEEKDAY_LONG[locale] ?? WEEKDAY_LONG.pl;
+  return { weekday: names[date.getDay()], dayMonth };
 }

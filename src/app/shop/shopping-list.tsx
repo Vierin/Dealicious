@@ -1,12 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { formatPln, formatQty } from "@/lib/money";
 import type { BasketLine } from "@/lib/types";
+
+const CATEGORIES = ["vegetables", "meat", "fish", "dairy", "grocery"] as const;
+
+function isCategory(value: string): value is (typeof CATEGORIES)[number] {
+  return (CATEGORIES as readonly string[]).includes(value);
+}
 
 type Group = { category: string; lines: BasketLine[] };
 
 export function ShoppingList({ planId, groups }: { planId: string; groups: Group[] }) {
+  const t = useTranslations("shop");
+  const categories = useTranslations("categories");
   const [checked, setChecked] = useState<string[]>([]);
   const storageKey = `dealicious-checks:${planId}`;
   const total = groups.reduce((sum, group) => sum + group.lines.length, 0);
@@ -41,12 +50,12 @@ export function ShoppingList({ planId, groups }: { planId: string; groups: Group
 
   return (
     <>
-      <p className="mt-6 text-sm text-muted">
-        {done} из {total}
-      </p>
+      <p className="mt-6 text-sm text-muted">{t("progress", { done, total })}</p>
       {groups.map((group) => (
         <section key={group.category} className="mt-8">
-          <h2 className="text-sm tracking-wide text-muted uppercase">{group.category}</h2>
+          <h2 className="text-sm tracking-wide text-muted uppercase">
+            {isCategory(group.category) ? categories(group.category) : group.category}
+          </h2>
           <ul className="mt-2">
             {group.lines.map((line) => {
               const on = checked.includes(line.productId);
@@ -73,10 +82,10 @@ export function ShoppingList({ planId, groups }: { planId: string; groups: Group
                     </span>
                     <span className={`text-right ${on ? "text-muted" : ""}`}>
                       <span className="block">{line.approx ? `≈ ${formatPln(line.lineTotal)}` : formatPln(line.lineTotal)}</span>
-                      {line.approx ? <span className="block text-sm text-muted">ориентир, без точной экономии</span> : null}
+                      {line.approx ? <span className="block text-sm text-muted">{t("approx")}</span> : null}
                       {discounted && !line.approx ? (
                         <span className={`block text-sm ${on ? "" : "text-olive"}`}>
-                          −{pct}% · было {formatPln(line.regularLineTotal)}
+                          −{pct}% · {t("was", { price: formatPln(line.regularLineTotal) })}
                         </span>
                       ) : null}
                     </span>

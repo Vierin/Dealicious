@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { BackButton } from "@/components/back-link";
 import { Choice, choiceClass } from "@/components/choice";
 import { Field } from "@/components/field";
@@ -69,6 +70,14 @@ function stepReady(draft: Draft, step: string) {
 
 export function OnboardingForm() {
   const router = useRouter();
+  const t = useTranslations("onboarding");
+  const dietT = useTranslations("diet");
+  const meatT = useTranslations("meat");
+  const allergenT = useTranslations("allergen");
+  const styleT = useTranslations("vibe");
+  const applianceT = useTranslations("appliance");
+  const errors = useTranslations("errors");
+  const auth = useTranslations("auth");
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [index, setIndex] = useState(0);
   const [error, setError] = useState("");
@@ -119,10 +128,10 @@ export function OnboardingForm() {
     if (!stepReady(draft, step)) {
       setError(
         step === "city"
-          ? "Пока считаем только Варшаву"
+          ? errors("warsaw")
           : step === "budget"
-            ? "Укажи бюджет от 20 до 10 000 zł"
-            : "Выбери вариант",
+            ? errors("budget")
+            : t("pick"),
       );
       return;
     }
@@ -149,18 +158,18 @@ export function OnboardingForm() {
           shopWeekday: draft.shopWeekday ?? 1,
           cookDays: draft.cookDays,
         },
-        { profile: "Анкета не сохранилась", plan: "Не собрал неделю" },
+        { profile: t("profileError"), plan: t("planError") },
       );
       router.push("/week");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Не вышло");
+      setError(err instanceof Error ? err.message : auth("failed"));
     } finally {
       setPending(false);
     }
   }
 
-  if (!ready) return <main className="mx-auto min-h-screen max-w-lg px-5 py-16 text-muted">Загрузка…</main>;
+  if (!ready) return <main className="mx-auto min-h-screen max-w-lg px-5 py-16 text-muted">{t("loading")}</main>;
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-lg flex-col px-5 py-8">
@@ -175,47 +184,47 @@ export function OnboardingForm() {
 
       <div className="flex-1">
         {step === "name" ? (
-          <Step title="Как тебя зовут?">
+          <Step title={t("name")}>
             <Field
               size="lg"
               autoFocus
               value={draft.name}
               onChange={(event) => setDraft({ ...draft, name: event.target.value })}
-              placeholder="Имя"
+              placeholder={t("namePlaceholder")}
             />
           </Step>
         ) : null}
 
         {step === "city" ? (
-          <Step title="Где ты закупаешься?" hint="Город или адрес. Сейчас работает Варшава.">
+          <Step title={t("city")} hint={t("cityHint")}>
             <Field
               size="lg"
               autoFocus
               value={draft.city}
               onChange={(event) => setDraft({ ...draft, city: event.target.value })}
-              placeholder="Варшава"
+              placeholder={t("cityPlaceholder")}
             />
             <button
               type="button"
               onClick={() => setDraft({ ...draft, city: "Warszawa" })}
               className="mt-3 rounded-full border border-olive px-4 py-2 text-sm text-olive"
             >
-              Варшава
+              {t("warsaw")}
             </button>
           </Step>
         ) : null}
 
         {step === "store" ? (
-          <Step title="Какой магазин?" hint="Акции Biedronka общие по всей сети.">
+          <Step title={t("store")} hint={t("storeHint")}>
             <div className={choiceClass(true, "px-4 py-4")}>
               <div className="text-lg">Biedronka</div>
-              <div className="mt-1 text-sm text-muted">Варшава</div>
+              <div className="mt-1 text-sm text-muted">{t("warsaw")}</div>
             </div>
           </Step>
         ) : null}
 
         {step === "diet" ? (
-          <Step title="Dietary needs">
+          <Step title={t("diet")}>
             <div className="flex flex-col gap-2">
               {DIET_OPTIONS.map((option) => (
                 <Choice
@@ -224,8 +233,8 @@ export function OnboardingForm() {
                   on={draft.diet === option.id}
                   onClick={() => setDraft({ ...draft, diet: option.id })}
                 >
-                  <div>{option.label}</div>
-                  <div className="mt-1 text-sm text-muted">{option.hint}</div>
+                  <div>{dietT(option.id)}</div>
+                  <div className="mt-1 text-sm text-muted">{dietT(`${option.id}Hint`)}</div>
                 </Choice>
               ))}
             </div>
@@ -233,7 +242,7 @@ export function OnboardingForm() {
         ) : null}
 
         {step === "meat" ? (
-          <Step title="Какое мясо предпочитаешь?" hint="Овощные обеды всё равно останутся в неделе.">
+          <Step title={t("meat")} hint={t("meatHint")}>
             <Choices
               value={draft.meatPref ?? ""}
               options={MEAT_OPTIONS}
@@ -243,14 +252,14 @@ export function OnboardingForm() {
         ) : null}
 
         {step === "allergies" ? (
-          <Step title="Есть аллергии?">
+          <Step title={t("allergies")}>
             <div className="flex flex-col gap-2">
               <Choice
                 pad="px-4 py-4"
                 on={draft.allergies.length === 0}
                 onClick={() => setDraft({ ...draft, allergies: [] })}
               >
-                Нет аллергии
+                {t("noAllergy")}
               </Choice>
               {ALLERGEN_OPTIONS.map((option) => {
                 const active = draft.allergies.includes(option.id);
@@ -268,7 +277,7 @@ export function OnboardingForm() {
                       })
                     }
                   >
-                    {option.label}
+                    {allergenT(option.id)}
                   </Choice>
                 );
               })}
@@ -277,7 +286,7 @@ export function OnboardingForm() {
         ) : null}
 
         {step === "style" ? (
-          <Step title="Какой стиль питания?">
+          <Step title={t("style")}>
             <div className="flex flex-col gap-2">
               {STYLE_OPTIONS.map((option) => (
                 <Choice
@@ -286,8 +295,8 @@ export function OnboardingForm() {
                   on={draft.dietStyle === option.id}
                   onClick={() => setDraft({ ...draft, dietStyle: option.id })}
                 >
-                  <div>{option.label}</div>
-                  <div className="mt-1 text-sm text-muted">{option.hint}</div>
+                  <div>{styleT(option.id)}</div>
+                  <div className="mt-1 text-sm text-muted">{styleT(`${option.id}Hint`)}</div>
                 </Choice>
               ))}
             </div>
@@ -295,7 +304,7 @@ export function OnboardingForm() {
         ) : null}
 
         {step === "kitchen" ? (
-          <Step title="Kitchen appliances" hint="Рецепт попадёт в неделю, только если вся нужная техника есть.">
+          <Step title={t("appliances")} hint={t("appliancesHint")}>
             <div className="flex flex-col gap-2">
               {APPLIANCE_OPTIONS.map((option) => {
                 const active = draft.appliances.includes(option.id);
@@ -313,8 +322,8 @@ export function OnboardingForm() {
                       })
                     }
                   >
-                    <div>{option.label}</div>
-                    <div className="mt-1 text-sm text-muted">{option.hint}</div>
+                    <div>{applianceT(option.id)}</div>
+                    <div className="mt-1 text-sm text-muted">{applianceT(`${option.id}Hint`)}</div>
                   </Choice>
                 );
               })}
@@ -323,7 +332,7 @@ export function OnboardingForm() {
         ) : null}
 
         {step === "people" ? (
-          <Step title="На сколько человек закупка?">
+          <Step title={t("people")}>
             <div className="flex items-center justify-center gap-6 py-8">
               <button
                 type="button"
@@ -345,7 +354,7 @@ export function OnboardingForm() {
         ) : null}
 
         {step === "kcal" ? (
-          <Step title="Сколько калорий в день?" hint="Обед подберём примерно на треть этой нормы.">
+          <Step title={t("kcal")} hint={t("kcalHint")}>
             <div className="flex items-center justify-center gap-6 py-8">
               <button
                 type="button"
@@ -367,7 +376,7 @@ export function OnboardingForm() {
         ) : null}
 
         {step === "budget" ? (
-          <Step title="Какой бюджет на неделю?" hint="Только обеды, в злотых. План будет держаться этой суммы.">
+          <Step title={t("budget")} hint={t("budgetHint")}>
             <RangeSlider
               min={BUDGET_MIN}
               max={BUDGET_MAX}
@@ -379,7 +388,7 @@ export function OnboardingForm() {
               maxLabel={`${BUDGET_MAX} zł`}
             />
             <div className="mt-10">
-              <h2 className="font-serif text-2xl leading-tight">Уровень меню</h2>
+              <h2 className="font-serif text-2xl leading-tight">{t("menu")}</h2>
               <div className="mt-4">
                 <MenuLevelCards value={draft.menuLevel} onChange={(menuLevel) => setDraft({ ...draft, menuLevel })} />
               </div>
@@ -388,7 +397,7 @@ export function OnboardingForm() {
         ) : null}
 
         {step === "day" ? (
-          <Step title="В какой день закупаешься?" hint="От этого зависят акции, которые ещё живы в магазине.">
+          <Step title={t("shopDay")} hint={t("shopDayHint")}>
             <DayPills
               selected={draft.shopWeekday === null ? [] : [draft.shopWeekday]}
               onPick={(shopWeekday) => setDraft({ ...draft, shopWeekday })}
@@ -397,7 +406,7 @@ export function OnboardingForm() {
         ) : null}
 
         {step === "cook" ? (
-          <Step title="В какие дни готовишь?" hint="Меню соберётся только на эти дни, не обязательно на всю неделю.">
+          <Step title={t("cookDays")} hint={t("cookDaysHint")}>
             <DayPills
               selected={draft.cookDays}
               onPick={(day) =>
@@ -417,7 +426,7 @@ export function OnboardingForm() {
 
       <div className="mt-6 flex items-center gap-4">
         {index > 0 ? (
-          <BackButton label="Назад" onClick={() => setIndex((value) => value - 1)} />
+          <BackButton onClick={() => setIndex((value) => value - 1)} />
         ) : (
           <span />
         )}
@@ -427,7 +436,7 @@ export function OnboardingForm() {
           onClick={next}
           className="ml-auto h-12 rounded-full bg-olive px-6 text-paper disabled:opacity-60"
         >
-          {pending ? "Считаю…" : last ? "Собрать неделю" : "Дальше"}
+          {pending ? t("saving") : last ? t("build") : t("next")}
         </button>
       </div>
     </main>
@@ -450,14 +459,15 @@ function Choices({
   onChange,
 }: {
   value: string;
-  options: { id: string; label: string }[];
+  options: { id: MeatPref }[];
   onChange: (id: string) => void;
 }) {
+  const meatT = useTranslations("meat");
   return (
     <div className="flex flex-col gap-2">
       {options.map((option) => (
         <Choice key={option.id} pad="px-4 py-4" on={value === option.id} onClick={() => onChange(option.id)}>
-          {option.label}
+          {meatT(option.id)}
         </Choice>
       ))}
     </div>

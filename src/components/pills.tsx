@@ -1,9 +1,7 @@
-import { CUISINE_OPTIONS, STYLE_OPTIONS } from "@/lib/options";
-import type { Cuisine, DietStyle } from "@/lib/types";
+"use client";
 
-export function cuisineLabel(cuisine: Cuisine): string {
-  return CUISINE_OPTIONS.find((item) => item.id === cuisine)?.label ?? cuisine;
-}
+import { useTranslations } from "next-intl";
+import type { Cuisine, DietStyle } from "@/lib/types";
 
 export const VIBE_COLOR: Record<DietStyle, string> = {
   "healthy-comfort": "bg-[#d7e7c8] text-[#2c5134]",
@@ -16,12 +14,18 @@ export const VIBE_COLOR: Record<DietStyle, string> = {
   "home-style": "bg-[#f3e3b0] text-[#5c4a1e]",
 };
 
+export function CuisineName({ cuisine }: { cuisine: Cuisine }) {
+  const t = useTranslations("cuisine");
+  return t(cuisine);
+}
+
 export function VibePills({ styles }: { styles: DietStyle[] }) {
+  const t = useTranslations("vibe");
   return (
     <ul className="flex flex-wrap gap-1.5">
       {styles.map((style) => (
         <li key={style} className={`rounded-full px-2.5 py-0.5 text-xs ${VIBE_COLOR[style]}`}>
-          {STYLE_OPTIONS.find((item) => item.id === style)?.label ?? style}
+          {t(style)}
         </li>
       ))}
     </ul>

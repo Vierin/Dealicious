@@ -2,17 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Calendar, ShoppingBag, User, Utensils } from "lucide-react";
 
 const tabs = [
-  { href: "/week", label: "Неделя", icon: Calendar },
-  { href: "/meals", label: "Блюда", icon: Utensils },
-  { href: "/shop", label: "Покупки", icon: ShoppingBag },
-  { href: "/profile", label: "Профиль", icon: User },
+  { href: "/week", key: "week", icon: Calendar },
+  { href: "/meals", key: "meals", icon: Utensils },
+  { href: "/shop", key: "shop", icon: ShoppingBag },
+  { href: "/profile", key: "profile", icon: User },
 ] as const;
 
 export function TabBar() {
   const path = usePathname();
+  const t = useTranslations("nav");
   if (path === "/" || path.startsWith("/login") || path.startsWith("/signup") || path.startsWith("/onboarding")) return null;
 
   return (
@@ -31,7 +33,7 @@ export function TabBar() {
                   className={`flex h-full flex-col items-center justify-center gap-1 text-[11px] ${on ? "text-olive" : "text-muted"}`}
                 >
                   <Icon size={22} strokeWidth={1.75} />
-                  {tab.label}
+                  {t(tab.key)}
                 </Link>
               </li>
             );
@@ -47,4 +49,3 @@ function isOn(path: string, href: string): boolean {
   if (href === "/meals") return path.startsWith("/meals") || path.startsWith("/recipe");
   return path === href || path.startsWith(`${href}/`);
 }
-

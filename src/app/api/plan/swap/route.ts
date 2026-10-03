@@ -6,16 +6,14 @@ import { getProfile, getSessionUser, replaceMeal } from "@/lib/store";
 export async function POST(request: Request) {
   try {
     const user = await getSessionUser();
-    if (!user) return NextResponse.json({ error: "Нужен аккаунт" }, { status: 401 });
+    if (!user) throw new Error("errors.account");
     const profile = await getProfile(user.id);
-    if (!isProfileComplete(profile)) {
-      return NextResponse.json({ error: "Сначала анкета" }, { status: 400 });
-    }
+    if (!isProfileComplete(profile)) throw new Error("errors.needProfile");
     const body = await readJson(request);
     const recipeId = body.recipeId;
-    if (typeof recipeId !== "string" || recipeId.length < 1) throw new Error("Нет блюда");
+    if (typeof recipeId !== "string" || recipeId.length < 1) throw new Error("errors.noMeal");
     const dayIndex = body.dayIndex == null ? undefined : Number(body.dayIndex);
-    if (dayIndex != null && !Number.isInteger(dayIndex)) throw new Error("Нет такого дня");
+    if (dayIndex != null && !Number.isInteger(dayIndex)) throw new Error("errors.noSuchDay");
     const plan = await replaceMeal(user.id, profile, recipeId, dayIndex);
     return NextResponse.json({ plan });
   } catch (error) {

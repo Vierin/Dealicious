@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Clock, CreditCard, Users } from "lucide-react";
 import { redirect } from "next/navigation";
-import { VibePills, cuisineLabel } from "@/components/pills";
+import { getTranslations } from "next-intl/server";
+import { VibePills } from "@/components/pills";
 import { leafletsOn, RECIPES } from "@/lib/catalog";
 import { COOKING, kcal } from "@/lib/cooking";
 import { recipePhoto } from "@/lib/recipes";
@@ -26,6 +27,9 @@ export default async function WeekPage() {
   const stale = plan?.meals.some((meal) => !RECIPES.some((recipe) => recipe.id === meal.recipeId)) ?? false;
   const noLeaflet = plan != null && plan.saved === 0 && leafletsOn(plan.shopDate).length === 0;
   const approx = plan?.lines.some((line) => line.approx) ?? false;
+  const t = await getTranslations("week");
+  const recipeT = await getTranslations("recipe");
+  const cuisine = await getTranslations("cuisine");
 
   return (
     <Page width="wide">
@@ -35,15 +39,13 @@ export default async function WeekPage() {
       </header>
 
       <p className="mt-4 text-sm text-muted">
-        {trial.open
-          ? `Триал ещё ${dayWord(trial.daysLeft)}.`
-          : "Триал кончился. Эта неделя остаётся. Следующую без подписки не соберём."}
+        {trial.open ? t("trialLeft", { days: trial.daysLeft }) : t("trialOver")}
       </p>
       <Link
         href="/subscribe"
         className="mt-4 flex items-baseline justify-between rounded-2xl border border-ink px-4 py-3"
       >
-        <span className="text-sm">Уже сэкономлено</span>
+        <span className="text-sm">{t("saved")}</span>
         <span className="font-serif text-2xl">{formatPln(trial.saved)}</span>
       </Link>
 
@@ -52,9 +54,9 @@ export default async function WeekPage() {
           <div className="mt-8 grid gap-4 md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)]">
             <div>
               <section className="grid grid-cols-3 gap-3 rounded-3xl bg-ink p-5 text-cream">
-                <Stat label="К оплате" value={`${approx ? "≈ " : ""}${formatPln(plan.total)}`} />
-                <Stat label="Без акций" value={formatPln(plan.regularTotal)} />
-                <Stat label="Сэкономили" value={formatPln(plan.saved)} accent />
+                <Stat label={t("toPay")} value={`${approx ? "≈ " : ""}${formatPln(plan.total)}`} />
+                <Stat label={t("withoutDeals")} value={formatPln(plan.regularTotal)} />
+                <Stat label={t("savedAmount")} value={formatPln(plan.saved)} accent />
               </section>
               <BudgetSpend spent={plan.total} budget={profile.weeklyBudgetPln} />
             </div>
@@ -67,8 +69,8 @@ export default async function WeekPage() {
                 className="flex shrink-0 items-center justify-between gap-4 rounded-3xl border border-line bg-paper px-5 py-5"
               >
                 <span>
-                  <span className="block font-serif text-2xl">Скидки</span>
-                  <span className="mt-1 block text-sm text-muted">На день закупки</span>
+                  <span className="block font-serif text-2xl">{t("deals")}</span>
+                  <span className="mt-1 block text-sm text-muted">{t("dealsHint")}</span>
                 </span>
               </Link>
             </div>
@@ -76,16 +78,16 @@ export default async function WeekPage() {
 
           {noLeaflet ? (
             <p className="mt-4 text-sm text-muted">
-              На {formatRuDate(plan.shopDate).dayMonth} газетки нет, поэтому сэкономили 0.
+              {t("noLeaflet", { date: formatRuDate(plan.shopDate).dayMonth })}
             </p>
           ) : null}
 
           {stale && trial.open ? (
-            <p className="mt-4 text-sm text-olive">Каталог обновился. Замени блюдо, которого больше нет.</p>
+            <p className="mt-4 text-sm text-olive">{t("stale")}</p>
           ) : null}
 
           <section className="mt-8 max-w-2xl">
-            <h2 className="font-serif text-2xl">Обеды</h2>
+            <h2 className="font-serif text-2xl">{t("lunches")}</h2>
             <ol className="mt-4 flex flex-col gap-3">
               {plan.meals.map((meal) => {
                 const date = formatRuDate(meal.date);
@@ -103,7 +105,7 @@ export default async function WeekPage() {
                       <h3 className="mt-1 font-serif text-2xl">{meal.title}</h3>
                       {recipe ? (
                         <div className="mt-3 flex flex-col gap-2">
-                          <p className="text-xs tracking-wide text-muted uppercase">{recipe.cuisines.map(cuisineLabel).join(" · ")}</p>
+                          <p className="text-xs tracking-wide text-muted uppercase">{recipe.cuisines.map((id) => cuisine(id)).join(" · ")}</p>
                           <VibePills styles={recipe.vibes} />
                         </div>
                       ) : null}
@@ -111,15 +113,15 @@ export default async function WeekPage() {
                         {minutes != null ? (
                           <span className="inline-flex items-center gap-1.5">
                             <Clock size={16} strokeWidth={1.75} />
-                            {minutes} мин
+                            {t("minutes", { count: minutes })}
                           </span>
                         ) : null}
                         <span className="inline-flex items-center gap-1.5">
                           <Users size={16} strokeWidth={1.75} />
-                          {plan.householdSize}
+                          {recipeT("portions", { count: plan.householdSize })}
                         </span>
                         {COOKING[meal.recipeId] ? (
-                          <span>{kcal(COOKING[meal.recipeId])} ккал</span>
+                          <span>{t("kcal", { count: kcal(COOKING[meal.recipeId]) })}</span>
                         ) : null}
                         <span className="inline-flex items-center gap-1.5">
                           <CreditCard size={16} strokeWidth={1.75} />
@@ -146,30 +148,23 @@ export default async function WeekPage() {
           </section>
         </>
       ) : (
-        <p className="mt-10 text-muted">Неделя ещё не собрана. Открой анкету и дойди до конца.</p>
+        <p className="mt-10 text-muted">{t("empty")}</p>
       )}
     </Page>
   );
 }
 
-function dayWord(days: number): string {
-  const mod10 = days % 10;
-  const mod100 = days % 100;
-  if (mod10 === 1 && mod100 !== 11) return `${days} день`;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return `${days} дня`;
-  return `${days} дней`;
-}
-
-function BudgetSpend({ spent, budget }: { spent: number; budget: number }) {
+async function BudgetSpend({ spent, budget }: { spent: number; budget: number }) {
+  const t = await getTranslations("week");
   const ratio = budget <= 0 ? 0 : Math.min(spent / budget, 1);
   const left = money(budget - spent);
   return (
     <section className="mt-4 rounded-3xl border border-line bg-paper px-5 py-4">
       <div className="flex items-baseline justify-between gap-3">
-        <p className="text-sm text-muted">Потрачено из бюджета</p>
+        <p className="text-sm text-muted">{t("spent")}</p>
         <p className="font-serif text-2xl">{formatPln(spent)}</p>
       </div>
-      <p className="mt-1 text-sm text-muted">из {formatPln(budget)} на неделю</p>
+      <p className="mt-1 text-sm text-muted">{t("ofWeek", { budget: formatPln(budget) })}</p>
       <div className="mt-3 h-2 overflow-hidden rounded-full bg-line">
         <div
           className={`h-full rounded-full ${left < 0 ? "bg-[#8a3d32]" : "bg-olive"}`}
@@ -177,7 +172,7 @@ function BudgetSpend({ spent, budget }: { spent: number; budget: number }) {
         />
       </div>
       <p className="mt-2 text-sm text-muted">
-        {left < 0 ? `Выше бюджета на ${formatPln(-left)}` : `Осталось ${formatPln(left)}`}
+        {left < 0 ? t("over", { amount: formatPln(-left) }) : t("left", { amount: formatPln(left) })}
       </p>
     </section>
   );

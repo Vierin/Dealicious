@@ -82,7 +82,7 @@ export function pantryNeeds(
 }
 
 export function pantryUseLabel(productId: string, qtyPerPerson: number, householdSize: number): string | null {
-  if (productId === "oliwa") return `${Math.round(qtyPerPerson * householdSize * 1000)} мл`;
-  if (productId === "maslo") return `${Math.round(qtyPerPerson * householdSize * 200)} г`;
+  if (productId === "oliwa") return `${Math.round(qtyPerPerson * householdSize * 1000)} ml`;
+  if (productId === "maslo") return `${Math.round(qtyPerPerson * householdSize * 200)} g`;
   return null;
 }

@@ -6,11 +6,9 @@ import { getLatestPlan, getProfile, getSessionUser, savePlan } from "@/lib/store
 export async function GET() {
   try {
     const user = await getSessionUser();
-    if (!user) return NextResponse.json({ error: "Нужен аккаунт" }, { status: 401 });
+    if (!user) throw new Error("errors.account");
     const profile = await getProfile(user.id);
-    if (!isProfileComplete(profile)) {
-      return NextResponse.json({ error: "Сначала анкета" }, { status: 400 });
-    }
+    if (!isProfileComplete(profile)) throw new Error("errors.needProfile");
     const plan = await getLatestPlan(user.id, profile.householdSize);
     return NextResponse.json({ plan });
   } catch (error) {
@@ -21,11 +19,9 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const user = await getSessionUser();
-    if (!user) return NextResponse.json({ error: "Нужен аккаунт" }, { status: 401 });
+    if (!user) throw new Error("errors.account");
     const profile = await getProfile(user.id);
-    if (!isProfileComplete(profile)) {
-      return NextResponse.json({ error: "Сначала анкета" }, { status: 400 });
-    }
+    if (!isProfileComplete(profile)) throw new Error("errors.needProfile");
     const plan = await savePlan(user.id, profile, await readKeep(request));
     return NextResponse.json({ plan });
   } catch (error) {
@@ -39,7 +35,7 @@ async function readKeep(request: Request): Promise<number[] | undefined> {
   const body = JSON.parse(text) as { keep?: unknown };
   if (body.keep == null) return undefined;
   if (!Array.isArray(body.keep) || body.keep.some((day) => !Number.isInteger(day) || day < 0 || day > 6)) {
-    throw new Error("Не те дни");
+    throw new Error("errors.badDays");
   }
   return body.keep;
 }

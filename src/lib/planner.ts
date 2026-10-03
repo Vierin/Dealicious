@@ -147,7 +147,7 @@ function promoShare(recipe: Recipe, catalog: Catalog, shopDate: string): number 
 
 function productById(catalog: Catalog, productId: string): Product {
   const product = catalog.products.find((item) => item.id === productId);
-  if (!product) throw new Error(`Нет продукта ${productId}`);
+  if (!product) throw new Error("errors.missingProduct");
   return product;
 }
 
@@ -228,7 +228,7 @@ function fillSlots(
     picked.push(best);
     fresh.push(best);
   }
-  if (fresh.length < count) throw new Error("Не хватает блюд под эти ограничения");
+  if (fresh.length < count) throw new Error("errors.notEnoughMeals");
   return fresh;
 }
 
@@ -243,7 +243,7 @@ function weekdaysFor(shopDate: string, offsets: number[]): number[] {
 export function pickWeek(profile: Profile, catalog: Catalog, from = new Date(), ratings: RecipeRatings = {}) {
   const shopDate = nextShopDate(profile.shopWeekday, from);
   const offsets = cookOffsets(shopDate, activeCookDays(profile));
-  if (offsets.length === 0) throw new Error("Выбери хотя бы один день готовки");
+  if (offsets.length === 0) throw new Error("errors.pickCookDay");
   const pool = catalog.recipes.filter((recipe) => allows(profile, recipe, catalog, shopDate));
   const picked = fillSlots(pool, [], profile, catalog, shopDate, offsets.length, weekdaysFor(shopDate, offsets), ratings);
   const recipeIds = Array.from({ length: 7 }, () => "");
@@ -262,7 +262,7 @@ export function repickWeek(
   ratings: RecipeRatings = {},
 ): string[] {
   const offsets = cookOffsets(shopDate, activeCookDays(profile));
-  if (offsets.length === 0) throw new Error("Выбери хотя бы один день готовки");
+  if (offsets.length === 0) throw new Error("errors.pickCookDay");
   const active = new Set(offsets);
   const base = Array.from({ length: 7 }, (_, index) => currentIds[index] ?? "");
   const keepSet = new Set<number>();
@@ -317,7 +317,7 @@ export function replacementFor(
 ): string {
   const used = new Set(recipeIds);
   const pool = catalog.recipes.filter((recipe) => allows(profile, recipe, catalog, shopDate) && !used.has(recipe.id));
-  if (pool.length === 0) throw new Error("Нечем заменить");
+  if (pool.length === 0) throw new Error("errors.nothingToSwap");
 
   const kept = recipesFrom(
     recipeIds.filter((id, itemIndex) => itemIndex !== index && id),
@@ -345,9 +345,9 @@ export function replacementFor(
 
 export function placeRecipe(recipeIds: string[], recipeId: string, dayIndex: number): string[] {
   if (!Number.isInteger(dayIndex) || dayIndex < 0 || dayIndex >= recipeIds.length) {
-    throw new Error("Нет такого дня");
+    throw new Error("errors.noSuchDay");
   }
-  if (recipeIds.some((id) => id === recipeId)) throw new Error("Уже в неделе");
+  if (recipeIds.some((id) => id === recipeId)) throw new Error("errors.alreadyInWeek");
   const next = [...recipeIds];
   next[dayIndex] = recipeId;
   return next;
