@@ -1,35 +1,24 @@
 {
-  "importedAt": "2026-10-02T12:21:59.695Z",
+  "importedAt": "2026-10-03T13:28:58.255Z",
   "leaflets": [
     {
-      "id": "526848",
+      "id": "527163",
       "name": "Od czwartku, Z ladą tradycyjną",
       "validFrom": "2026-10-01",
       "validTo": "2026-10-07"
     },
     {
-      "id": "526845",
+      "id": "527160",
       "name": "Od czwartku",
       "validFrom": "2026-10-01",
       "validTo": "2026-10-14"
-    },
-    {
-      "id": "526674",
-      "name": "Od poniedziałku, Z ladą tradycyjną",
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-10"
-    },
-    {
-      "id": "526671",
-      "name": "Od poniedziałku",
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-10"
     }
   ],
   "promotions": [
     {
-      "id": "blix-526848-pomidory",
+      "id": "blix-527163-pomidory-malinowe-polskie-599",
       "productId": "pomidory",
+      "name": "Pomidory malinowe polskie",
       "promoPricePln": 5.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -37,26 +26,19 @@
       "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526848-mleko",
-      "productId": "mleko",
-      "promoPricePln": 1.99,
+      "id": "blix-527163-swieze-podudzie-z-kurczaka-799",
+      "productId": "",
+      "name": "Świeże podudzie z kurczaka",
+      "promoPricePln": 7.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
       "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526848-maslo",
-      "productId": "maslo",
-      "promoPricePln": 3.99,
-      "regularPricePln": null,
-      "validFrom": "2026-10-01",
-      "validTo": "2026-10-03",
-      "label": "Od czwartku, Z ladą tradycyjną"
-    },
-    {
-      "id": "blix-526848-gouda",
-      "productId": "gouda",
+      "id": "blix-527163-ser-gouda-w-plastrach-swiatowid-549",
+      "productId": "",
+      "name": "Ser gouda w plastrach Światowid",
       "promoPricePln": 5.49,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -64,44 +46,39 @@
       "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526848-brokuly",
-      "productId": "brokuly",
-      "promoPricePln": 3.89,
+      "id": "blix-527163-szynka-konserwowa-kraina-wedlin-379",
+      "productId": "",
+      "name": "Szynka konserwowa Kraina Wędlin",
+      "promoPricePln": 3.79,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
       "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526848-awokado",
-      "productId": "awokado",
-      "promoPricePln": 3.49,
+      "id": "blix-527163-ser-podlaski-w-plastrach-swiatowid-549",
+      "productId": "",
+      "name": "Ser podlaski w plastrach Światowid",
+      "promoPricePln": 5.49,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
       "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526848-ziemniaki",
-      "productId": "ziemniaki",
-      "promoPricePln": 3.99,
+      "id": "blix-527163-swieze-udo-z-kurczaka-799",
+      "productId": "",
+      "name": "Świeże udo z kurczaka",
+      "promoPricePln": 7.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
       "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526848-cebula",
-      "productId": "cebula",
-      "promoPricePln": 1.99,
-      "regularPricePln": null,
-      "validFrom": "2026-10-01",
-      "validTo": "2026-10-03",
-      "label": "Od czwartku, Z ladą tradycyjną"
-    },
-    {
-      "id": "blix-526848-cytryna",
-      "productId": "cytryna",
+      "id": "blix-527163-winogrona-jasne-599",
+      "productId": "",
+      "name": "Winogrona jasne",
       "promoPricePln": 5.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -109,8 +86,659 @@
       "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526848-mielone",
-      "productId": "mielone",
+      "id": "blix-527163-napoj-gazowany-coca-cola-699",
+      "productId": "",
+      "name": "Napój gazowany Coca-Cola",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-napoj-gazowany-coca-cola-zero-cukru-699",
+      "productId": "",
+      "name": "Napój gazowany Coca-Cola Zero Cukru",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-mleko-uht-mleczna-dolina-3-2-199",
+      "productId": "mleko",
+      "name": "Mleko UHT Mleczna Dolina 3,2%",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-ser-swiatowid-podlaski-549",
+      "productId": "",
+      "name": "Ser Światowid Podlaski",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-ser-swiatowid-gouda-549",
+      "productId": "gouda",
+      "name": "Ser Światowid Gouda",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-maslo-ekstra-polskie-mlekovita-399",
+      "productId": "maslo",
+      "name": "Masło ekstra Polskie Mlekovita",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-filet-z-lososia-atlantyckiego-porcja-rodzinna-marinero-499",
+      "productId": "",
+      "name": "Filet z łososia atlantyckiego porcja rodzinna Marinero",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-swiezy-pstrag-teczowy-patroszony-marinero-289",
+      "productId": "",
+      "name": "Świeży pstrąg tęczowy patroszony Marinero",
+      "promoPricePln": 2.89,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-napoj-energetyczny-dzik-white-499",
+      "productId": "",
+      "name": "Napój energetyczny Dzik White",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-napoj-energetyczny-dzik-cactus-zero-499",
+      "productId": "",
+      "name": "Napój energetyczny Dzik Cactus Zero",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-woda-zrodlana-niegazowana-zywiec-zdroj-179",
+      "productId": "",
+      "name": "Woda źródlana niegazowana Żywiec Zdrój",
+      "promoPricePln": 1.79,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-woda-zrodlana-gazowana-zywiec-zdroj-mocny-gaz-179",
+      "productId": "",
+      "name": "Woda źródlana gazowana Żywiec Zdrój mocny gaz",
+      "promoPricePln": 1.79,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-napoj-niegazowany-ice-tea-remsey-249",
+      "productId": "",
+      "name": "Napój niegazowany Ice Tea Remsey",
+      "promoPricePln": 2.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-czekoladki-merci-2999",
+      "productId": "",
+      "name": "Czekoladki Merci",
+      "promoPricePln": 29.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-piwo-harnas-249",
+      "productId": "",
+      "name": "Piwo Harnaś",
+      "promoPricePln": 2.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-piwo-zubr-269",
+      "productId": "",
+      "name": "Piwo Żubr",
+      "promoPricePln": 2.69,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-sucha-karma-dla-psa-z-wolowina-i-warzywami-pedigree-7499",
+      "productId": "",
+      "name": "Sucha karma dla psa z wołowiną i warzywami Pedigree",
+      "promoPricePln": 74.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-kielbasa-sucha-krakowska-z-szynki-olewnik-759",
+      "productId": "",
+      "name": "Kiełbasa sucha krakowska z szynki Olewnik",
+      "promoPricePln": 7.59,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-parowki-gryzzale-tarczynski-599",
+      "productId": "",
+      "name": "Parówki Gryzzale Tarczyński",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-parowki-krakus-649",
+      "productId": "",
+      "name": "Parówki Krakus",
+      "promoPricePln": 6.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-filet-pieczony-z-kurczaka-duda-799",
+      "productId": "",
+      "name": "Filet pieczony z kurczaka Duda",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-jogurt-nestle-nesquik-349",
+      "productId": "",
+      "name": "Jogurt Nestle Nesquik",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-jogurt-nestle-kit-kat-349",
+      "productId": "",
+      "name": "Jogurt Nestle Kit Kat",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-plyn-do-prania-ariel-color-50-pran-3999",
+      "productId": "",
+      "name": "Płyn do prania Ariel Color 50 prań",
+      "promoPricePln": 39.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-margaryna-optima-cardio-active-999",
+      "productId": "",
+      "name": "Margaryna Optima Cardio active",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-salatka-lisner-gyros-z-kurczakiem-799",
+      "productId": "",
+      "name": "Sałatka Lisner gyros z kurczakiem",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-salatka-lisner-warzywno-jajeczna-z-kurkami-799",
+      "productId": "",
+      "name": "Sałatka Lisner warzywno-jajeczna z kurkami",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-kapsulki-somat-4w1-2999",
+      "productId": "",
+      "name": "Kapsułki Somat 4w1",
+      "promoPricePln": 29.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-sledzik-na-raz-lisner-w-oleju-z-suszonymi-pomidorami-280",
+      "productId": "",
+      "name": "Śledzik na raz Lisner w oleju z suszonymi pomidorami",
+      "promoPricePln": 2.8,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-schab-jak-u-dziadka-sokolow-999",
+      "productId": "",
+      "name": "Schab jak u dziadka Sokołów",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-sledzik-na-raz-lisner-w-oleju-z-cebulka-280",
+      "productId": "",
+      "name": "Śledzik na raz Lisner w oleju z cebulką",
+      "promoPricePln": 2.8,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-sledzik-na-raz-lisner-w-sosie-grzybowym-kurki-280",
+      "productId": "",
+      "name": "Śledzik na raz Lisner w sosie grzybowym kurki",
+      "promoPricePln": 2.8,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-jogurt-wysokobialkowy-bakoma-x-ksw-banan-cytryna-699",
+      "productId": "",
+      "name": "Jogurt wysokobiałkowy Bakoma x KSW banan-cytryna",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-jogurt-wysokobialkowy-bakoma-x-ksw-gruszka-z-nuta-karmelu-699",
+      "productId": "",
+      "name": "Jogurt wysokobiałkowy Bakoma x KSW gruszka z nutą karmelu",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-szynka-jak-u-dziadka-sokolow-999",
+      "productId": "",
+      "name": "Szynka jak u dziadka Sokołów",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-jogurt-wysokobialkowy-bakoma-x-ksw-truskawka-malina-699",
+      "productId": "",
+      "name": "Jogurt wysokobiałkowy Bakoma x KSW truskawka-malina",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-puszysty-serek-twarogowy-lekki-z-ziolami-almette-399",
+      "productId": "",
+      "name": "Puszysty serek twarogowy lekki z ziołami Almette",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-puszysty-serek-twarogowy-smietankowy-almette-399",
+      "productId": "",
+      "name": "Puszysty serek twarogowy śmietankowy Almette",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-kurki-899",
+      "productId": "",
+      "name": "Kurki",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-pomidory-malinowe-polskie-ukladane-na-wage-599",
+      "productId": "pomidory",
+      "name": "Pomidory malinowe polskie układane na wagę",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-winogrona-na-wage-599",
+      "productId": "",
+      "name": "Winogrona na wagę",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-brokul-389",
+      "productId": "brokuly",
+      "name": "Brokuł",
+      "promoPricePln": 3.89,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-sliwki-polskie-na-wage-399",
+      "productId": "",
+      "name": "Śliwki polskie na wagę",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-figa-swieza-99",
+      "productId": "",
+      "name": "Figa świeża",
+      "promoPricePln": 0.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-awokado-349",
+      "productId": "awokado",
+      "name": "Awokado",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-gruszki-konferencja-499",
+      "productId": "",
+      "name": "Gruszki Konferencja",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-jablka-polskie-czerwone-299",
+      "productId": "",
+      "name": "Jabłka polskie czerwone",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-maliny-polskie-899",
+      "productId": "",
+      "name": "Maliny polskie",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-jablka-polskie-298",
+      "productId": "",
+      "name": "Jabłka polskie",
+      "promoPricePln": 2.98,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-borowki-amerykanskie-xl-999",
+      "productId": "",
+      "name": "Borówki amerykańskie XL",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-cebula-zolta-199",
+      "productId": "cebula",
+      "name": "Cebula żółta",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-ziemniaki-jadalne-399",
+      "productId": "ziemniaki",
+      "name": "Ziemniaki jadalne",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-cytryny-na-wage-599",
+      "productId": "cytryna",
+      "name": "Cytryny na wagę",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-jablka-polskie-lobo-na-wage-399",
+      "productId": "",
+      "name": "Jabłka polskie Lobo na wagę",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-mandarynki-899",
+      "productId": "",
+      "name": "Mandarynki",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-brzoskwinie-399",
+      "productId": "",
+      "name": "Brzoskwinie",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-winogrona-bio-jasne-hey-vita-799",
+      "productId": "",
+      "name": "Winogrona bio jasne Hey, Vita!",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-winogrona-bio-ciemne-hey-vita-799",
+      "productId": "",
+      "name": "Winogrona bio ciemne Hey, Vita!",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-ananas-na-wage-799",
+      "productId": "",
+      "name": "Ananas na wagę",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-borowka-amerykanska-xl-sekoya-999",
+      "productId": "",
+      "name": "Borówka amerykańska XL Sekoya",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-imbir-na-wage-1499",
+      "productId": "",
+      "name": "Imbir na wagę",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-mieso-z-uda-indyka-2499",
+      "productId": "",
+      "name": "Mięso z uda indyka",
+      "promoPricePln": 24.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-kielbasa-biala-surowa-premium-1899",
+      "productId": "",
+      "name": "Kiełbasa biała surowa premium",
+      "promoPricePln": 18.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-skrzydelka-z-kurczaka-699",
+      "productId": "",
+      "name": "Skrzydełka z kurczaka",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-karkowka-wieprzowa-bez-kosci-1749",
+      "productId": "",
+      "name": "Karkówka wieprzowa bez kości",
+      "promoPricePln": 17.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-kaczka-swieza-bez-podrobow-1299",
+      "productId": "",
+      "name": "Kaczka świeża bez podrobów",
       "promoPricePln": 12.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -118,35 +746,239 @@
       "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526845-pomidory",
-      "productId": "pomidory",
-      "promoPricePln": 5.99,
+      "id": "blix-527163-filety-sledziowe-a-la-matjas-179",
+      "productId": "",
+      "name": "Filety śledziowe a'la Matjas",
+      "promoPricePln": 1.79,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
-      "label": "Od czwartku"
+      "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526845-mleko",
-      "productId": "mleko",
-      "promoPricePln": 1.99,
+      "id": "blix-527163-ser-edam-rycki-299",
+      "productId": "",
+      "name": "Ser edam Rycki",
+      "promoPricePln": 2.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
-      "label": "Od czwartku"
+      "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526845-maslo",
-      "productId": "maslo",
+      "id": "blix-527163-szynka-delikatesowa-z-kurczat-drobimex-389",
+      "productId": "",
+      "name": "Szynka delikatesowa z kurcząt Drobimex",
+      "promoPricePln": 3.89,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-pasztet-z-indyka-moscibrody-259",
+      "productId": "",
+      "name": "Pasztet z indyka Mościbrody",
+      "promoPricePln": 2.59,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-salatka-jarzynowa-seko-119",
+      "productId": "",
+      "name": "Sałatka jarzynowa Seko",
+      "promoPricePln": 1.19,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-szynka-doskonala-w-smaku-duda-399",
+      "productId": "",
+      "name": "Szynka Doskonała w smaku Duda",
       "promoPricePln": 3.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
-      "label": "Od czwartku"
+      "label": "Od czwartku, Z ladą tradycyjną"
     },
     {
-      "id": "blix-526845-gouda",
-      "productId": "gouda",
+      "id": "blix-527163-kielbasa-krolewska-z-szynki-madej-wrobel-299",
+      "productId": "",
+      "name": "Kiełbasa królewska z szynki Madej Wróbel",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-poledwiczki-z-kurczaka-mega-paka-kraina-mies-2499",
+      "productId": "",
+      "name": "Polędwiczki z kurczaka Mega Paka Kraina Mięs",
+      "promoPricePln": 24.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-stek-wolowy-z-rostbefu-kraina-mies-649",
+      "productId": "",
+      "name": "Stek wołowy z rostbefu Kraina Mięs",
+      "promoPricePln": 6.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-stek-wolowy-z-antrykotu-kraina-mies-649",
+      "productId": "",
+      "name": "Stek wołowy z antrykotu Kraina Mięs",
+      "promoPricePln": 6.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-podudzie-z-indyka-pakowane-prozniowo-kraina-mies-1199",
+      "productId": "",
+      "name": "Podudzie z indyka pakowane próżniowo Kraina Mięs",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-burger-wolowy-kraina-mies-699",
+      "productId": "",
+      "name": "Burger wołowy Kraina Mięs",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-mieso-mielone-z-lopatki-wieprzowej-kraina-mies-549",
+      "productId": "",
+      "name": "Mięso mielone z łopatki wieprzowej Kraina Mięs",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-karkowka-wieprzowa-bez-kosci-kotlety-kraina-mies-1299",
+      "productId": "",
+      "name": "Karkówka wieprzowa bez kości kotlety Kraina Mięs",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-flaki-wolowe-gotowane-krojone-kraina-mies-899",
+      "productId": "",
+      "name": "Flaki wołowe gotowane krojone Kraina Mięs",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-zeberka-wieprzowe-paski-pakowane-prozniowo-kraina-mies-1799",
+      "productId": "",
+      "name": "Żeberka wieprzowe paski pakowane próżniowo Kraina Mięs",
+      "promoPricePln": 17.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-stek-z-ligawy-cielecej-gourmet-2599",
+      "productId": "",
+      "name": "Stek z ligawy cielęcej Gourmet",
+      "promoPricePln": 25.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-golonka-wieprzowa-wolno-gotowane-kraina-mies-1790",
+      "productId": "",
+      "name": "Golonka wieprzowa Wolno Gotowane Kraina Mięs",
+      "promoPricePln": 17.9,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-kaczka-nadziewana-jablkami-i-pomaranczami-prosto-do-piekarnika-biedronka-1699",
+      "productId": "",
+      "name": "Kaczka nadziewana jabłkami i pomarańczami Prosto do piekarnika Biedronka",
+      "promoPricePln": 16.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-przepiorka-swieza-1399",
+      "productId": "",
+      "name": "Przepiórka świeża",
+      "promoPricePln": 13.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-mieso-mielone-wolowe-kraina-mies-1299",
+      "productId": "mielone",
+      "name": "Mięso mielone wołowe Kraina Mięs",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-paski-z-fileta-z-kurczaka-1299",
+      "productId": "",
+      "name": "Paski z fileta z kurczaka",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527163-papier-toaletowy-rumiankowy-queen-24-pak-2199",
+      "productId": "",
+      "name": "Papier toaletowy rumiankowy Queen 24-pak",
+      "promoPricePln": 21.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku, Z ladą tradycyjną"
+    },
+    {
+      "id": "blix-527160-ser-gouda-w-plastrach-swiatowid-549",
+      "productId": "",
+      "name": "Ser gouda w plastrach Światowid",
       "promoPricePln": 5.49,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -154,44 +986,29 @@
       "label": "Od czwartku"
     },
     {
-      "id": "blix-526845-brokuly",
-      "productId": "brokuly",
-      "promoPricePln": 3.89,
+      "id": "blix-527160-ser-podlaski-w-plastrach-swiatowid-549",
+      "productId": "",
+      "name": "Ser podlaski w plastrach Światowid",
+      "promoPricePln": 5.49,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
       "label": "Od czwartku"
     },
     {
-      "id": "blix-526845-awokado",
-      "productId": "awokado",
-      "promoPricePln": 3.49,
+      "id": "blix-527160-szynka-konserwowa-kraina-wedlin-379",
+      "productId": "",
+      "name": "Szynka konserwowa Kraina Wędlin",
+      "promoPricePln": 3.79,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
       "label": "Od czwartku"
     },
     {
-      "id": "blix-526845-cebula",
-      "productId": "cebula",
-      "promoPricePln": 1.99,
-      "regularPricePln": null,
-      "validFrom": "2026-10-01",
-      "validTo": "2026-10-03",
-      "label": "Od czwartku"
-    },
-    {
-      "id": "blix-526845-ziemniaki",
-      "productId": "ziemniaki",
-      "promoPricePln": 3.99,
-      "regularPricePln": null,
-      "validFrom": "2026-10-01",
-      "validTo": "2026-10-03",
-      "label": "Od czwartku"
-    },
-    {
-      "id": "blix-526845-cytryna",
-      "productId": "cytryna",
+      "id": "blix-527160-pomidory-malinowe-polskie-599",
+      "productId": "pomidory",
+      "name": "Pomidory malinowe polskie",
       "promoPricePln": 5.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -199,8 +1016,269 @@
       "label": "Od czwartku"
     },
     {
-      "id": "blix-526845-schab",
-      "productId": "schab",
+      "id": "blix-527160-napoj-gazowany-coca-cola-zero-cukru-699",
+      "productId": "",
+      "name": "Napój gazowany Coca-Cola Zero Cukru",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-winogrona-jasne-599",
+      "productId": "",
+      "name": "Winogrona jasne",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-gazowany-coca-cola-699",
+      "productId": "",
+      "name": "Napój gazowany Coca-Cola",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mleko-uht-mleczna-dolina-3-2-199",
+      "productId": "mleko",
+      "name": "Mleko UHT Mleczna Dolina 3,2%",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-maslo-ekstra-polskie-mlekovita-399",
+      "productId": "maslo",
+      "name": "Masło ekstra Polskie Mlekovita",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ser-swiatowid-gouda-549",
+      "productId": "gouda",
+      "name": "Ser Światowid Gouda",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ser-swiatowid-podlaski-549",
+      "productId": "",
+      "name": "Ser Światowid Podlaski",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-filet-z-lososia-atlantyckiego-porcja-rodzinna-marinero-499",
+      "productId": "",
+      "name": "Filet z łososia atlantyckiego porcja rodzinna Marinero",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-swiezy-pstrag-teczowy-patroszony-marinero-289",
+      "productId": "",
+      "name": "Świeży pstrąg tęczowy patroszony Marinero",
+      "promoPricePln": 2.89,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-woda-zrodlana-niegazowana-zywiec-zdroj-179",
+      "productId": "",
+      "name": "Woda źródlana niegazowana Żywiec Zdrój",
+      "promoPricePln": 1.79,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-dzik-white-499",
+      "productId": "",
+      "name": "Napój energetyczny Dzik White",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-niegazowany-ice-tea-remsey-249",
+      "productId": "",
+      "name": "Napój niegazowany Ice Tea Remsey",
+      "promoPricePln": 2.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-woda-zrodlana-gazowana-zywiec-zdroj-mocny-gaz-179",
+      "productId": "",
+      "name": "Woda źródlana gazowana Żywiec Zdrój mocny gaz",
+      "promoPricePln": 1.79,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-dzik-cactus-zero-499",
+      "productId": "",
+      "name": "Napój energetyczny Dzik Cactus Zero",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-czekoladki-merci-2999",
+      "productId": "",
+      "name": "Czekoladki Merci",
+      "promoPricePln": 29.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-harnas-249",
+      "productId": "",
+      "name": "Piwo Harnaś",
+      "promoPricePln": 2.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-zubr-269",
+      "productId": "",
+      "name": "Piwo Żubr",
+      "promoPricePln": 2.69,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sucha-karma-dla-psa-z-wolowina-i-warzywami-pedigree-7499",
+      "productId": "",
+      "name": "Sucha karma dla psa z wołowiną i warzywami Pedigree",
+      "promoPricePln": 74.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-parowki-krakus-649",
+      "productId": "",
+      "name": "Parówki Krakus",
+      "promoPricePln": 6.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kielbasa-sucha-krakowska-z-szynki-olewnik-759",
+      "productId": "",
+      "name": "Kiełbasa sucha krakowska z szynki Olewnik",
+      "promoPricePln": 7.59,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-salatka-lisner-warzywno-jajeczna-z-kurkami-799",
+      "productId": "",
+      "name": "Sałatka Lisner warzywno-jajeczna z kurkami",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-parowki-gryzzale-tarczynski-599",
+      "productId": "",
+      "name": "Parówki Gryzzale Tarczyński",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-filet-pieczony-z-kurczaka-duda-799",
+      "productId": "",
+      "name": "Filet pieczony z kurczaka Duda",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-salatka-lisner-gyros-z-kurczakiem-799",
+      "productId": "",
+      "name": "Sałatka Lisner gyros z kurczakiem",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-jogurt-nestle-nesquik-349",
+      "productId": "",
+      "name": "Jogurt Nestle Nesquik",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-jogurt-nestle-kit-kat-349",
+      "productId": "",
+      "name": "Jogurt Nestle Kit Kat",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-margaryna-optima-cardio-active-999",
+      "productId": "",
+      "name": "Margaryna Optima Cardio active",
       "promoPricePln": 9.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -208,8 +1286,19 @@
       "label": "Od czwartku"
     },
     {
-      "id": "blix-526845-kurczak",
-      "productId": "kurczak",
+      "id": "blix-527160-plyn-do-prania-ariel-color-50-pran-3999",
+      "productId": "",
+      "name": "Płyn do prania Ariel Color 50 prań",
+      "promoPricePln": 39.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kapsulki-somat-4w1-2999",
+      "productId": "",
+      "name": "Kapsułki Somat 4w1",
       "promoPricePln": 29.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -217,17 +1306,269 @@
       "label": "Od czwartku"
     },
     {
-      "id": "blix-526845-mielone",
-      "productId": "mielone",
-      "promoPricePln": 12.99,
+      "id": "blix-527160-szynka-jak-u-dziadka-sokolow-999",
+      "productId": "",
+      "name": "Szynka jak u dziadka Sokołów",
+      "promoPricePln": 9.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
       "label": "Od czwartku"
     },
     {
-      "id": "blix-526845-dorsz",
-      "productId": "dorsz",
+      "id": "blix-527160-sledzik-na-raz-lisner-w-sosie-grzybowym-kurki-280",
+      "productId": "",
+      "name": "Śledzik na raz Lisner w sosie grzybowym kurki",
+      "promoPricePln": 2.8,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-schab-jak-u-dziadka-sokolow-999",
+      "productId": "",
+      "name": "Schab jak u dziadka Sokołów",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sledzik-na-raz-lisner-w-oleju-z-suszonymi-pomidorami-280",
+      "productId": "",
+      "name": "Śledzik na raz Lisner w oleju z suszonymi pomidorami",
+      "promoPricePln": 2.8,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sledzik-na-raz-lisner-w-oleju-z-cebulka-280",
+      "productId": "",
+      "name": "Śledzik na raz Lisner w oleju z cebulką",
+      "promoPricePln": 2.8,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-jogurt-wysokobialkowy-bakoma-x-ksw-banan-cytryna-699",
+      "productId": "",
+      "name": "Jogurt wysokobiałkowy Bakoma x KSW banan-cytryna",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-jogurt-wysokobialkowy-bakoma-x-ksw-gruszka-z-nuta-karmelu-699",
+      "productId": "",
+      "name": "Jogurt wysokobiałkowy Bakoma x KSW gruszka z nutą karmelu",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-jogurt-wysokobialkowy-bakoma-x-ksw-truskawka-malina-699",
+      "productId": "",
+      "name": "Jogurt wysokobiałkowy Bakoma x KSW truskawka-malina",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-puszysty-serek-twarogowy-lekki-z-ziolami-almette-399",
+      "productId": "",
+      "name": "Puszysty serek twarogowy lekki z ziołami Almette",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-puszysty-serek-twarogowy-smietankowy-almette-399",
+      "productId": "",
+      "name": "Puszysty serek twarogowy śmietankowy Almette",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-brokul-389",
+      "productId": "brokuly",
+      "name": "Brokuł",
+      "promoPricePln": 3.89,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kurki-899",
+      "productId": "",
+      "name": "Kurki",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-winogrona-na-wage-599",
+      "productId": "",
+      "name": "Winogrona na wagę",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pomidory-malinowe-polskie-ukladane-na-wage-599",
+      "productId": "pomidory",
+      "name": "Pomidory malinowe polskie układane na wagę",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sliwki-polskie-na-wage-399",
+      "productId": "",
+      "name": "Śliwki polskie na wagę",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-gruszki-konferencja-499",
+      "productId": "",
+      "name": "Gruszki Konferencja",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-awokado-349",
+      "productId": "awokado",
+      "name": "Awokado",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-jablka-polskie-czerwone-299",
+      "productId": "",
+      "name": "Jabłka polskie czerwone",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-figa-swieza-99",
+      "productId": "",
+      "name": "Figa świeża",
+      "promoPricePln": 0.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-cebula-zolta-199",
+      "productId": "cebula",
+      "name": "Cebula żółta",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-jablka-polskie-298",
+      "productId": "",
+      "name": "Jabłka polskie",
+      "promoPricePln": 2.98,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-maliny-polskie-899",
+      "productId": "",
+      "name": "Maliny polskie",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ziemniaki-jadalne-399",
+      "productId": "ziemniaki",
+      "name": "Ziemniaki jadalne",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-borowki-amerykanskie-xl-999",
+      "productId": "",
+      "name": "Borówki amerykańskie XL",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-jablka-polskie-lobo-na-wage-399",
+      "productId": "",
+      "name": "Jabłka polskie Lobo na wagę",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-cytryny-na-wage-599",
+      "productId": "cytryna",
+      "name": "Cytryny na wagę",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ananas-na-wage-799",
+      "productId": "",
+      "name": "Ananas na wagę",
       "promoPricePln": 7.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -235,8 +1576,469 @@
       "label": "Od czwartku"
     },
     {
-      "id": "blix-526845-jogurt",
-      "productId": "jogurt",
+      "id": "blix-527160-mandarynki-899",
+      "productId": "",
+      "name": "Mandarynki",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-winogrona-bio-jasne-hey-vita-799",
+      "productId": "",
+      "name": "Winogrona bio jasne Hey, Vita!",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-brzoskwinie-399",
+      "productId": "",
+      "name": "Brzoskwinie",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-winogrona-bio-ciemne-hey-vita-799",
+      "productId": "",
+      "name": "Winogrona bio ciemne Hey, Vita!",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-borowka-amerykanska-xl-sekoya-999",
+      "productId": "",
+      "name": "Borówka amerykańska XL Sekoya",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-imbir-na-wage-1499",
+      "productId": "",
+      "name": "Imbir na wagę",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-lopatka-wieprzowa-bez-kosci-pakowana-prozniowo-kraina-mies-500",
+      "productId": "",
+      "name": "Łopatka wieprzowa bez kości pakowana próżniowo Kraina Mięs",
+      "promoPricePln": 5,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-schab-wieprzowy-bez-kosci-pakowany-prozniowo-kraina-mies-999",
+      "productId": "schab",
+      "name": "Schab wieprzowy bez kości pakowany próżniowo Kraina Mięs",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mieso-mielone-z-lopatki-wieprzowej-kraina-mies-549",
+      "productId": "",
+      "name": "Mięso mielone z łopatki wieprzowej Kraina Mięs",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-boczek-wieprzowy-bez-kosci-i-skory-pakowany-prozniowo-kraina-mies-999",
+      "productId": "",
+      "name": "Boczek wieprzowy bez kości i skóry pakowany próżniowo Kraina Mięs",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-stek-wolowy-z-antrykotu-kraina-mies-649",
+      "productId": "",
+      "name": "Stek wołowy z antrykotu Kraina Mięs",
+      "promoPricePln": 6.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kielbasa-biala-surowa-premium-kraina-mies-799",
+      "productId": "",
+      "name": "Kiełbasa biała surowa premium Kraina Mięs",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-filet-z-piersi-kurczaka-bez-antybiotykow-kraina-mies-select-kurczak-farm-2999",
+      "productId": "kurczak",
+      "name": "Filet z piersi kurczaka bez antybiotyków Kraina Mięs Select Kurczak farmerski",
+      "promoPricePln": 29.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karkowka-wieprzowa-bez-kosci-kotlety-kraina-mies-1299",
+      "productId": "",
+      "name": "Karkówka wieprzowa bez kości kotlety Kraina Mięs",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-flaki-wolowe-gotowane-krojone-kraina-mies-899",
+      "productId": "",
+      "name": "Flaki wołowe gotowane krojone Kraina Mięs",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-burger-wolowy-kraina-mies-699",
+      "productId": "",
+      "name": "Burger wołowy Kraina Mięs",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-podudzie-z-indyka-pakowane-prozniowo-kraina-mies-1199",
+      "productId": "",
+      "name": "Podudzie z indyka pakowane próżniowo Kraina Mięs",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-stek-wolowy-z-rostbefu-kraina-mies-649",
+      "productId": "",
+      "name": "Stek wołowy z rostbefu Kraina Mięs",
+      "promoPricePln": 6.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-paski-z-fileta-z-kurczaka-1299",
+      "productId": "",
+      "name": "Paski z fileta z kurczaka",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-poledwiczki-z-kurczaka-mega-paka-kraina-mies-2499",
+      "productId": "",
+      "name": "Polędwiczki z kurczaka Mega Paka Kraina Mięs",
+      "promoPricePln": 24.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mieso-mielone-wolowe-kraina-mies-1299",
+      "productId": "mielone",
+      "name": "Mięso mielone wołowe Kraina Mięs",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-przepiorka-swieza-1399",
+      "productId": "",
+      "name": "Przepiórka świeża",
+      "promoPricePln": 13.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-golonka-wieprzowa-wolno-gotowane-kraina-mies-1790",
+      "productId": "",
+      "name": "Golonka wieprzowa Wolno Gotowane Kraina Mięs",
+      "promoPricePln": 17.9,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-stek-z-ligawy-cielecej-gourmet-2599",
+      "productId": "",
+      "name": "Stek z ligawy cielęcej Gourmet",
+      "promoPricePln": 25.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kaczka-nadziewana-jablkami-i-pomaranczami-prosto-do-piekarnika-biedronka-1699",
+      "productId": "",
+      "name": "Kaczka nadziewana jabłkami i pomarańczami Prosto do piekarnika Biedronka",
+      "promoPricePln": 16.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-filet-z-halibuta-bez-skory-marinero-999",
+      "productId": "",
+      "name": "Filet z halibuta bez skóry Marinero",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-filet-z-dorsza-atlantyckiego-z-grenlandii-marinero-799",
+      "productId": "dorsz",
+      "name": "Filet z dorsza atlantyckiego z Grenlandii Marinero",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-krewetki-gotowane-marinero-1499",
+      "productId": "",
+      "name": "Krewetki gotowane Marinero",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-krewetki-obrane-marinero-1999",
+      "productId": "",
+      "name": "Krewetki obrane Marinero",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-poledwica-z-lososia-superfish-999",
+      "productId": "",
+      "name": "Polędwica z łososia Superfish",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kalmary-w-ciescie-mirko-1999",
+      "productId": "",
+      "name": "Kalmary w cieście Mirko",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-filet-bez-skory-z-karmazyna-marinero-549",
+      "productId": "",
+      "name": "Filet bez skóry z karmazyna Marinero",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mule-w-bialym-winie-norso-2499",
+      "productId": "",
+      "name": "Mule w białym winie Norso",
+      "promoPricePln": 24.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-losos-norweski-wedzony-na-zimno-w-plastrach-marinero-1200",
+      "productId": "",
+      "name": "Łosoś norweski wędzony na zimno w plastrach Marinero",
+      "promoPricePln": 12,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sledzie-po-kolobrzesku-kapitan-navi-1399",
+      "productId": "",
+      "name": "Śledzie po kołobrzesku Kapitan Navi",
+      "promoPricePln": 13.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-makrela-wedzona-tusza-marinero-379",
+      "productId": "",
+      "name": "Makrela wędzona tusza Marinero",
+      "promoPricePln": 3.79,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sushi-marinero-799",
+      "productId": "",
+      "name": "Sushi Marinero",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sushi-toshii-1199",
+      "productId": "",
+      "name": "Sushi Toshii",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sushi-sakura-kuro-1699",
+      "productId": "",
+      "name": "Sushi Sakura Kuro",
+      "promoPricePln": 16.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sushi-sakura-nami-1699",
+      "productId": "",
+      "name": "Sushi Sakura Nami",
+      "promoPricePln": 16.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-double-wrap-sakura-pieczony-losos-1999",
+      "productId": "",
+      "name": "Double Wrap Sakura pieczony łosoś",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sushi-sushiko-899",
+      "productId": "",
+      "name": "Sushi Sushiko",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sushi-premium-kyoko-2199",
+      "productId": "",
+      "name": "Sushi Premium Kyoko",
+      "promoPricePln": 21.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-bulka-codzienna-105",
+      "productId": "",
+      "name": "Bułka codzienna",
+      "promoPricePln": 1.05,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-bulka-poranna-fitness-89",
+      "productId": "",
+      "name": "Bułka poranna fitness",
+      "promoPricePln": 0.89,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-przekaska-kebab-409",
+      "productId": "",
+      "name": "Przekąska kebab",
+      "promoPricePln": 4.09,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zapiekanka-z-pieczarkami-serem-ketchupem-i-szynka-375",
+      "productId": "",
+      "name": "Zapiekanka z pieczarkami serem ketchupem i szynką",
       "promoPricePln": 3.75,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -244,8 +2046,589 @@
       "label": "Od czwartku"
     },
     {
-      "id": "blix-526845-chleb",
-      "productId": "chleb",
+      "id": "blix-527160-ciastko-duet-truskawkowy-159",
+      "productId": "",
+      "name": "Ciastko duet truskawkowy",
+      "promoPricePln": 1.59,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-bulka-z-zoltym-serem-135",
+      "productId": "",
+      "name": "Bułka z żółtym serem",
+      "promoPricePln": 1.35,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-croissant-z-nadzieniem-orzechowo-kakaowym-269",
+      "productId": "",
+      "name": "Croissant z nadzieniem orzechowo-kakaowym",
+      "promoPricePln": 2.69,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-wytrawny-donut-cheddar-jalapeno-449",
+      "productId": "",
+      "name": "Wytrawny donut cheddar jalapeno",
+      "promoPricePln": 4.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chleb-orkiszowy-z-ziarnami-475",
+      "productId": "",
+      "name": "Chleb orkiszowy z ziarnami",
+      "promoPricePln": 4.75,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-schiacciata-199",
+      "productId": "",
+      "name": "Schiacciata",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ciabatta-99",
+      "productId": "",
+      "name": "Ciabatta",
+      "promoPricePln": 0.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-flauto-margherita-449",
+      "productId": "",
+      "name": "Flauto margherita",
+      "promoPricePln": 4.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pinsa-capriciosa-489",
+      "productId": "",
+      "name": "Pinsa Capriciosa",
+      "promoPricePln": 4.89,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chleb-w-stylu-wloskim-419",
+      "productId": "",
+      "name": "Chleb w stylu włoskim",
+      "promoPricePln": 4.19,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pizza-z-salami-375",
+      "productId": "",
+      "name": "Pizza z salami",
+      "promoPricePln": 3.75,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-cynamonka-399",
+      "productId": "",
+      "name": "Cynamonka",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ciastka-kruche-z-ziarnami-na-wage-319",
+      "productId": "",
+      "name": "Ciastka kruche z ziarnami na wagę",
+      "promoPricePln": 3.19,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ciasto-budyniowiec-2199",
+      "productId": "",
+      "name": "Ciasto Budyniowiec",
+      "promoPricePln": 21.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ciasto-z-wisniami-1499",
+      "productId": "",
+      "name": "Ciasto z wiśniami",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ciasto-leos-2299",
+      "productId": "",
+      "name": "Ciasto Leoś",
+      "promoPricePln": 22.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mus-czekoladowy-e-wedel-2499",
+      "productId": "",
+      "name": "Mus czekoladowy E.Wedel",
+      "promoPricePln": 24.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sernik-o-smaku-kokosowym-z-kremem-princessa-2399",
+      "productId": "",
+      "name": "Sernik o smaku kokosowym z kremem Princessa",
+      "promoPricePln": 23.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-rwaniec-z-kremem-budyniowym-piekarnia-biedronki-749",
+      "productId": "",
+      "name": "Rwaniec z kremem budyniowym Piekarnia Biedronki",
+      "promoPricePln": 7.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-losos-norweski-wedzony-na-zimno-w-plastrach-marinero-1199",
+      "productId": "",
+      "name": "Łosoś norweski wędzony na zimno w plastrach Marinero",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-poledwica-sopocka-kraina-wedlin-699",
+      "productId": "",
+      "name": "Polędwica Sopocka Kraina Wędlin",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-dzem-60-mniej-cukrow-rapsodia-599",
+      "productId": "",
+      "name": "Dżem 60% mniej cukrów Rapsodia",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-bulka-wysmienita-dluga-fermentacja-20",
+      "productId": "",
+      "name": "Bułka wyśmienita długa fermentacja",
+      "promoPricePln": 0.2,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-bulka-grahamka-ze-slonecznikiem-dluga-fermentacja-20",
+      "productId": "",
+      "name": "Bułka grahamka ze słonecznikiem długa fermentacja",
+      "promoPricePln": 0.2,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-bulka-z-ziarnem-dluga-fermentacja-20",
+      "productId": "",
+      "name": "Bułka z ziarnem długa fermentacja",
+      "promoPricePln": 0.2,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ser-gouda-mlekpol-1699",
+      "productId": "gouda",
+      "name": "Ser gouda Mlekpol",
+      "promoPricePln": 16.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ser-rycki-w-plastrach-maasdam-ryki-1399",
+      "productId": "",
+      "name": "Ser Rycki w plastrach Maasdam Ryki",
+      "promoPricePln": 13.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kasia-crema-31-469",
+      "productId": "",
+      "name": "Kasia Crema 31%",
+      "promoPricePln": 4.69,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-jogurt-aktiplus-10-pak-100-g-999",
+      "productId": "",
+      "name": "Jogurt Aktiplus 10-pak 100 g",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-skyr-deserowy-pouch-fruvita-kokos-biala-czekolada-349",
+      "productId": "",
+      "name": "Skyr deserowy pouch Fruvita kokos - biała czekolada",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-jogurt-naturalny-piatnica-2-375",
+      "productId": "jogurt",
+      "name": "Jogurt naturalny Piątnica 2%",
+      "promoPricePln": 3.75,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-maslo-klarowane-laciate-1699",
+      "productId": "",
+      "name": "Masło klarowane Łaciate",
+      "promoPricePln": 16.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kefir-jogurtowy-activia-naturalny-549",
+      "productId": "",
+      "name": "Kefir jogurtowy Activia naturalny",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-actimel-wieloowocowy-12-pak-100-g-1599",
+      "productId": "",
+      "name": "Actimel wieloowocowy 12-pak 100 g",
+      "promoPricePln": 15.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kefir-jogurtowy-activia-mango-549",
+      "productId": "",
+      "name": "Kefir jogurtowy Activia mango",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kefir-jogurtowy-activia-truskawka-549",
+      "productId": "",
+      "name": "Kefir jogurtowy Activia truskawka",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kefir-jogurtowy-activia-borowka-549",
+      "productId": "",
+      "name": "Kefir jogurtowy Activia borówka",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-skyr-deserowy-pouch-fruvita-pistacja-349",
+      "productId": "",
+      "name": "Skyr deserowy pouch Fruvita pistacja",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-danie-z-tofu-i-mango-hortex-asia-menu-1199",
+      "productId": "",
+      "name": "Danie z tofu i mango Hortex Asia Menu",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-danie-wok-z-kurczakiem-hortex-asia-menu-1199",
+      "productId": "",
+      "name": "Danie wok z kurczakiem Hortex Asia Menu",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pieczarki-mrozone-w-sosie-mrozna-kraina-699",
+      "productId": "",
+      "name": "Pieczarki mrożone w sosie Mroźna Kraina",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zupa-z-kurczakiem-i-grzybami-mun-hortex-asia-menu-1199",
+      "productId": "",
+      "name": "Zupa z kurczakiem i grzybami mun Hortex Asia Menu",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zupa-ramen-hortex-asia-menu-1199",
+      "productId": "",
+      "name": "Zupa ramen Hortex Asia Menu",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pizza-z-kurczakiem-trattoria-donatello-999",
+      "productId": "",
+      "name": "Pizza z kurczakiem Trattoria Donatello",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pizza-proteinowa-z-kurczakiem-go-active-1299",
+      "productId": "",
+      "name": "Pizza proteinowa z kurczakiem Go Active",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kubelek-z-sosami-american-foodie-2699",
+      "productId": "",
+      "name": "Kubełek z sosami American Foodie",
+      "promoPricePln": 26.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pizza-quattro-formaggi-trattoria-donatello-1299",
+      "productId": "",
+      "name": "Pizza Quattro Formaggi Trattoria Donatello",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pinsa-trattoria-donatello-1199",
+      "productId": "",
+      "name": "Pinsa Trattoria Donatello",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-lody-marletto-good-lood-belgijska-czekolada-1999",
+      "productId": "",
+      "name": "Lody Marletto Good Lood belgijska czekolada",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-lody-marletto-good-lood-slona-krowka-1999",
+      "productId": "",
+      "name": "Lody Marletto Good Lood słona krówka",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-czekolada-mild-lindt-50-1299",
+      "productId": "",
+      "name": "Czekolada mild Lindt 50%",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-czekolada-mild-lindt-70-1299",
+      "productId": "",
+      "name": "Czekolada mild Lindt 70%",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-czekolada-mild-lindt-85-1299",
+      "productId": "",
+      "name": "Czekolada mild Lindt 85%",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-czekolada-gold-milk-lindt-milk-hazelnut-1299",
+      "productId": "",
+      "name": "Czekolada gold milk Lindt milk hazelnut",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-czekolada-gold-milk-lindt-1299",
+      "productId": "",
+      "name": "Czekolada gold milk Lindt",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-czekolada-gold-milk-lindt-milk-almond-1299",
+      "productId": "",
+      "name": "Czekolada gold milk Lindt milk almond",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-gazowany-coca-cola-499",
+      "productId": "",
+      "name": "Napój gazowany Coca-Cola",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-borek-ze-szpinakiem-i-serem-189",
+      "productId": "",
+      "name": "Borek ze szpinakiem i serem",
+      "promoPricePln": 1.89,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kielbasa-slaska-z-szynki-kraina-wedlin-select-299",
+      "productId": "",
+      "name": "Kiełbasa śląska z szynki Kraina Wędlin Select",
       "promoPricePln": 2.99,
       "regularPricePln": null,
       "validFrom": "2026-10-01",
@@ -253,157 +2636,2704 @@
       "label": "Od czwartku"
     },
     {
-      "id": "blix-526674-jogurt",
-      "productId": "jogurt",
+      "id": "blix-527160-szynka-wieprzowa-marynowana-po-staropolsku-olewnik-849",
+      "productId": "",
+      "name": "Szynka wieprzowa marynowana po staropolsku Olewnik",
+      "promoPricePln": 8.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-filet-maslany-z-indyka-kraina-wedlin-799",
+      "productId": "",
+      "name": "Filet maślany z indyka Kraina Wędlin",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-oliwki-zielone-drylowane-el-toro-rojo-179",
+      "productId": "",
+      "name": "Oliwki zielone drylowane El Toro Rojo",
+      "promoPricePln": 1.79,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zupa-knorr-199",
+      "productId": "",
+      "name": "Zupa Knorr",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-buraczki-zasmazane-nasza-spizarnia-299",
+      "productId": "",
+      "name": "Buraczki zasmażane Nasza Spiżarnia",
       "promoPricePln": 2.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
+      "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
-      "label": "Od poniedziałku, Z ladą tradycyjną"
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526674-mleko",
-      "productId": "mleko",
-      "promoPricePln": 3.09,
+      "id": "blix-527160-filet-pieczony-z-kurczaka-premium-biedronka-799",
+      "productId": "",
+      "name": "Filet pieczony z kurczaka premium Biedronka",
+      "promoPricePln": 7.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
+      "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
-      "label": "Od poniedziałku, Z ladą tradycyjną"
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526674-kurczak",
-      "productId": "kurczak",
-      "promoPricePln": 16.99,
+      "id": "blix-527160-pasta-jajeczna-salato-199",
+      "productId": "",
+      "name": "Pasta jajeczna Salato",
+      "promoPricePln": 1.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
+      "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
-      "label": "Od poniedziałku, Z ladą tradycyjną"
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526674-mielone",
-      "productId": "mielone",
+      "id": "blix-527160-buraczki-tarte-nasza-spizarnia-299",
+      "productId": "",
+      "name": "Buraczki tarte Nasza Spiżarnia",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-posypki-rozkoszny-kamis-299",
+      "productId": "",
+      "name": "Posypki Rozkoszny Kamis",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pomysl-na-airfryer-winiary-399",
+      "productId": "",
+      "name": "Pomysł na Airfryer Winiary",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ogorki-malosolne-swojska-chata-639",
+      "productId": "",
+      "name": "Ogórki małosolne Swojska Chata",
+      "promoPricePln": 6.39,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-lasagne-carbonara-come-a-casa-999",
+      "productId": "",
+      "name": "Lasagne carbonara Come a Casa",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pomidory-duszone-pudliszki-klasyczny-599",
+      "productId": "pomidory",
+      "name": "Pomidory duszone Pudliszki klasyczny",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pomidory-duszone-pudliszki-ziola-i-smak-prazonego-czosnku-599",
+      "productId": "pomidory",
+      "name": "Pomidory duszone Pudliszki zioła i smak prażonego czosnku",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sos-culineo-bolonski-499",
+      "productId": "",
+      "name": "Sos Culineo boloński",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sos-culineo-spaghetti-499",
+      "productId": "",
+      "name": "Sos Culineo spaghetti",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-przecier-pomidorowy-culineo-449",
+      "productId": "",
+      "name": "Przecier pomidorowy Culineo",
+      "promoPricePln": 4.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pomidory-duszone-pudliszki-karmelizowana-cebula-i-szalotka-599",
+      "productId": "pomidory",
+      "name": "Pomidory duszone Pudliszki karmelizowana cebula i szalotka",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sos-culineo-slodko-kwasny-499",
+      "productId": "",
+      "name": "Sos Culineo słodko-kwaśny",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-dip-madero-serowy-499",
+      "productId": "",
+      "name": "Dip Madero serowy",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-dip-madero-salsa-499",
+      "productId": "",
+      "name": "Dip Madero salsa",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-salatka-z-zielonych-pomidorow-nasza-spizarnia-799",
+      "productId": "",
+      "name": "Sałatka z zielonych pomidorów Nasza Spiżarnia",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-powidla-wegierkowe-rapsodia-299",
+      "productId": "",
+      "name": "Powidła węgierkowe Rapsodia",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sos-culineo-meksykanski-499",
+      "productId": "",
+      "name": "Sos Culineo meksykański",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mieszanka-warzywna-marchewka-z-groszkiem-nasza-spizarnia-399",
+      "productId": "",
+      "name": "Mieszanka warzywna marchewka z groszkiem Nasza Spiżarnia",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-dzem-pokemon-lowicz-799",
+      "productId": "",
+      "name": "Dżem Pokemon Łowicz",
+      "promoPricePln": 7.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-krem-do-smarowania-nutella-2499",
+      "productId": "",
+      "name": "Krem do smarowania Nutella",
+      "promoPricePln": 24.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-krem-czekoladowy-nussmilk-duo-999",
+      "productId": "",
+      "name": "Krem czekoladowy NussMilk Duo",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-salatka-z-pstragiem-marinero-z-kasza-bulgur-699",
+      "productId": "",
+      "name": "Sałatka z pstrągiem Marinero z kaszą bulgur",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-salatka-z-pstragiem-marinero-z-kasza-kuskus-699",
+      "productId": "",
+      "name": "Sałatka z pstrągiem Marinero z kaszą kuskus",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-tunczyk-wedzony-w-oleju-roslinnym-ektos-pikantny-899",
+      "productId": "",
+      "name": "Tuńczyk wędzony w oleju roślinnym Ektos pikantny",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-salatka-z-pstragiem-marinero-z-kasza-jeczmienna-699",
+      "productId": "",
+      "name": "Sałatka z pstrągiem Marinero z kaszą jęczmienną",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zupy-proteinowe-go-active-899",
+      "productId": "",
+      "name": "Zupy proteinowe Go Active",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-tunczyk-wedzony-w-oleju-roslinnym-ektos-z-sokiem-z-cytryny-i-oregano-899",
+      "productId": "",
+      "name": "Tuńczyk wędzony w oleju roślinnym Ektos z sokiem z cytryny i oregano",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-lasagne-bolognese-high-protein-come-a-casa-1099",
+      "productId": "",
+      "name": "Lasagne bolognese high protein Come a Casa",
+      "promoPricePln": 10.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kotlety-sojowe-go-vege-269",
+      "productId": "",
+      "name": "Kotlety sojowe Go Vege",
+      "promoPricePln": 2.69,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ketchup-zero-kotlin-pikantny-1099",
+      "productId": "",
+      "name": "Ketchup zero Kotlin pikantny",
+      "promoPricePln": 10.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ketchup-zero-kotlin-lagodny-1099",
+      "productId": "",
+      "name": "Ketchup zero Kotlin łagodny",
+      "promoPricePln": 10.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-parowki-proteinowe-kraina-wedlin-protein-z-szynki-699",
+      "productId": "",
+      "name": "Parówki proteinowe Kraina Wędlin Protein z szynki",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sos-dzik-ketchup-lagodny-999",
+      "productId": "",
+      "name": "Sos Dzik Ketchup łagodny",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sos-dzik-garlic-999",
+      "productId": "",
+      "name": "Sos Dzik Garlic",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sos-dzik-barbecue-999",
+      "productId": "",
+      "name": "Sos Dzik Barbecue",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-filet-pieczony-z-kurczaka-kraina-wedlin-nature-1299",
+      "productId": "",
+      "name": "Filet pieczony z kurczaka Kraina Wędlin Nature",
       "promoPricePln": 12.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku, Z ladą tradycyjną"
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526674-dorsz",
-      "productId": "dorsz",
-      "promoPricePln": 7.99,
+      "id": "blix-527160-parowki-proteinowe-kraina-wedlin-protein-z-filetem-z-kurczaka-699",
+      "productId": "",
+      "name": "Parówki proteinowe Kraina Wędlin Protein z filetem z kurczaka",
+      "promoPricePln": 6.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku, Z ladą tradycyjną"
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526674-chleb",
-      "productId": "chleb",
-      "promoPricePln": 2.99,
-      "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku, Z ladą tradycyjną"
-    },
-    {
-      "id": "blix-526674-gouda",
-      "productId": "gouda",
-      "promoPricePln": 5.49,
-      "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku, Z ladą tradycyjną"
-    },
-    {
-      "id": "blix-526674-oliwa",
-      "productId": "oliwa",
-      "promoPricePln": 19.99,
-      "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku, Z ladą tradycyjną"
-    },
-    {
-      "id": "blix-526674-kukurydza",
-      "productId": "kukurydza",
+      "id": "blix-527160-filet-z-kurczaka-bio-pieczony-kraina-wedlin-nature-599",
+      "productId": "",
+      "name": "Filet z kurczaka bio pieczony Kraina Wędlin Nature",
       "promoPricePln": 5.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
+      "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
-      "label": "Od poniedziałku, Z ladą tradycyjną"
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526671-mleko",
+      "id": "blix-527160-filet-z-kurczaka-bio-wedzony-kraina-wedlin-nature-599",
+      "productId": "",
+      "name": "Filet z kurczaka bio wędzony Kraina Wędlin Nature",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kielbaski-z-szynki-bez-oslonki-kraina-wedlin-nature-649",
+      "productId": "",
+      "name": "Kiełbaski z szynki bez osłonki Kraina Wędlin Nature",
+      "promoPricePln": 6.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-losos-wedzony-fit-marinero-1299",
+      "productId": "",
+      "name": "Łosoś wędzony fit Marinero",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kielbaski-z-filetem-z-kurczaka-bez-oslonki-kraina-wedlin-nature-649",
+      "productId": "",
+      "name": "Kiełbaski z filetem z kurczaka bez osłonki Kraina Wędlin Nature",
+      "promoPricePln": 6.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-losos-bio-w-plastrach-marinero-999",
+      "productId": "",
+      "name": "Łosoś bio w plastrach Marinero",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-parowki-z-indyka-kraina-wedlin-nature-422",
+      "productId": "",
+      "name": "Parówki z indyka Kraina Wędlin Nature",
+      "promoPricePln": 4.22,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-parowki-z-szynki-kraina-wedlin-nature-441",
+      "productId": "",
+      "name": "Parówki z szynki Kraina Wędlin Nature",
+      "promoPricePln": 4.41,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-krem-nutlove-white-choco-peanut-allnutrition-1599",
+      "productId": "",
+      "name": "Krem Nutlove White Choco Peanut AllNutrition",
+      "promoPricePln": 15.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-owsianka-proteinowa-oy-che-z-wisnia-1199",
+      "productId": "",
+      "name": "Owsianka proteinowa Oy!che z wiśnią",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-owsiany-go-vege-o-smaku-karmelowego-popcornu-699",
+      "productId": "",
+      "name": "Napój owsiany Go Vege o smaku karmelowego popcornu",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-krem-nutlove-coco-crunch-allnutrition-1599",
+      "productId": "",
+      "name": "Krem Nutlove Coco Crunch AllNutrition",
+      "promoPricePln": 15.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-mleczny-proteinowy-sba-o-smaku-ciasteczkowym-12-pak-mlekovita-2999",
       "productId": "mleko",
-      "promoPricePln": 3.09,
-      "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku"
-    },
-    {
-      "id": "blix-526671-jogurt",
-      "productId": "jogurt",
-      "promoPricePln": 2.99,
-      "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku"
-    },
-    {
-      "id": "blix-526671-kurczak",
-      "productId": "kurczak",
+      "name": "Napój mleczny proteinowy SBA o smaku ciasteczkowym 12-pak Mlekovita",
       "promoPricePln": 29.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku"
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526671-dorsz",
-      "productId": "dorsz",
-      "promoPricePln": 7.99,
+      "id": "blix-527160-napoj-owsiany-go-vege-o-smaku-popcornu-699",
+      "productId": "",
+      "name": "Napój owsiany Go Vege o smaku popcornu",
+      "promoPricePln": 6.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku"
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526671-chleb",
-      "productId": "chleb",
-      "promoPricePln": 2.99,
+      "id": "blix-527160-maka-orkiszowa-jasna-typ-650-plony-natury-499",
+      "productId": "",
+      "name": "Mąka orkiszowa jasna typ 650 Plony Natury",
+      "promoPricePln": 4.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku"
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526671-gouda",
-      "productId": "gouda",
-      "promoPricePln": 5.49,
+      "id": "blix-527160-dzem-slodzony-ksylitolem-rapsodia-morelowy-499",
+      "productId": "",
+      "name": "Dżem słodzony ksylitolem Rapsodia morelowy",
+      "promoPricePln": 4.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku"
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526671-oliwa",
-      "productId": "oliwa",
-      "promoPricePln": 19.99,
+      "id": "blix-527160-owsianka-proteinowa-oy-che-z-mango-1199",
+      "productId": "",
+      "name": "Owsianka proteinowa Oy!che z mango",
+      "promoPricePln": 11.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
-      "validTo": "2026-10-03",
-      "label": "Od poniedziałku"
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
     },
     {
-      "id": "blix-526671-kukurydza",
-      "productId": "kukurydza",
+      "id": "blix-527160-baton-proteinowy-slony-karmel-dzik-999",
+      "productId": "",
+      "name": "Baton proteinowy słony karmel Dzik",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mleko-czekoladowe-bez-dodatku-cukrow-laciate-599",
+      "productId": "",
+      "name": "Mleko czekoladowe bez dodatku cukrów Łaciate",
       "promoPricePln": 5.99,
       "regularPricePln": null,
-      "validFrom": "2026-09-28",
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-dzem-slodzony-ksylitolem-rapsodia-truskawkowy-499",
+      "productId": "",
+      "name": "Dżem słodzony ksylitolem Rapsodia truskawkowy",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-makaron-fusilli-mniej-wegli-pastani-599",
+      "productId": "",
+      "name": "Makaron fusilli mniej węgli Pastani",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-suplementy-diety-activlab-1999",
+      "productId": "",
+      "name": "Suplementy diety Activlab",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
       "validTo": "2026-10-03",
-      "label": "Od poniedziałku"
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kolagen-go-active-5999",
+      "productId": "",
+      "name": "Kolagen Go Active",
+      "promoPricePln": 59.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kreatyna-go-active-5999",
+      "productId": "",
+      "name": "Kreatyna Go Active",
+      "promoPricePln": 59.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-witaminy-activlab-1499",
+      "productId": "",
+      "name": "Witaminy Activlab",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-izolat-bialka-wpi-go-active-wanilia-5999",
+      "productId": "",
+      "name": "Izolat białka WPI Go Active wanilia",
+      "promoPricePln": 59.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-bialko-wegetarianskie-go-active-waniliowe-3999",
+      "productId": "",
+      "name": "Białko wegetariańskie Go Active waniliowe",
+      "promoPricePln": 39.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-smoothie-ekamedica-599",
+      "productId": "",
+      "name": "Smoothie Ekamedica",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-bialko-wegetarianskie-go-active-ciasteczkowe-3999",
+      "productId": "",
+      "name": "Białko wegetariańskie Go Active ciasteczkowe",
+      "promoPricePln": 39.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-izolat-bialka-wpi-go-active-truskawka-5999",
+      "productId": "",
+      "name": "Izolat białka WPI Go Active truskawka",
+      "promoPricePln": 59.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kreatyna-wk-dzik-cola-4999",
+      "productId": "",
+      "name": "Kreatyna WK Dzik cola",
+      "promoPricePln": 49.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kreatyna-wk-dzik-truskawka-i-kiwi-4999",
+      "productId": "",
+      "name": "Kreatyna WK Dzik truskawka i kiwi",
+      "promoPricePln": 49.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kreatyna-wk-dzik-mango-4999",
+      "productId": "",
+      "name": "Kreatyna WK Dzik mango",
+      "promoPricePln": 49.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kolagen-shot-all-nutrition-all-deynn-699",
+      "productId": "",
+      "name": "Kolagen Shot All Nutrition All Deynn",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-czekolada-ww-pumpkin-spice-e-wedel-1999",
+      "productId": "",
+      "name": "Czekolada WW Pumpkin Spice E.Wedel",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-wafle-ww-pumpkin-spice-e-wedel-349",
+      "productId": "",
+      "name": "Wafle WW Pumpkin Spice E.Wedel",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-cukierki-ww-pumpkin-spice-e-wedel-na-wage-429",
+      "productId": "",
+      "name": "Cukierki WW Pumpkin Spice E.Wedel na wagę",
+      "promoPricePln": 4.29,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ciastka-kremowki-bonitki-smietankowo-truskawkowe-1499",
+      "productId": "",
+      "name": "Ciastka kremówki Bonitki śmietankowo-truskawkowe",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-ciastka-kremowki-bonitki-smietankowo-jagodowe-1499",
+      "productId": "",
+      "name": "Ciastka kremówki Bonitki śmietankowo-jagodowe",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-wafle-maslane-bonitki-599",
+      "productId": "",
+      "name": "Wafle maślane Bonitki",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-czekolada-ww-e-wedel-1399",
+      "productId": "",
+      "name": "Czekolada WW E.Wedel",
+      "promoPricePln": 13.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-precle-solone-w-polewie-karmelowej-baitz-399",
+      "productId": "",
+      "name": "Precle solone w polewie karmelowej Baitz",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-cukierki-pumpkin-mieszanka-wedlowska-na-wage-e-wedel-429",
+      "productId": "",
+      "name": "Cukierki Pumpkin Mieszanka Wedlowska na wagę E.Wedel",
+      "promoPricePln": 4.29,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-rogaliki-kakaowe-baitz-5-pak-499",
+      "productId": "",
+      "name": "Rogaliki kakaowe Baitz 5-pak",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pistacje-prazone-solone-bakad-or-2999",
+      "productId": "",
+      "name": "Pistacje prażone solone BakaD'Or",
+      "promoPricePln": 29.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mieszanka-nerkowiec-zurawina-bakad-or-2399",
+      "productId": "",
+      "name": "Mieszanka nerkowiec-żurawina BakaD'Or",
+      "promoPricePln": 23.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-podplomyki-mini-kupiec-499",
+      "productId": "",
+      "name": "Podpłomyki mini Kupiec",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chrupki-z-soczewicy-top-349",
+      "productId": "",
+      "name": "Chrupki z soczewicy TOP",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-daktyle-suszone-bakad-or-1499",
+      "productId": "",
+      "name": "Daktyle suszone BakaD'Or",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-draze-maltesers-899",
+      "productId": "",
+      "name": "Draże Maltesers",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chipsy-doritos-sweet-chilli-699",
+      "productId": "",
+      "name": "Chipsy Doritos sweet chilli",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chipsy-doritos-cool-original-699",
+      "productId": "",
+      "name": "Chipsy Doritos cool original",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chrupki-crispstop-pizza-499",
+      "productId": "",
+      "name": "Chrupki CrispsTop pizza",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chrupki-crispstop-ketchup-499",
+      "productId": "",
+      "name": "Chrupki CrispsTop ketchup",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chipsy-doritos-cinnamon-699",
+      "productId": "",
+      "name": "Chipsy Doritos cinnamon",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-paluszki-lajkonik-klasyczne-349",
+      "productId": "",
+      "name": "Paluszki Lajkonik klasyczne",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chipsy-cheetos-avengers-salted-toffee-749",
+      "productId": "",
+      "name": "Chipsy Cheetos Avengers Salted Toffee",
+      "promoPricePln": 7.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-paluszki-lajkonik-junior-349",
+      "productId": "",
+      "name": "Paluszki Lajkonik Junior",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chipsy-cheetos-avengers-ketchup-749",
+      "productId": "",
+      "name": "Chipsy Cheetos Avengers Ketchup",
+      "promoPricePln": 7.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-gazowany-coca-cola-zero-cukru-499",
+      "productId": "",
+      "name": "Napój gazowany Coca-Cola Zero Cukru",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-gazowany-sprite-499",
+      "productId": "",
+      "name": "Napój gazowany Sprite",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-gazowany-fanta-499",
+      "productId": "",
+      "name": "Napój gazowany Fanta",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-black-classic-299",
+      "productId": "",
+      "name": "Napój energetyczny Black Classic",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-gazowany-sprite-zero-499",
+      "productId": "",
+      "name": "Napój gazowany Sprite Zero",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-gazowany-coca-cola-zero-zero-499",
+      "productId": "",
+      "name": "Napój gazowany Coca-Cola Zero-Zero",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-black-zero-cukru-299",
+      "productId": "",
+      "name": "Napój energetyczny Black Zero Cukru",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-black-mojito-299",
+      "productId": "",
+      "name": "Napój energetyczny Black Mojito",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-gazowany-fanta-zero-499",
+      "productId": "",
+      "name": "Napój gazowany Fanta Zero",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-herbata-ice-tea-remsey-biala-o-smaku-wisni-249",
+      "productId": "",
+      "name": "Herbata ice tea Remsey biała o smaku wiśni",
+      "promoPricePln": 2.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-herbata-ice-tea-remsey-czarna-o-smaku-limonki-249",
+      "productId": "",
+      "name": "Herbata ice tea Remsey czarna o smaku limonki",
+      "promoPricePln": 2.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-be-power-299",
+      "productId": "",
+      "name": "Napój energetyczny Be Power",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-aloesowy-riviva-329",
+      "productId": "",
+      "name": "Napój aloesowy Riviva",
+      "promoPricePln": 3.29,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-z-blonnikiem-go-active-red-orange-and-clementine-399",
+      "productId": "",
+      "name": "Napój z błonnikiem Go Active red orange and clementine",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-proteinowy-go-active-o-smaku-waniliowego-ciasteczka-499",
+      "productId": "",
+      "name": "Napój proteinowy Go Active o smaku waniliowego ciasteczka",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-z-blonnikiem-go-active-peach-and-vanilla-399",
+      "productId": "",
+      "name": "Napój z błonnikiem Go Active peach and vanilla",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-proteinowy-go-active-czekoladowy-499",
+      "productId": "",
+      "name": "Napój proteinowy Go Active czekoladowy",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-kiwi-limonka-449",
+      "productId": "",
+      "name": "Napój energetyczny Tiger kiwi-limonka",
+      "promoPricePln": 4.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-classic-449",
+      "productId": "",
+      "name": "Napój energetyczny Tiger classic",
+      "promoPricePln": 4.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-brzoskwinia-449",
+      "productId": "",
+      "name": "Napój energetyczny Tiger brzoskwinia",
+      "promoPricePln": 4.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-jagoda-449",
+      "productId": "",
+      "name": "Napój energetyczny Tiger jagoda",
+      "promoPricePln": 4.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-classic-199",
+      "productId": "",
+      "name": "Napój energetyczny Tiger classic",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-classic-max-199",
+      "productId": "",
+      "name": "Napój energetyczny Tiger classic max",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-poziomka-199",
+      "productId": "",
+      "name": "Napój energetyczny Tiger poziomka",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-mirabelka-199",
+      "productId": "",
+      "name": "Napój energetyczny Tiger mirabelka",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-red-bull-499",
+      "productId": "",
+      "name": "Napój energetyczny Red Bull",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-malina-zero-199",
+      "productId": "",
+      "name": "Napój energetyczny Tiger malina zero",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-brzoskwinia-199",
+      "productId": "",
+      "name": "Napój energetyczny Tiger brzoskwinia",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-lemonade-oshee-mango-pineapple-lemon-379",
+      "productId": "",
+      "name": "Napój lemonade Oshee mango-pineapple-lemon",
+      "promoPricePln": 3.79,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-lemonade-oshee-blueberry-blackcurrant-379",
+      "productId": "",
+      "name": "Napój lemonade Oshee blueberry-blackcurrant",
+      "promoPricePln": 3.79,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-energetyczny-tiger-malina-199",
+      "productId": "",
+      "name": "Napój energetyczny Tiger malina",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-zywiec-porter-699",
+      "productId": "",
+      "name": "Piwo Żywiec Porter",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-ateck-sv-tl-le-k-9-pak-500-ml-299",
+      "productId": "",
+      "name": "Piwo Žatecký Světlý Ležák 9-pak 500 ml",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-zywiec-biale-349",
+      "productId": "",
+      "name": "Piwo Żywiec Białe",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-zywiec-biale-z-nuta-imbiru-349",
+      "productId": "",
+      "name": "Piwo Żywiec Białe z nutą imbiru",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-zywiec-biale-z-nuta-wisni-349",
+      "productId": "",
+      "name": "Piwo Żywiec Białe z nutą wiśni",
+      "promoPricePln": 3.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-lomza-4-5-gruszka-399",
+      "productId": "",
+      "name": "Piwo Łomża 4,5% gruszka",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-lomza-4-5-jablko-i-trawa-zubrowa-399",
+      "productId": "",
+      "name": "Piwo Łomża 4,5% jabłko i trawa żubrowa",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-prem-blackcurrant-4-5-299",
+      "productId": "",
+      "name": "Piwo Prem Blackcurrant 4,5%",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-lomza-4-5-sliwka-399",
+      "productId": "",
+      "name": "Piwo Łomża 4,5% śliwka",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-lomza-4-5-mirabelka-399",
+      "productId": "",
+      "name": "Piwo Łomża 4,5% mirabelka",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-bezalkoholowe-prem-radler-lemon-lime-mint-299",
+      "productId": "",
+      "name": "Piwo bezalkoholowe Prem Radler Lemon Lime Mint",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-bezalkoholowe-okocim-radler-limonka-z-mieta-319",
+      "productId": "",
+      "name": "Piwo bezalkoholowe Okocim Radler limonka z miętą",
+      "promoPricePln": 3.19,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-prem-melon-4-5-299",
+      "productId": "",
+      "name": "Piwo Prem Melon 4,5%",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-bezalkoholowe-okocim-radler-mango-z-marakuja-319",
+      "productId": "",
+      "name": "Piwo bezalkoholowe Okocim Radler mango z marakują",
+      "promoPricePln": 3.19,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-okocim-radler-cytrusowa-lemoniada-4-5-319",
+      "productId": "",
+      "name": "Piwo Okocim Radler cytrusowa lemoniada 4,5%",
+      "promoPricePln": 3.19,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-bezalkoholowe-lomza-radler-jablko-wisnia-249",
+      "productId": "",
+      "name": "Piwo bezalkoholowe Łomża Radler jabłko & wiśnia",
+      "promoPricePln": 2.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-bezalkoholowe-lomza-radler-brzoskwinia-morela-249",
+      "productId": "",
+      "name": "Piwo bezalkoholowe Łomża Radler brzoskwinia & morela",
+      "promoPricePln": 2.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-bezalkoholowe-lomza-radler-kwasne-porzeczki-249",
+      "productId": "",
+      "name": "Piwo bezalkoholowe Łomża Radler kwaśne porzeczki",
+      "promoPricePln": 2.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-bezalkoholowe-lomza-radler-cytryna-limonka-249",
+      "productId": "",
+      "name": "Piwo bezalkoholowe Łomża Radler cytryna & limonka",
+      "promoPricePln": 2.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-piwo-warka-279",
+      "productId": "",
+      "name": "Piwo Warka",
+      "promoPricePln": 2.79,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kawa-ziarnista-cafe-d-or-crema-4999",
+      "productId": "",
+      "name": "Kawa ziarnista Cafe d'Or Crema",
+      "promoPricePln": 49.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kawa-ziarnista-ti-meriti-gusto-raffinato-woseba-1999",
+      "productId": "",
+      "name": "Kawa ziarnista Ti Meriti Gusto raffinato Woseba",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kawa-ziarnista-ti-meriti-crema-e-aroma-woseba-1999",
+      "productId": "",
+      "name": "Kawa ziarnista Ti Meriti Crema e aroma Woseba",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kawa-mielona-parana-cafe-d-or-1799",
+      "productId": "",
+      "name": "Kawa mielona Parana Cafe d'Or",
+      "promoPricePln": 17.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-herbatka-ziola-swiata-lipton-mieta-z-cytrusami-499",
+      "productId": "",
+      "name": "Herbatka Zioła Świata Lipton mięta z cytrusami",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-herbatka-ziola-swiata-lipton-melisa-z-wisnia-499",
+      "productId": "",
+      "name": "Herbatka Zioła Świata Lipton melisa z wiśnią",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-herbatka-funkcjonalna-lipton-sen-699",
+      "productId": "",
+      "name": "Herbatka funkcjonalna Lipton sen",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-herbatka-funkcjonalna-lipton-dobrostan-jelit-699",
+      "productId": "",
+      "name": "Herbatka funkcjonalna Lipton dobrostan jelit",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-herbatka-ziola-swiata-lipton-pokrzywa-z-mango-499",
+      "productId": "",
+      "name": "Herbatka Zioła Świata Lipton pokrzywa z mango",
+      "promoPricePln": 4.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-herbatka-funkcjonalna-lipton-trawienie-699",
+      "productId": "",
+      "name": "Herbatka funkcjonalna Lipton trawienie",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-maszynki-do-golenia-gillette-simply-smooth-3499",
+      "productId": "",
+      "name": "Maszynki do golenia Gillette Simply Smooth",
+      "promoPricePln": 34.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zel-do-golenia-gillette-satin-care-1999",
+      "productId": "",
+      "name": "Żel do golenia Gillette Satin Care",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-maszynka-do-golenia-ostrza-wymienne-gillette-mach3-sport-4499",
+      "productId": "",
+      "name": "Maszynka do golenia + ostrza wymienne Gillette Mach3 Sport",
+      "promoPricePln": 44.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-maszynki-do-golenia-gillette-blue3-comfort-2999",
+      "productId": "",
+      "name": "Maszynki do golenia Gillette Blue3 Comfort",
+      "promoPricePln": 29.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-maszynki-do-golenia-gillette-tropical-3499",
+      "productId": "",
+      "name": "Maszynki do golenia Gillette Tropical",
+      "promoPricePln": 34.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zel-pod-prysznic-old-spice-whitewater-3999",
+      "productId": "",
+      "name": "Żel pod prysznic Old Spice Whitewater",
+      "promoPricePln": 39.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pasta-do-zebow-advanced-white-colgate-1199",
+      "productId": "",
+      "name": "Pasta do zębów Advanced White Colgate",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-szczoteczka-do-zebow-colgate-360-1199",
+      "productId": "",
+      "name": "Szczoteczka do zębów Colgate 360°",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pasta-do-zebow-3d-white-blend-a-med-699",
+      "productId": "",
+      "name": "Pasta do zębów 3D White blend-a-med",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-maszynka-do-golenia-ostrza-wymienne-gillette-venus-start-4499",
+      "productId": "",
+      "name": "Maszynka do golenia + ostrza wymienne Gillette Venus Start",
+      "promoPricePln": 44.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zel-pod-prysznic-old-spice-captain-3999",
+      "productId": "",
+      "name": "Żel pod prysznic Old Spice Captain",
+      "promoPricePln": 39.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-maszynki-do-golenia-gillette-blue-2-plus-2999",
+      "productId": "",
+      "name": "Maszynki do golenia Gillette Blue 2 Plus",
+      "promoPricePln": 29.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-farba-do-wlosow-syoss-color-1999",
+      "productId": "",
+      "name": "Farba do włosów Syoss Color",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mus-bobovita-kicia-kocia-519",
+      "productId": "",
+      "name": "Mus BoboVita Kicia Kocia",
+      "promoPricePln": 5.19,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mus-owocowy-dada-baby-food-bio-10-pak-2499",
+      "productId": "",
+      "name": "Mus owocowy Dada Baby Food Bio 10-pak",
+      "promoPricePln": 24.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chusteczki-dada-everyday-14-pak-3999",
+      "productId": "",
+      "name": "Chusteczki Dada Everyday 14-pak",
+      "promoPricePln": 39.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-proszek-do-prania-vizir-do-kolorow-3999",
+      "productId": "",
+      "name": "Proszek do prania Vizir do kolorów",
+      "promoPricePln": 39.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-plukania-silan-130-pran-2699",
+      "productId": "",
+      "name": "Płyn do płukania Silan 130 prań",
+      "promoPricePln": 26.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-plukania-silan-126-pran-2699",
+      "productId": "",
+      "name": "Płyn do płukania Silan 126 prań",
+      "promoPricePln": 26.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-plukania-silan-fresh-1799",
+      "productId": "",
+      "name": "Płyn do płukania Silan Fresh",
+      "promoPricePln": 17.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-perfumy-do-prania-silan-30-pran-1899",
+      "productId": "",
+      "name": "Perfumy do prania Silan 30 prań",
+      "promoPricePln": 18.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-plukania-silan-sensitive-1799",
+      "productId": "",
+      "name": "Płyn do płukania Silan Sensitive",
+      "promoPricePln": 17.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-perfumy-eden-2w1-colonia-1499",
+      "productId": "",
+      "name": "Perfumy Eden 2w1 Colonia",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-listki-piorace-dr-beckmann-do-koloru-1499",
+      "productId": "",
+      "name": "Listki piorące Dr. Beckmann do koloru",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-listki-piorace-dr-beckmann-uniwersalne-1499",
+      "productId": "",
+      "name": "Listki piorące Dr. Beckmann uniwersalne",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-plukania-silan-aroma-magic-magnolia-1799",
+      "productId": "",
+      "name": "Płyn do płukania Silan Aroma Magic Magnolia",
+      "promoPricePln": 17.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-plukania-silan-fresh-control-cool-1799",
+      "productId": "",
+      "name": "Płyn do płukania Silan Fresh Control Cool",
+      "promoPricePln": 17.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-proszek-do-prania-lovela-baby-5999",
+      "productId": "",
+      "name": "Proszek do prania Lovela Baby",
+      "promoPricePln": 59.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-prania-lovela-baby-5999",
+      "productId": "",
+      "name": "Płyn do prania Lovela Baby",
+      "promoPricePln": 59.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-mycia-paneli-mr-magic-749",
+      "productId": "",
+      "name": "Płyn do mycia paneli Mr Magic",
+      "promoPricePln": 7.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-listki-czyszczace-uniwersalne-dr-beckmann-1199",
+      "productId": "",
+      "name": "Listki czyszczące uniwersalne Dr. Beckmann",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-mycia-podlog-mr-magic-749",
+      "productId": "",
+      "name": "Płyn do mycia podłóg Mr Magic",
+      "promoPricePln": 7.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-plukania-silan-aroma-relaxing-1799",
+      "productId": "",
+      "name": "Płyn do płukania Silan Aroma Relaxing",
+      "promoPricePln": 17.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kapsulki-do-zmywarki-fairy-platinum-8999",
+      "productId": "",
+      "name": "Kapsułki do zmywarki Fairy Platinum+",
+      "promoPricePln": 89.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-mycia-naczyn-fairy-1299",
+      "productId": "",
+      "name": "Płyn do mycia naczyń Fairy",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-wklad-do-odswiezacza-powietrza-air-wick-active-fresh-2299",
+      "productId": "",
+      "name": "Wkład do odświeżacza powietrza Air Wick Active Fresh",
+      "promoPricePln": 22.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-wklady-do-odswiezacza-powietrza-air-wick-freshmatic-2-pak-2699",
+      "productId": "",
+      "name": "Wkłady do odświeżacza powietrza Air Wick Freshmatic 2-pak",
+      "promoPricePln": 26.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kapsulki-do-zmywarki-fairy-original-8999",
+      "productId": "",
+      "name": "Kapsułki do zmywarki Fairy Original",
+      "promoPricePln": 89.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kostka-w-zelu-agent-max-2-pak-1499",
+      "productId": "",
+      "name": "Kostka w żelu Agent Max 2-pak",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-wklady-do-elektrycznego-odswiezacza-powietrza-air-wick-2-pak-2699",
+      "productId": "",
+      "name": "Wkłady do elektrycznego odświeżacza powietrza Air Wick 2-pak",
+      "promoPricePln": 26.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-spray-cillit-bang-power-cleaner-1799",
+      "productId": "",
+      "name": "Spray Cillit Bang Power Cleaner",
+      "promoPricePln": 17.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-kapsulki-do-zmywarki-fairy-8999",
+      "productId": "",
+      "name": "Kapsułki do zmywarki Fairy",
+      "promoPricePln": 89.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zestaw-miotelki-wklady-swiffer-1799",
+      "productId": "",
+      "name": "Zestaw miotełki+wkłady Swiffer",
+      "promoPricePln": 17.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-puffi-z-jagniecina-199",
+      "productId": "",
+      "name": "Karma dla psa Puffi z jagnięciną",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-activ-pet-z-kurczakiem-i-wolowina-269",
+      "productId": "",
+      "name": "Karma dla psa Activ Pet z kurczakiem i wołowiną",
+      "promoPricePln": 2.69,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-baton-puffi-z-wolowina-399",
+      "productId": "",
+      "name": "Karma dla psa baton Puffi z wołowiną",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-activ-pet-z-wolowina-269",
+      "productId": "",
+      "name": "Karma dla psa Activ Pet z wołowiną",
+      "promoPricePln": 2.69,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-baton-puffi-z-drobiem-399",
+      "productId": "",
+      "name": "Karma dla psa baton Puffi z drobiem",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-puffi-z-indykiem-199",
+      "productId": "",
+      "name": "Karma dla psa Puffi z indykiem",
+      "promoPricePln": 1.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-dolina-noteci-lamb-849",
+      "productId": "",
+      "name": "Karma dla psa Dolina Noteci Lamb",
+      "promoPricePln": 8.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-z-cielecina-pet-republic-599",
+      "productId": "",
+      "name": "Karma dla psa z cielęciną Pet Republic",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-dolina-noteci-duck-849",
+      "productId": "",
+      "name": "Karma dla psa Dolina Noteci Duck",
+      "promoPricePln": 8.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-przysmak-pedigree-dentastix-110-g-749",
+      "productId": "",
+      "name": "Przysmak Pedigree Dentastix 110 g",
+      "promoPricePln": 7.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-przysmaki-dla-psa-pedigree-ranchos-999",
+      "productId": "",
+      "name": "Przysmaki dla psa Pedigree Ranchos",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-przysmak-pedigree-dentastix-128-g-749",
+      "productId": "",
+      "name": "Przysmak Pedigree Dentastix 128 g",
+      "promoPricePln": 7.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-przysmaki-dla-psa-pedigree-dentastix-3-pak-1399",
+      "productId": "",
+      "name": "Przysmaki dla psa Pedigree Dentastix 3-pak",
+      "promoPricePln": 13.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-przysmak-pedigree-dentastix-154-g-749",
+      "productId": "",
+      "name": "Przysmak Pedigree Dentastix 154 g",
+      "promoPricePln": 7.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-activ-pet-z-jagniecina-1199",
+      "productId": "",
+      "name": "Karma dla psa Activ Pet z jagnięciną",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psa-activ-pet-z-kaczka-1199",
+      "productId": "",
+      "name": "Karma dla psa Activ Pet z kaczką",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-przysmaki-dla-psa-pedigree-rodeo-3-pak-1399",
+      "productId": "",
+      "name": "Przysmaki dla psa Pedigree Rodeo 3-pak",
+      "promoPricePln": 13.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sucha-karma-dla-psa-puffi-z-wolowina-2649",
+      "productId": "",
+      "name": "Sucha karma dla psa Puffi z wołowiną",
+      "promoPricePln": 26.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psow-malych-ras-activ-pet-z-kurczakiem-i-warzywami-899",
+      "productId": "",
+      "name": "Karma dla psów małych ras Activ Pet z kurczakiem i warzywami",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sucha-karma-dla-psa-puffi-z-kurczakiem-2649",
+      "productId": "",
+      "name": "Sucha karma dla psa Puffi z kurczakiem",
+      "promoPricePln": 26.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-psow-malych-ras-activ-pet-z-jagniecina-i-warzywami-899",
+      "productId": "",
+      "name": "Karma dla psów małych ras Activ Pet z jagnięciną i warzywami",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-kota-sheba-2-pak-60-g-899",
+      "productId": "",
+      "name": "Karma dla kota Sheba 2-pak 60 g",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zwirek-bentonitowy-kitty-o-zapachu-lawendowym-1199",
+      "productId": "",
+      "name": "Żwirek bentonitowy Kitty o zapachu lawendowym",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-kota-maxi-natural-649",
+      "productId": "",
+      "name": "Karma dla kota Maxi Natural",
+      "promoPricePln": 6.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-kota-kitty-excellence-40-pak-85-g-3560",
+      "productId": "",
+      "name": "Karma dla kota Kitty Excellence 40-pak 85 g",
+      "promoPricePln": 35.6,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-sucha-karma-dla-kota-sterile-kitty-999",
+      "productId": "",
+      "name": "Sucha karma dla kota Sterile Kitty",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zwirek-dla-kota-kukurydziany-kitty-1499",
+      "productId": "",
+      "name": "Żwirek dla kota kukurydziany Kitty",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-karma-dla-kota-sheba-369",
+      "productId": "",
+      "name": "Karma dla kota Sheba",
+      "promoPricePln": 3.69,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-snacki-dla-kota-kitty-8-pak-5-g-329",
+      "productId": "",
+      "name": "Snacki dla kota Kitty 8-pak 5 g",
+      "promoPricePln": 3.29,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-skrzydlokwiat-3199",
+      "productId": "",
+      "name": "Skrzydłokwiat",
+      "promoPricePln": 31.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-anturium-3199",
+      "productId": "",
+      "name": "Anturium",
+      "promoPricePln": 31.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-roza-1299",
+      "productId": "",
+      "name": "Róża",
+      "promoPricePln": 12.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-storczyk-malowany-5999",
+      "productId": "",
+      "name": "Storczyk malowany",
+      "promoPricePln": 59.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-wrzos-paczkowy-599",
+      "productId": "",
+      "name": "Wrzos pączkowy",
+      "promoPricePln": 5.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-monstera-monkey-mask-1499",
+      "productId": "",
+      "name": "Monstera Monkey Mask",
+      "promoPricePln": 14.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-wrzosiec-999",
+      "productId": "",
+      "name": "Wrzosiec",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-znicz-z-wkladem-parafinowym-399",
+      "productId": "",
+      "name": "Znicz z wkładem parafinowym",
+      "promoPricePln": 3.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-znicz-z-aplikacja-wklad-parafinowy-1199",
+      "productId": "",
+      "name": "Znicz z aplikacją wkład parafinowy",
+      "promoPricePln": 11.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-znicz-z-wkladem-parafinowym-699",
+      "productId": "",
+      "name": "Znicz z wkładem parafinowym",
+      "promoPricePln": 6.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-znicz-z-wkladem-parafinowym-1999",
+      "productId": "",
+      "name": "Znicz z wkładem parafinowym",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-szklany-pojemnik-na-zywnosc-kwadratowy-o-poj-800-ml-smukee-1999",
+      "productId": "",
+      "name": "Szklany pojemnik na żywność kwadratowy o poj. 800 ml Smukee",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-mata-do-suszenia-naczyn-60x40-cm-999",
+      "productId": "",
+      "name": "Mata do suszenia naczyń 60x40 cm",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-szklany-pojemnik-na-zywnosc-okragly-o-poj-950-ml-smukee-1999",
+      "productId": "",
+      "name": "Szklany pojemnik na żywność okrągły o poj. 950 ml Smukee",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-2-maty-do-szuflad-i-szafek-47x29-cm-999",
+      "productId": "",
+      "name": "2 maty do szuflad i szafek 47x29 cm",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-szklany-pojemnik-na-zywnosc-prostokatny-o-poj-1-04-l-smukee-1999",
+      "productId": "",
+      "name": "Szklany pojemnik na żywność prostokątny o poj. 1,04 l Smukee",
+      "promoPricePln": 19.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-5-przekladek-do-patelni-i-garnkow-999",
+      "productId": "",
+      "name": "5 przekładek do patelni i garnków",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-antyposlizgowa-mata-do-szuflad-i-szafek-150x50-cm-999",
+      "productId": "",
+      "name": "Antypoślizgowa mata do szuflad i szafek 150x50 cm",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-36-przekladek-do-talerzy-i-miseczek-999",
+      "productId": "",
+      "name": "36 przekładek do talerzy i miseczek",
+      "promoPricePln": 9.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-poduszka-dekoracyjna-40-cm-2499",
+      "productId": "",
+      "name": "Poduszka dekoracyjna 40 cm",
+      "promoPricePln": 24.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-14",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-koc-z-kapturem-120x150-cm-5990",
+      "productId": "",
+      "name": "Koc z kapturem 120x150 cm",
+      "promoPricePln": 59.9,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-14",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-zupa-koperkowa-biedronka-629",
+      "productId": "",
+      "name": "Zupa koperkowa Biedronka",
+      "promoPricePln": 6.29,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-plyn-do-prania-perwoll-40-pran-3199",
+      "productId": "",
+      "name": "Płyn do prania Perwoll 40 prań",
+      "promoPricePln": 31.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pierogi-ruskie-nasze-smaki-549",
+      "productId": "",
+      "name": "Pierogi ruskie Nasze Smaki",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-nalesniki-z-jablkiem-i-cynamonem-nasze-smaki-549",
+      "productId": "",
+      "name": "Naleśniki z jabłkiem i cynamonem Nasze Smaki",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-margaryna-mr-549",
+      "productId": "",
+      "name": "Margaryna MR",
+      "promoPricePln": 5.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pizza-donatello-z-kurczakiem-899",
+      "productId": "",
+      "name": "Pizza Donatello z kurczakiem",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-pizza-donatello-capriciosa-899",
+      "productId": "",
+      "name": "Pizza Donatello Capriciosa",
+      "promoPricePln": 8.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-platki-kukurydziane-vitanella-439",
+      "productId": "",
+      "name": "Płatki kukurydziane Vitanella",
+      "promoPricePln": 4.39,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-napoj-o-smaku-jablka-i-maliny-kubus-play-229",
+      "productId": "",
+      "name": "Napój o smaku jabłka i maliny Kubuś Play",
+      "promoPricePln": 2.29,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-bulka-sniadaniowa-95",
+      "productId": "",
+      "name": "Bułka śniadaniowa",
+      "promoPricePln": 0.95,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-chleb-zytni-100-bez-dodatku-drozdzy-299",
+      "productId": "chleb",
+      "name": "Chleb żytni 100% bez dodatku drożdży",
+      "promoPricePln": 2.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-croissant-francuski-bridor-149",
+      "productId": "",
+      "name": "Croissant francuski Bridor",
+      "promoPricePln": 1.49,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-07",
+      "label": "Od czwartku"
+    },
+    {
+      "id": "blix-527160-papier-toaletowy-rumiankowy-queen-24-pak-2199",
+      "productId": "",
+      "name": "Papier toaletowy rumiankowy Queen 24-pak",
+      "promoPricePln": 21.99,
+      "regularPricePln": null,
+      "validFrom": "2026-10-01",
+      "validTo": "2026-10-03",
+      "label": "Od czwartku"
     }
   ]
 }

@@ -37,7 +37,6 @@ export function ShopCard({
     >
       <span>
         <span className="block font-serif text-2xl">{t("title")}</span>
-        <span className="mt-1 block text-sm text-muted">{t("open")}</span>
       </span>
       <span className="font-serif text-3xl">
         {done}/{productIds.length}

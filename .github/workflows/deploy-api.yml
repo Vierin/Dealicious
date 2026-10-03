@@ -1,0 +1,41 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - server/**
+      - src/lib/**
+      - data/**
+      - messages/**
+      - docker-compose.yml
+      - .github/workflows/deploy-api.yml
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: server/Dockerfile
+          push: false
+          load: true
+          tags: dealicious-api:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Ship image and restart
+        env:
+          SSH_KEY: ${{ secrets.DO_SSH_KEY }}
+          HOST: ${{ secrets.DO_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id
+          chmod 600 ~/.ssh/id
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+          scp -i ~/.ssh/id docker-compose.yml "root@$HOST:/opt/dealicious/docker-compose.yml"
+          docker save dealicious-api:latest | gzip | ssh -i ~/.ssh/id "root@$HOST" "gunzip | docker load"
+          ssh -i ~/.ssh/id "root@$HOST" "cd /opt/dealicious && docker compose up -d --no-build && docker image prune -f"

@@ -37,6 +37,8 @@ export type Product = {
 export type Promotion = {
   id: string;
   productId: string;
+  /** Leaflet line, when the row is not only a catalog product. */
+  name?: string;
   promoPricePln: number;
   validFrom: string;
   validTo: string;

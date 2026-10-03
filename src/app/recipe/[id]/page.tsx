@@ -2,7 +2,6 @@ import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { BackLink } from "@/components/back-link";
 import { VibePills } from "@/components/pills";
-import { PRODUCTS } from "@/lib/catalog";
 import { kcal } from "@/lib/cooking";
 import { formatRuDate } from "@/lib/dates";
 import { formatQty, roundQty } from "@/lib/money";
@@ -56,7 +55,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
   const photo = recipe.image ?? recipePhoto(recipe.id);
   const pantry = catalog.pantry.filter((item) => item.recipeId === recipe.id).map((item) => item.name);
   const ingredients = catalog.ingredients.filter((item) => item.recipeId === recipe.id).map((item) => {
-    const product = PRODUCTS.find((entry) => entry.id === item.productId);
+    const product = catalog.products.find((entry) => entry.id === item.productId);
     if (!product) throw new Error("errors.missingProduct");
     return {
       name: product.namePl,

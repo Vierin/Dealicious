@@ -97,23 +97,27 @@
   "week": {
     "saved": "Już zaoszczędzone",
     "toPay": "Do zapłaty",
-    "withoutDeals": "Bez promocji",
-    "savedAmount": "Zaoszczędzone",
+    "withoutDeals": "Koszyk bez promocji",
+    "savedAmount": "Oszczędność",
     "deals": "Promocje",
-    "dealsHint": "Na dzień zakupów",
     "noLeaflet": "Na {date} nie ma gazetki, więc oszczędność to 0.",
     "stale": "Katalog się zmienił. Wymień danie, którego już nie ma.",
     "lunches": "Obiady",
     "empty": "Tydzień jeszcze nie jest złożony. Otwórz ankietę i dokończ ją.",
     "trialLeft": "Trial jeszcze {days, plural, one {# dzień} few {# dni} many {# dni} other {# dni}}.",
     "trialOver": "Trial się skończył. Ten tydzień zostaje. Następnego bez subskrypcji nie złożymy.",
-    "spent": "Wydane z budżetu",
-    "ofWeek": "z {budget} na tydzień",
+    "weekBudget": "Budżet tygodnia",
     "over": "Powyżej budżetu o {amount}",
     "left": "Zostało {amount}",
     "replace": "Zamień danie",
+    "refreshAll": "Odśwież wszystkie dni",
+    "refreshing": "Liczę…",
+    "refreshError": "Nie przeliczyłem tygodnia",
     "minutes": "{count} min",
-    "kcal": "{count} kcal"
+    "kcal": "{count} kcal",
+    "cookSmarter": "Cook smarter",
+    "cooking": "Liczę…",
+    "cookError": "Nie złożyłem tańszego menu"
   },
   "meals": {
     "title": "Dania",
@@ -160,7 +164,6 @@
     "title": "Lista produktów",
     "forPeople": "Biedronka · na {count} os.",
     "pantry": "Spiżarnia",
-    "open": "Otwórz",
     "approx": "orientacyjnie, bez dokładnej oszczędności",
     "was": "było {price}",
     "progress": "{done} z {total}"
@@ -372,6 +375,11 @@
     "planSave": "Nie udało się zapisać planu",
     "ratingsMigration": "Oceny jeszcze nie są włączone. Zastosuj migrację recipe_ratings.",
     "cookedMigration": "Oznaczenie gotowania jeszcze nie jest włączone. Zastosuj migrację cooked_meals.",
-    "missingProduct": "Nie ma produktu"
+    "missingProduct": "Nie ma produktu",
+    "cookNoGain": "Taniej bez gorszej jakości się nie składa.",
+    "cookQuality": "Tańsze menu gubi jakość jedzenia.",
+    "cookBad": "Model oddał menu, którego nie da się złożyć.",
+    "cookKey": "Brak klucza OpenAI.",
+    "cookModel": "Model nie odpowiedział."
   }
 }

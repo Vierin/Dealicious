@@ -38,6 +38,11 @@ const ERROR_KEYS = [
   "ratingsMigration",
   "cookedMigration",
   "missingProduct",
+  "cookNoGain",
+  "cookQuality",
+  "cookBad",
+  "cookKey",
+  "cookModel",
 ] as const;
 
 type ErrorKey = (typeof ERROR_KEYS)[number];

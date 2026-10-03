@@ -109,42 +109,39 @@ function leafletSpan(html: string, leafletId: string): { validFrom: string; vali
   return validFrom ? { validFrom, validTo } : null;
 }
 
+function slug(name: string): string {
+  const folded = name
+    .toLowerCase()
+    .replace(/[ąćęłńóśźż]/g, (char) => ({ ą: "a", ć: "c", ę: "e", ł: "l", ń: "n", ó: "o", ś: "s", ź: "z", ż: "z" })[char] ?? char);
+  return folded.replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 72) || "offer";
+}
+
 function offersFromLeaflet(html: string, leaflet: { id: string; name: string }): MatchedOffer[] {
   const re =
     /<div class="offer section-n__item" data-name="([^"]*)" data-price="([^"]*)" data-leaflet-id="(\d+)"[^>]*data-date-start="([^"]*)" data-date-end="([^"]*)"([\s\S]*?)(?=<div class="offer section-n__item"|$)/g;
-  const best = new Map<string, MatchedOffer>();
+  const rows: MatchedOffer[] = [];
+  const seen = new Set<string>();
 
   for (const match of html.matchAll(re)) {
     const offerName = decode(match[1]);
     const promoPricePln = parsePrice(match[2]);
     if (promoPricePln == null || match[3] !== leaflet.id) continue;
-    const productId = matchProductId(offerName);
-    if (!productId) continue;
-
-    const validFrom = isoDate(match[4]);
-    const validTo = isoDate(match[5]);
-    const regularPricePln = regularFromChunk(match[6]);
-    const next: MatchedOffer = {
-      id: `blix-${leaflet.id}-${productId}`,
-      productId,
+    const id = `blix-${leaflet.id}-${slug(offerName)}-${Math.round(promoPricePln * 100)}`;
+    if (seen.has(id)) continue;
+    seen.add(id);
+    rows.push({
+      id,
+      productId: matchProductId(offerName) ?? "",
       promoPricePln,
-      regularPricePln,
-      validFrom,
-      validTo,
+      regularPricePln: regularFromChunk(match[6]),
+      validFrom: isoDate(match[4]),
+      validTo: isoDate(match[5]),
       label: leaflet.name,
       offerName,
-    };
-    const prev = best.get(productId);
-    if (
-      !prev ||
-      next.promoPricePln < prev.promoPricePln ||
-      (next.promoPricePln === prev.promoPricePln && prev.regularPricePln == null && next.regularPricePln != null)
-    ) {
-      best.set(productId, next);
-    }
+    });
   }
 
-  return [...best.values()];
+  return rows;
 }
 
 function unmatchedNames(html: string): string[] {
@@ -187,7 +184,7 @@ async function pushSupabase(promotions: Promotion[]): Promise<void> {
     return;
   }
 
-  const rows = promotions.map((promo) => ({
+  const rows = promotions.filter((promo) => promo.productId).map((promo) => ({
     id: promo.id,
     product_id: promo.productId,
     promo_price_pln: promo.promoPricePln,
@@ -246,7 +243,7 @@ async function main(): Promise<void> {
       validFrom: span?.validFrom ?? "",
       validTo: span?.validTo ?? "",
     });
-    console.log(`${leaflet.id} ${leaflet.name}: ${parsed.length} matched`);
+    console.log(`${leaflet.id} ${leaflet.name}: ${parsed.length} offers`);
   }
 
   const file: LiveFile = {
@@ -255,6 +252,7 @@ async function main(): Promise<void> {
     promotions: promotions.map((item) => ({
       id: item.id,
       productId: item.productId,
+      name: item.offerName,
       promoPricePln: item.promoPricePln,
       regularPricePln: item.regularPricePln,
       validFrom: item.validFrom,

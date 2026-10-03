@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "outDir": "dist",
+    "rootDir": "..",
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "sourceMap": true
+  },
+  "include": ["src/**/*.ts", "../src/lib/**/*.ts"],
+  "exclude": [
+    "../src/lib/**/*.test.ts",
+    "../src/lib/store/index.ts",
+    "../src/lib/supabase/server.ts",
+    "../src/lib/supabase/client.ts",
+    "../src/lib/server-http.ts"
+  ]
+}

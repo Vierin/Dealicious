@@ -115,7 +115,7 @@ function stocked(product: Product, catalog: Catalog, shopDate: string, depth = 0
   return product.estimatePricePln > 0 && product.regularPricePln <= product.estimatePricePln * 1.15;
 }
 
-function allows(profile: Profile, recipe: Recipe, catalog: Catalog, shopDate: string): boolean {
+export function recipeAllowed(profile: Profile, recipe: Recipe, catalog: Catalog, shopDate: string): boolean {
   if (recipe.allergens.some((allergen) => profile.allergies.includes(allergen))) return false;
   if (recipe.appliances.some((appliance) => !profile.appliances.includes(appliance))) return false;
   if (profile.diet !== "none" && !recipe.diets.includes(profile.diet)) return false;
@@ -241,7 +241,7 @@ export function pickWeek(profile: Profile, catalog: Catalog, from = new Date(), 
   const shopDate = nextShopDate(profile.shopWeekday, from);
   const offsets = cookOffsets(shopDate, activeCookDays(profile));
   if (offsets.length === 0) throw new Error("errors.pickCookDay");
-  const pool = catalog.recipes.filter((recipe) => allows(profile, recipe, catalog, shopDate));
+  const pool = catalog.recipes.filter((recipe) => recipeAllowed(profile, recipe, catalog, shopDate));
   const picked = fillSlots(pool, [], profile, catalog, shopDate, offsets.length, weekdaysFor(shopDate, offsets), ratings);
   const recipeIds = Array.from({ length: 7 }, () => "");
   offsets.forEach((offset, index) => {
@@ -267,7 +267,7 @@ export function repickWeek(
   for (const index of keep) {
     if (!active.has(index) || keepSet.has(index) || !base[index]) continue;
     const recipe = catalog.recipes.find((item) => item.id === base[index]);
-    if (!recipe || !allows(profile, recipe, catalog, shopDate)) continue;
+    if (!recipe || !recipeAllowed(profile, recipe, catalog, shopDate)) continue;
     keepSet.add(index);
     locked.push(recipe);
   }
@@ -278,7 +278,7 @@ export function repickWeek(
 
   const lockedIds = new Set(locked.map((recipe) => recipe.id));
   const avoid = new Set(openIndexes.map((index) => base[index]).filter((id) => id.length > 0));
-  const allowed = catalog.recipes.filter((recipe) => allows(profile, recipe, catalog, shopDate) && !lockedIds.has(recipe.id));
+  const allowed = catalog.recipes.filter((recipe) => recipeAllowed(profile, recipe, catalog, shopDate) && !lockedIds.has(recipe.id));
   const fresh = allowed.filter((recipe) => !avoid.has(recipe.id));
   const pool = fresh.length >= openIndexes.length ? [...fresh] : [...allowed];
   const added = fillSlots(
@@ -313,7 +313,7 @@ export function replacementFor(
   ratings: RecipeRatings = {},
 ): string {
   const used = new Set(recipeIds);
-  const pool = catalog.recipes.filter((recipe) => allows(profile, recipe, catalog, shopDate) && !used.has(recipe.id));
+  const pool = catalog.recipes.filter((recipe) => recipeAllowed(profile, recipe, catalog, shopDate) && !used.has(recipe.id));
   if (pool.length === 0) throw new Error("errors.nothingToSwap");
 
   const kept = recipesFrom(

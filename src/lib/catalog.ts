@@ -242,6 +242,60 @@ export function hasLivePromos(): boolean {
   return readLivePromos() != null;
 }
 
+export type LeafletDeal = {
+  id: string;
+  namePl: string;
+  pack: string;
+  regularPricePln: number | null;
+  promoPricePln: number;
+  approx: boolean;
+};
+
+const NOT_FOOD =
+  /karma dla|sucha karma|przysmak|żwirek|znicz|do prania|do płukania|do zmywarki|do mycia|do zębów|do golenia|odświeżacz|chusteczk|poduszk|pojemnik na żywność|przekład|mata do | maty | mata |antypoślizg|farba do włosów|perfum|papier toalet|szczoteczk|mioteł|kostka w żelu|listki (czyszczące|piorące)|spray |żel do golenia|żel pod prysznic|koc z kapturem|anturium|monstera|skrzydłokwiat|storczyk|wrzosiec|wrzos |(?:^|\s)róża(?:\s|$)/;
+
+const NOT_SWEET =
+  /czekolad|cukierk|baton|draże|maltesers|ciastka |ciastko |ciasto |lody |wafl|rogalik|sernik|donut|nutella|nutlove|nussmilk|cynamonka|rwaniec|croissant|naleśnik|precle|deserowy|chipsy|chrupki|napój gazowany|napój energetyczny|napój lemonade|napój aloesowy|napój niegazowany|napój o smaku jabłka|napój z błonnikiem|ice tea|mleko czekoladowe|smoothie/;
+
+const NOT_ALCOHOL = /piwo|wódk|whisky|whiskey|likier|cydr|prosecco|szampan|(?:^|\s)wino(?:\s|$)/;
+
+const NOT_SKIP = /herbatka|kapsułki|napój|pizza|sushi|(?:^|\s)woda(?:\s|$)/;
+
+function isFoodOffer(name: string): boolean {
+  const text = name.toLocaleLowerCase("pl");
+  if (NOT_FOOD.test(text) || NOT_ALCOHOL.test(text) || NOT_SKIP.test(text)) return false;
+  if (text.startsWith("wytrawny ")) return true;
+  return !NOT_SWEET.test(text);
+}
+
+export function shopDeals(shopDate: string): LeafletDeal[] {
+  const live = readLivePromos();
+  if (!live) return [];
+  const seen = new Set<string>();
+  const rows: LeafletDeal[] = [];
+  for (const promo of live.promotions) {
+    if (promo.validFrom > shopDate || promo.validTo < shopDate) continue;
+    const product = promo.productId ? PRODUCTS.find((item) => item.id === promo.productId) : undefined;
+    const name = promo.name?.trim() || product?.namePl || promo.label;
+    if (!isFoodOffer(name)) continue;
+    const key = `${name.toLocaleLowerCase("pl")}|${promo.promoPricePln}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const shelf = product ? confirmedShelf(product.id) : undefined;
+    const leafletRegular = typeof promo.regularPricePln === "number" ? promo.regularPricePln : null;
+    const regular = leafletRegular ?? shelf?.regularPricePln ?? product?.regularPricePln ?? null;
+    rows.push({
+      id: promo.id,
+      namePl: name,
+      pack: product?.pack ?? "",
+      regularPricePln: regular != null && regular > promo.promoPricePln ? regular : null,
+      promoPricePln: promo.promoPricePln,
+      approx: leafletRegular == null && shelf == null && regular != null,
+    });
+  }
+  return rows.sort((a, b) => a.namePl.localeCompare(b.namePl, "pl"));
+}
+
 export function leafletsOn(shopDate: string): LiveLeaflet[] {
   const live = readLivePromos();
   if (!live) return [];
@@ -323,7 +377,7 @@ export function applyLivePromos(catalog: Catalog): Catalog {
   if (!live) return priced;
   return {
     ...priced,
-    promotions: live.promotions.filter((promo) => plausiblePromo(promo.productId, promo.promoPricePln)),
+    promotions: live.promotions.filter((promo) => promo.productId && plausiblePromo(promo.productId, promo.promoPricePln)),
   };
 }
 

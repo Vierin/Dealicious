@@ -3,13 +3,14 @@ import { Clock, CreditCard, Users } from "lucide-react";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { VibePills } from "@/components/pills";
-import { leafletsOn } from "@/lib/catalog";
 import { kcal } from "@/lib/cooking";
 import { recipePhoto } from "@/lib/recipes";
 import { formatRuDate } from "@/lib/dates";
 import { formatPln, money } from "@/lib/money";
 import { isProfileComplete } from "@/lib/profile";
-import { getCatalog, getLatestPlan, getProfile, getSessionUser, getTrial } from "@/lib/store";
+import { getCatalog, getLatestPlan, getOffers, getProfile, getSessionUser, getTrial } from "@/lib/store";
+import { SavedRow } from "./cook-smarter";
+import { RefreshWeek } from "./refresh-week";
 import { ReplaceMeal } from "./replace-meal";
 import { WeekActions } from "./week-actions";
 import { Page } from "@/components/page";
@@ -22,12 +23,17 @@ export default async function WeekPage() {
   if (!user) redirect("/login");
   const profile = await getProfile(user.id);
   if (!isProfileComplete(profile)) redirect("/onboarding");
-  const plan = await getLatestPlan(user.id, profile.householdSize);
-  const trial = await getTrial(user.id, profile.householdSize);
-  const catalog = await getCatalog();
+  const [plan, trial, catalog] = await Promise.all([
+    getLatestPlan(user.id, profile.householdSize),
+    getTrial(user.id, profile.householdSize),
+    getCatalog(),
+  ]);
+  const offers = plan ? await getOffers(plan.shopDate) : null;
   const stale = plan?.meals.some((meal) => !catalog.recipes.some((recipe) => recipe.id === meal.recipeId)) ?? false;
-  const noLeaflet = plan != null && plan.saved === 0 && leafletsOn(plan.shopDate).length === 0;
+  const noLeaflet = plan != null && plan.saved === 0 && (offers?.leaflets.length ?? 0) === 0;
   const approx = plan?.lines.some((line) => line.approx) ?? false;
+  const shop = plan ? formatRuDate(plan.shopDate) : null;
+  const dealCount = offers?.deals.length ?? 0;
   const t = await getTranslations("week");
   const recipeT = await getTranslations("recipe");
   const cuisine = await getTranslations("cuisine");
@@ -42,24 +48,19 @@ export default async function WeekPage() {
       <p className="mt-4 text-sm text-muted">
         {trial.open ? t("trialLeft", { days: trial.daysLeft }) : t("trialOver")}
       </p>
-      <Link
-        href="/subscribe"
-        className="mt-4 flex items-baseline justify-between rounded-2xl border border-ink px-4 py-3"
-      >
-        <span className="text-sm">{t("saved")}</span>
-        <span className="font-serif text-2xl">{formatPln(trial.saved)}</span>
-      </Link>
+      <SavedRow amount={formatPln(trial.saved)} cook={plan != null} />
 
       {plan ? (
         <>
           <div className="mt-8 grid gap-4 md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)]">
             <div>
-              <section className="grid grid-cols-3 gap-3 rounded-3xl bg-ink p-5 text-cream">
-                <Stat label={t("toPay")} value={`${approx ? "≈ " : ""}${formatPln(plan.total)}`} />
-                <Stat label={t("withoutDeals")} value={formatPln(plan.regularTotal)} />
-                <Stat label={t("savedAmount")} value={formatPln(plan.saved)} accent />
-              </section>
-              <BudgetSpend spent={plan.total} budget={profile.weeklyBudgetPln} />
+              <WeekTotals
+                total={plan.total}
+                regularTotal={plan.regularTotal}
+                saved={plan.saved}
+                budget={profile.weeklyBudgetPln}
+                approx={approx}
+              />
             </div>
             <div className="flex h-full flex-col gap-4">
               <div className="min-h-0 flex-1">
@@ -71,8 +72,13 @@ export default async function WeekPage() {
               >
                 <span>
                   <span className="block font-serif text-2xl">{t("deals")}</span>
-                  <span className="mt-1 block text-sm text-muted">{t("dealsHint")}</span>
+                  {shop ? (
+                    <span className="mt-1 block text-sm text-muted capitalize">
+                      {shop.weekday}, {shop.dayMonth}
+                    </span>
+                  ) : null}
                 </span>
+                <span className="font-serif text-3xl">{dealCount}</span>
               </Link>
             </div>
           </div>
@@ -88,7 +94,10 @@ export default async function WeekPage() {
           ) : null}
 
           <section className="mt-8 max-w-2xl">
-            <h2 className="font-serif text-2xl">{t("lunches")}</h2>
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="font-serif text-2xl">{t("lunches")}</h2>
+              {trial.open ? <RefreshWeek /> : null}
+            </div>
             <ol className="mt-4 flex flex-col gap-3">
               {plan.meals.map((meal) => {
                 const date = formatRuDate(meal.date);
@@ -156,35 +165,56 @@ export default async function WeekPage() {
   );
 }
 
-async function BudgetSpend({ spent, budget }: { spent: number; budget: number }) {
+async function WeekTotals({
+  total,
+  regularTotal,
+  saved,
+  budget,
+  approx,
+}: {
+  total: number;
+  regularTotal: number;
+  saved: number;
+  budget: number;
+  approx: boolean;
+}) {
   const t = await getTranslations("week");
-  const ratio = budget <= 0 ? 0 : Math.min(spent / budget, 1);
-  const left = money(budget - spent);
+  const left = money(budget - total);
+  const ratio = budget <= 0 ? (total > 0 ? 1 : 0) : Math.min(total / budget, 1);
+  const pay = `${approx ? "≈ " : ""}${formatPln(total)}`;
   return (
-    <section className="mt-4 rounded-3xl border border-line bg-paper px-5 py-4">
-      <div className="flex items-baseline justify-between gap-3">
-        <p className="text-sm text-muted">{t("spent")}</p>
-        <p className="font-serif text-2xl">{formatPln(spent)}</p>
+    <section className="overflow-hidden rounded-3xl border border-line bg-paper">
+      <div className="bg-ink px-5 py-5 text-cream">
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="text-xs tracking-wide text-cream/70 uppercase">{t("toPay")}</p>
+          <p className="font-serif text-3xl">{pay}</p>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-3 border-t border-cream/15 pt-4">
+          <div>
+            <p className="text-xs tracking-wide text-cream/70 uppercase">{t("withoutDeals")}</p>
+            <p className="mt-1 font-serif text-xl">{formatPln(regularTotal)}</p>
+          </div>
+          <div>
+            <p className="text-xs tracking-wide text-cream/70 uppercase">{t("savedAmount")}</p>
+            <p className="mt-1 font-serif text-xl text-[#d7e7c8]">{formatPln(saved)}</p>
+          </div>
+        </div>
       </div>
-      <p className="mt-1 text-sm text-muted">{t("ofWeek", { budget: formatPln(budget) })}</p>
-      <div className="mt-3 h-2 overflow-hidden rounded-full bg-line">
-        <div
-          className={`h-full rounded-full ${left < 0 ? "bg-[#8a3d32]" : "bg-olive"}`}
-          style={{ width: `${ratio * 100}%` }}
-        />
+      <div className="px-5 py-4">
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="text-sm text-muted">{t("weekBudget")}</p>
+          <p className="font-serif text-2xl">{formatPln(budget)}</p>
+        </div>
+        <div className="mt-3 h-2 overflow-hidden rounded-full bg-line">
+          <div
+            className={`h-full rounded-full ${left < 0 ? "bg-[#8a3d32]" : "bg-olive"}`}
+            style={{ width: `${ratio * 100}%` }}
+          />
+        </div>
+        <p className="mt-2 text-sm text-muted">
+          {left < 0 ? t("over", { amount: formatPln(-left) }) : t("left", { amount: formatPln(left) })}
+        </p>
       </div>
-      <p className="mt-2 text-sm text-muted">
-        {left < 0 ? t("over", { amount: formatPln(-left) }) : t("left", { amount: formatPln(left) })}
-      </p>
     </section>
-  );
-}
-
-function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return (
-    <div>
-      <div className="text-xs tracking-wide text-cream/70 uppercase">{label}</div>
-      <div className={`mt-2 font-serif text-xl sm:text-2xl ${accent ? "text-[#d7e7c8]" : ""}`}>{value}</div>
-    </div>
   );
 }

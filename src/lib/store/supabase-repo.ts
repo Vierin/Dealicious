@@ -3,7 +3,7 @@ import { applyLivePromos, PRODUCTS } from "../catalog";
 import { assertWithinBudget, pickWeek, placeRecipe, presentPlan, repickWeek, swapRecipeIds } from "../planner";
 import type { RecipeRatings } from "../score";
 import type { Catalog, Cooking, PantryItem, PlanView, Profile, Recipe, RecipeIngredient } from "../types";
-import { createClient } from "../supabase/server";
+import { createClient } from "../supabase/request";
 import { cookDaysOrAll, menuLevelOf, vibeOf } from "../profile";
 
 type PromotionRow = {
@@ -372,6 +372,36 @@ export async function replaceMeal(
     dayIndex == null
       ? swapRecipeIds(profile, catalog, currentIds, recipeId, current.shopDate, ratings)
       : placeRecipe(currentIds, recipeId, dayIndex);
+  assertWithinBudget(profile, catalog, recipeIds, current.shopDate);
+  const changedDays = recipeIds.flatMap((id, day) => (currentIds[day] === id ? [] : [day]));
+  const supabase = await createClient();
+  if (changedDays.length > 0) {
+    const cleared = await supabase
+      .from("cooked_meals")
+      .delete()
+      .eq("user_id", userId)
+      .eq("meal_plan_id", current.id)
+      .in("day_index", changedDays);
+    if (cleared.error && !cookedMissing(cleared.error.message)) throw new Error(cleared.error.message);
+  }
+  const updated = await supabase.from("meal_plans").update({ recipe_ids: recipeIds }).eq("id", current.id);
+  if (updated.error) throw new Error(updated.error.message);
+  await writeItems(current.id, recipeIds);
+  return presentPlan({
+    id: current.id,
+    shopDate: current.shopDate,
+    householdSize: profile.householdSize,
+    recipeIds,
+    catalog,
+  });
+}
+
+export async function setWeekMenu(userId: string, profile: Profile, recipeIds: string[]): Promise<PlanView> {
+  const current = await getLatestPlan(userId, profile.householdSize);
+  if (!current) throw new Error("errors.noWeek");
+  if (recipeIds.length !== 7) throw new Error("errors.cookBad");
+  const catalog = await getCatalog();
+  const currentIds = slotsFromMeals(current.meals);
   assertWithinBudget(profile, catalog, recipeIds, current.shopDate);
   const changedDays = recipeIds.flatMap((id, day) => (currentIds[day] === id ? [] : [day]));
   const supabase = await createClient();
