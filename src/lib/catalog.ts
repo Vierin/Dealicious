@@ -2,9 +2,6 @@ import { existsSync, readFileSync, statSync } from "fs";
 import path from "path";
 import { addDays, formatISODate, mondayOnOrBefore } from "./dates";
 import type { Catalog, Product, Promotion } from "./types";
-import { INGREDIENTS, RECIPES } from "./recipes";
-
-export { INGREDIENTS, PANTRY, RECIPES } from "./recipes";
 
 const SEASONAL = new Set([
   "pomidory",
@@ -333,8 +330,10 @@ export function applyLivePromos(catalog: Catalog): Catalog {
 export function buildCatalog(from = new Date()): Catalog {
   return applyLivePromos({
     products: PRODUCTS,
-    recipes: RECIPES,
-    ingredients: INGREDIENTS,
+    recipes: [],
+    ingredients: [],
+    cooking: {},
+    pantry: [],
     promotions: buildPromotions(from),
   });
 }

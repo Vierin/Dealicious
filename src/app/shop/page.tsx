@@ -3,11 +3,10 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Refrigerator } from "lucide-react";
 import { BackLink } from "@/components/back-link";
-import { buildCatalog, INGREDIENTS, PANTRY } from "@/lib/catalog";
 import { pantryNeeds } from "@/lib/pantry";
 import { packQuote } from "@/lib/planner";
 import { isProfileComplete } from "@/lib/profile";
-import { getLatestPlan, getProfile, getSessionUser } from "@/lib/store";
+import { getCatalog, getLatestPlan, getProfile, getSessionUser } from "@/lib/store";
 import type { BasketLine } from "@/lib/types";
 import { PantryStock } from "./pantry-stock";
 import { Page } from "@/components/page";
@@ -22,6 +21,7 @@ export default async function ShopPage() {
   if (!isProfileComplete(profile)) redirect("/onboarding");
   const plan = await getLatestPlan(user.id, profile.householdSize);
   if (!plan) redirect("/week");
+  const catalog = await getCatalog();
 
   const groups: { category: string; lines: BasketLine[] }[] = [];
   for (const line of plan.lines) {
@@ -44,15 +44,13 @@ export default async function ShopPage() {
       <h1 className="mt-3 font-serif text-4xl">{t("title")}</h1>
       <p className="mt-2 text-muted">{t("forPeople", { count: profile.householdSize })}</p>
       <ShoppingList planId={plan.id} groups={groups} />
-      <PantryStock planId={plan.id} needs={needsFor(plan.meals.map((meal) => meal.recipeId), profile.householdSize, plan.shopDate)} />
+      <PantryStock
+        planId={plan.id}
+        needs={pantryNeeds(plan.meals.map((meal) => meal.recipeId), profile.householdSize, catalog.ingredients, catalog.pantry, {
+          oliwa: packQuote("oliwa", catalog, plan.shopDate),
+          maslo: packQuote("maslo", catalog, plan.shopDate),
+        })}
+      />
     </Page>
   );
-}
-
-function needsFor(recipeIds: string[], householdSize: number, shopDate: string) {
-  const catalog = buildCatalog();
-  return pantryNeeds(recipeIds, householdSize, INGREDIENTS, PANTRY, {
-    oliwa: packQuote("oliwa", catalog, shopDate),
-    maslo: packQuote("maslo", catalog, shopDate),
-  });
 }

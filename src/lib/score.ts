@@ -1,4 +1,4 @@
-import { COOKING, kcal } from "./cooking";
+import { kcal } from "./cooking";
 import { menuLevelOf } from "./profile";
 import type { Catalog, Profile, Recipe } from "./types";
 
@@ -24,7 +24,7 @@ function minuteFit(minutes: number, min: number, max: number): number {
 }
 
 function complexity(level: number, recipe: Recipe, catalog: Catalog): number {
-  const minutes = COOKING[recipe.id]?.minutes ?? 30;
+  const minutes = catalog.cooking[recipe.id]?.minutes ?? 30;
   const oven = recipe.appliances.includes("oven");
   const cold = recipe.appliances.length === 0;
   const parts = plateIds(recipe.id, catalog).length;
@@ -67,7 +67,7 @@ export function recipeScore(input: {
   rating: number | null;
 }): number {
   const { profile, recipe, picked, catalog } = input;
-  const cooking = COOKING[recipe.id];
+  const cooking = catalog.cooking[recipe.id];
   const plate = cooking ? kcal(cooking) : profile.dailyKcal * 0.325;
   const low = profile.dailyKcal * 0.3;
   const high = profile.dailyKcal * 0.35;

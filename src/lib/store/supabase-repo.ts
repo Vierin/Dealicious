@@ -1,8 +1,8 @@
 import { savingLines, trialOpen, type TrialWeek } from "../billing";
-import { applyLivePromos, INGREDIENTS, PRODUCTS, RECIPES } from "../catalog";
+import { applyLivePromos, PRODUCTS } from "../catalog";
 import { assertWithinBudget, pickWeek, placeRecipe, presentPlan, repickWeek, swapRecipeIds } from "../planner";
 import type { RecipeRatings } from "../score";
-import type { Catalog, PlanView, Profile } from "../types";
+import type { Catalog, Cooking, PantryItem, PlanView, Profile, Recipe, RecipeIngredient } from "../types";
 import { createClient } from "../supabase/server";
 import { cookDaysOrAll, menuLevelOf, vibeOf } from "../profile";
 
@@ -114,10 +114,75 @@ export async function saveProfile(profile: Profile) {
   if (saved.error) throw new Error(saved.error.message);
 }
 
+type RecipeRow = {
+  id: string;
+  title: string;
+  diet_styles: Recipe["vibes"] | null;
+  allergens: Recipe["allergens"] | null;
+  proteins: Recipe["proteins"] | null;
+  appliances: Recipe["appliances"] | null;
+  cuisines: Recipe["cuisines"] | null;
+  diets: Recipe["diets"] | null;
+  prep_time: number | null;
+  calories: number | null;
+  protein_g: number | string | null;
+  fat_g: number | string | null;
+  carbs_g: number | string | null;
+  steps: string[] | null;
+};
+
+type IngredientRow = {
+  recipe_id: string;
+  product_id: string;
+  qty_per_person: number | string;
+};
+
+type PantryRow = {
+  recipe_id: string;
+  name: string;
+  grams: number | string | null;
+};
+
+function recipeFrom(row: RecipeRow): Recipe {
+  return {
+    id: row.id,
+    title: row.title,
+    vibes: row.diet_styles ?? [],
+    allergens: row.allergens ?? [],
+    proteins: row.proteins ?? [],
+    diets: row.diets ?? [],
+    appliances: row.appliances ?? [],
+    cuisines: row.cuisines ?? [],
+  };
+}
+
+function cookingFrom(row: RecipeRow): Cooking {
+  return {
+    minutes: row.prep_time ?? 0,
+    protein: row.protein_g == null ? 0 : num(row.protein_g),
+    fat: row.fat_g == null ? 0 : num(row.fat_g),
+    carbs: row.carbs_g == null ? 0 : num(row.carbs_g),
+    kcal: row.calories ?? undefined,
+    steps: row.steps ?? [],
+  };
+}
+
 export async function getCatalog(): Promise<Catalog> {
   const supabase = await createClient();
-  const promotions = await supabase.from("promotions").select("*");
+  const [promotions, recipeRows, ingredientRows, pantryRows] = await Promise.all([
+    supabase.from("promotions").select("*"),
+    supabase.from("recipes").select("id, title, diet_styles, allergens, proteins, appliances, cuisines, diets, prep_time, calories, protein_g, fat_g, carbs_g, steps").limit(500),
+    supabase.from("recipe_ingredients").select("recipe_id, product_id, qty_per_person").limit(5000),
+    supabase.from("recipe_pantry").select("recipe_id, name, grams").limit(5000),
+  ]);
   if (promotions.error) throw new Error(promotions.error.message);
+  if (recipeRows.error) throw new Error(recipeRows.error.message);
+  if (ingredientRows.error) throw new Error(ingredientRows.error.message);
+  if (pantryRows.error) throw new Error(pantryRows.error.message);
+
+  const rows = recipeRows.data as RecipeRow[];
+  const cooking: Record<string, Cooking> = {};
+  for (const row of rows) cooking[row.id] = cookingFrom(row);
 
   return applyLivePromos({
     products: PRODUCTS,
@@ -129,8 +194,22 @@ export async function getCatalog(): Promise<Catalog> {
       validTo: String(row.valid_to).slice(0, 10),
       label: row.label,
     })),
-    recipes: RECIPES,
-    ingredients: INGREDIENTS,
+    recipes: rows.map(recipeFrom),
+    ingredients: (ingredientRows.data as IngredientRow[]).map(
+      (row): RecipeIngredient => ({
+        recipeId: row.recipe_id,
+        productId: row.product_id,
+        qtyPerPerson: num(row.qty_per_person),
+      }),
+    ),
+    cooking,
+    pantry: (pantryRows.data as PantryRow[]).map(
+      (row): PantryItem => ({
+        recipeId: row.recipe_id,
+        name: row.name,
+        grams: row.grams == null ? undefined : num(row.grams),
+      }),
+    ),
   });
 }
 

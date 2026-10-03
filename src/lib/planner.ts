@@ -2,7 +2,7 @@ import { addISODays, cookOffsets, nextShopDate, parseISODate } from "./dates";
 import { ALL_COOK_DAYS } from "./profile";
 import { PANTRY_PRODUCT_IDS } from "./pantry";
 import { money, roundQty } from "./money";
-import { COOKING, kcal } from "./cooking";
+import { kcal } from "./cooking";
 import { inLunchBand, recipeScore, type RecipeRatings } from "./score";
 import type {
   BasketLine,
@@ -125,7 +125,7 @@ function allows(profile: Profile, recipe: Recipe, catalog: Catalog, shopDate: st
     );
     if (!ok) return false;
   }
-  const cooking = COOKING[recipe.id];
+  const cooking = catalog.cooking[recipe.id];
   if (!cooking || !inLunchBand(kcal(cooking), profile.dailyKcal)) return false;
   return catalog.ingredients
     .filter((item) => item.recipeId === recipe.id)

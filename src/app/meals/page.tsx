@@ -1,10 +1,8 @@
 import { redirect } from "next/navigation";
 import { BackLink } from "@/components/back-link";
-import { RECIPES } from "@/lib/catalog";
-import { COOKING } from "@/lib/cooking";
 import { recipePhoto } from "@/lib/recipes";
 import { isProfileComplete } from "@/lib/profile";
-import { getProfile, getSessionUser } from "@/lib/store";
+import { getCatalog, getProfile, getSessionUser } from "@/lib/store";
 import { Page } from "@/components/page";
 import { MealBrowser } from "./meal-browser";
 
@@ -20,13 +18,14 @@ export default async function MealsPage({
   const profile = await getProfile(user.id);
   if (!isProfileComplete(profile)) redirect("/onboarding");
   const favoritesOnly = (await searchParams).favorites === "1";
+  const catalog = await getCatalog();
 
-  const meals = RECIPES.map((recipe) => ({
+  const meals = catalog.recipes.map((recipe) => ({
     id: recipe.id,
     title: recipe.title,
     cuisine: recipe.cuisines[0] ?? "polish",
     vibes: recipe.vibes,
-    minutes: COOKING[recipe.id]?.minutes ?? 0,
+    minutes: catalog.cooking[recipe.id]?.minutes ?? 0,
     photo: recipe.image ?? recipePhoto(recipe.id),
   }));
 

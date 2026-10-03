@@ -71,11 +71,22 @@ export type RecipeIngredient = {
   qtyPerPerson: number;
 };
 
+export type Cooking = {
+  minutes: number;
+  protein: number;
+  fat: number;
+  carbs: number;
+  kcal?: number;
+  steps: string[];
+};
+
 export type Catalog = {
   products: Product[];
   promotions: Promotion[];
   recipes: Recipe[];
   ingredients: RecipeIngredient[];
+  cooking: Record<string, Cooking>;
+  pantry: PantryItem[];
 };
 
 export type Profile = {

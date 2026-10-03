@@ -2,14 +2,14 @@ import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { BackLink } from "@/components/back-link";
 import { VibePills } from "@/components/pills";
-import { INGREDIENTS, PANTRY, PRODUCTS, RECIPES } from "@/lib/catalog";
-import { COOKING, kcal } from "@/lib/cooking";
+import { PRODUCTS } from "@/lib/catalog";
+import { kcal } from "@/lib/cooking";
 import { formatRuDate } from "@/lib/dates";
 import { formatQty, roundQty } from "@/lib/money";
 import { pantryUseLabel } from "@/lib/pantry";
 import { recipePhoto } from "@/lib/recipes";
 import { isProfileComplete } from "@/lib/profile";
-import { getCookedDays, getLatestPlan, getProfile, getRatings, getSessionUser } from "@/lib/store";
+import { getCatalog, getCookedDays, getLatestPlan, getProfile, getRatings, getSessionUser } from "@/lib/store";
 import { RecipeBar } from "@/components/recipe-bar";
 import type { DietNeed } from "@/lib/types";
 import { FavoriteButton } from "@/components/favorite-button";
@@ -37,8 +37,9 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
   const profile = await getProfile(user.id);
   if (!isProfileComplete(profile)) redirect("/onboarding");
 
-  const recipe = RECIPES.find((item) => item.id === id);
-  const cooking = COOKING[id];
+  const catalog = await getCatalog();
+  const recipe = catalog.recipes.find((item) => item.id === id);
+  const cooking = catalog.cooking[id];
   if (!recipe || !cooking) notFound();
 
   const plan = await getLatestPlan(user.id, profile.householdSize);
@@ -53,8 +54,8 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
     })) ?? [];
   const portions = profile.householdSize;
   const photo = recipe.image ?? recipePhoto(recipe.id);
-  const pantry = PANTRY.filter((item) => item.recipeId === recipe.id).map((item) => item.name);
-  const ingredients = INGREDIENTS.filter((item) => item.recipeId === recipe.id).map((item) => {
+  const pantry = catalog.pantry.filter((item) => item.recipeId === recipe.id).map((item) => item.name);
+  const ingredients = catalog.ingredients.filter((item) => item.recipeId === recipe.id).map((item) => {
     const product = PRODUCTS.find((entry) => entry.id === item.productId);
     if (!product) throw new Error("errors.missingProduct");
     return {

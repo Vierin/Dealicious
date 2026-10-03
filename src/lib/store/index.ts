@@ -14,6 +14,10 @@ export type TrialView = {
 
 type SessionUser = { id: string; email: string };
 
+export async function getCatalog() {
+  return remote.getCatalog();
+}
+
 export async function getSessionUser(): Promise<SessionUser | null> {
   return remote.getSessionUser();
 }

@@ -3,13 +3,13 @@ import { Clock, CreditCard, Users } from "lucide-react";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { VibePills } from "@/components/pills";
-import { leafletsOn, RECIPES } from "@/lib/catalog";
-import { COOKING, kcal } from "@/lib/cooking";
+import { leafletsOn } from "@/lib/catalog";
+import { kcal } from "@/lib/cooking";
 import { recipePhoto } from "@/lib/recipes";
 import { formatRuDate } from "@/lib/dates";
 import { formatPln, money } from "@/lib/money";
 import { isProfileComplete } from "@/lib/profile";
-import { getLatestPlan, getProfile, getSessionUser, getTrial } from "@/lib/store";
+import { getCatalog, getLatestPlan, getProfile, getSessionUser, getTrial } from "@/lib/store";
 import { ReplaceMeal } from "./replace-meal";
 import { WeekActions } from "./week-actions";
 import { Page } from "@/components/page";
@@ -24,7 +24,8 @@ export default async function WeekPage() {
   if (!isProfileComplete(profile)) redirect("/onboarding");
   const plan = await getLatestPlan(user.id, profile.householdSize);
   const trial = await getTrial(user.id, profile.householdSize);
-  const stale = plan?.meals.some((meal) => !RECIPES.some((recipe) => recipe.id === meal.recipeId)) ?? false;
+  const catalog = await getCatalog();
+  const stale = plan?.meals.some((meal) => !catalog.recipes.some((recipe) => recipe.id === meal.recipeId)) ?? false;
   const noLeaflet = plan != null && plan.saved === 0 && leafletsOn(plan.shopDate).length === 0;
   const approx = plan?.lines.some((line) => line.approx) ?? false;
   const t = await getTranslations("week");
@@ -91,8 +92,9 @@ export default async function WeekPage() {
             <ol className="mt-4 flex flex-col gap-3">
               {plan.meals.map((meal) => {
                 const date = formatRuDate(meal.date);
-                const minutes = COOKING[meal.recipeId]?.minutes;
-                const recipe = RECIPES.find((item) => item.id === meal.recipeId);
+                const cooking = catalog.cooking[meal.recipeId];
+                const minutes = cooking?.minutes;
+                const recipe = catalog.recipes.find((item) => item.id === meal.recipeId);
                 const photo = recipe ? (recipe.image ?? recipePhoto(recipe.id)) : null;
                 const card = (
                     <div className="block overflow-hidden rounded-3xl border border-line bg-paper">
@@ -120,8 +122,8 @@ export default async function WeekPage() {
                           <Users size={16} strokeWidth={1.75} />
                           {recipeT("portions", { count: plan.householdSize })}
                         </span>
-                        {COOKING[meal.recipeId] ? (
-                          <span>{t("kcal", { count: kcal(COOKING[meal.recipeId]) })}</span>
+                        {cooking ? (
+                          <span>{t("kcal", { count: kcal(cooking) })}</span>
                         ) : null}
                         <span className="inline-flex items-center gap-1.5">
                           <CreditCard size={16} strokeWidth={1.75} />
